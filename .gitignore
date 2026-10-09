@@ -28,3 +28,5 @@ desktop.ini
 temp/
 tmp/
 *.tmp
+*.zip
+create_cpanel_zip.py
