@@ -1,0 +1,21 @@
+# MISSION KIDS — Root Apache Configuration
+# Routes web traffic to /public/ and blocks direct access to backend files
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Prevent direct access to sensitive folders & files
+    RewriteRule ^(\.git|\.env|config|database|src|templates|docs|tests) - [F,L]
+    RewriteRule \.(sql|sqlite|sqlite3|db|log|md|json)$ - [F,L]
+
+    # Route root request to public/
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^$ public/ [L]
+
+    # Route all other requests into public/
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Block directory indexing
+Options -Indexes

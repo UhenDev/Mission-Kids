@@ -1,0 +1,30 @@
+# Environment & Secret files
+.env
+.env.local
+.env.*.local
+*.env
+
+# SQLite local databases
+*.sqlite
+*.sqlite3
+*.db
+database/*.sqlite
+
+# Session, Cookies & Test artifacts
+*cookie*.txt
+cookies.txt
+*.log
+
+# Operating System & IDE files
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary files
+temp/
+tmp/
+*.tmp

@@ -1,0 +1,555 @@
+/* ==========================================================================
+   MISSION KIDS — Mission Engine & Interactive Canvas Styles
+   ========================================================================== */
+
+.mission-shell {
+  background: var(--bg-surface);
+  border: 3px solid var(--border-subtle);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+/* Mission Top Bar */
+.mission-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-6);
+  background: var(--bg-surface-elevated);
+  border-bottom: 2px solid var(--border-subtle);
+}
+
+.mission-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.mission-steps-stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.step-node {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-heading);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--text-light);
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-pill);
+  transition: all var(--transition-fast);
+}
+
+.step-node.active {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+}
+
+.step-node.done {
+  background-color: var(--color-accent-light);
+  color: var(--color-accent-hover);
+}
+
+/* Mission Stages Display */
+.stage-panel {
+  display: none;
+  padding: var(--space-8);
+  animation: fadeIn 300ms ease;
+}
+
+.stage-panel.active {
+  display: block;
+}
+
+/* Stage: Story & Learn */
+.story-card-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.story-badge-category {
+  margin-bottom: var(--space-2);
+}
+
+.story-title {
+  font-size: var(--fs-3xl);
+  margin-bottom: var(--space-3);
+  color: var(--text-main);
+}
+
+.story-dialogue-box {
+  background: #F0FDF4;
+  border: 2px dashed #86EFAC;
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  margin: var(--space-6) 0;
+  font-size: var(--fs-lg);
+  line-height: 1.7;
+  color: #14532D;
+  position: relative;
+}
+
+.story-dialogue-box::before {
+  content: '💬';
+  position: absolute;
+  top: -16px;
+  left: 32px;
+  background: #FFFFFF;
+  padding: 0 8px;
+  font-size: 1.25rem;
+}
+
+/* Stage: Interactive Challenge Grid */
+.challenge-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: var(--space-8);
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .challenge-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.interactive-viewport {
+  background: #F8FAFC;
+  border: 3px solid var(--border-interactive);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.interactive-control-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  background: #FFFFFF;
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+}
+
+/* HERO SIMULATION: Plant (Tanaman Layu) */
+.plant-svg-container {
+  width: 260px;
+  height: 260px;
+  transition: all 400ms ease;
+}
+
+.plant-gauges-row {
+  display: flex;
+  gap: var(--space-4);
+  width: 100%;
+  margin-top: var(--space-4);
+}
+
+.gauge-item {
+  flex: 1;
+  background: #FFFFFF;
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  text-align: center;
+}
+
+.gauge-title {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.gauge-value {
+  font-family: var(--font-heading);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+}
+
+.tool-control-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tool-label {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  display: flex;
+  justify-content: space-between;
+}
+
+.kid-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 14px;
+  border-radius: var(--radius-pill);
+  background: #E2E8F0;
+  outline: none;
+  cursor: pointer;
+}
+
+.kid-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 3px solid #FFFFFF;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+
+/* ROBOT GRID: Thinking Lab */
+.robot-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 64px);
+  grid-template-rows: repeat(4, 64px);
+  gap: 6px;
+  background: #E2E8F0;
+  padding: 8px;
+  border-radius: var(--radius-lg);
+}
+
+.robot-cell {
+  background: #FFFFFF;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.robot-cell.obstacle {
+  background: #FED7AA;
+}
+
+.robot-cell.target {
+  background: #BBF7D0;
+  border: 2px dashed #22C55E;
+}
+
+.robot-cell.botty {
+  background: #DBEAFE;
+}
+
+.command-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.btn-command-card {
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border-interactive);
+  background: #FFFFFF;
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  transition: all var(--transition-fast);
+}
+
+.btn-command-card:hover {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+.command-queue-tray {
+  min-height: 52px;
+  border: 2px dashed var(--border-interactive);
+  border-radius: var(--radius-md);
+  padding: var(--space-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  background: #F8FAFC;
+}
+
+.queued-card {
+  background: var(--color-primary);
+  color: #FFFFFF;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.queued-card.active-running {
+  background: #F59E0B;
+  transform: scale(1.1);
+}
+
+/* MATCH & SORT: Shopping & Patterns */
+.shopping-shelf {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.shop-item-card {
+  background: #FFFFFF;
+  border: 2px solid var(--border-interactive);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: 700;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.shop-item-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-primary);
+}
+
+.tray-drop-zone {
+  min-height: 120px;
+  width: 100%;
+  border: 3px dashed #CBD5E1;
+  border-radius: var(--radius-xl);
+  background: #F1F5F9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: var(--space-4);
+}
+
+/* REFLECTION STAGE */
+.reflection-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: var(--space-6) 0;
+  text-align: left;
+}
+
+.reflection-option-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border: 2px solid var(--border-interactive);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: var(--fs-md);
+  transition: all var(--transition-fast);
+}
+
+.reflection-option-label:hover {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+.reflection-option-label input[type="radio"]:checked + span {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* CONFETTI & REWARD CELEBRATION */
+.celebration-box {
+  max-width: 580px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.stars-row {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  font-size: 3.5rem;
+  margin: var(--space-4) 0;
+  animation: bounceStars 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.xp-breakdown-list {
+  background: #FEF3C7;
+  border: 2px solid #FDE68A;
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  margin: var(--space-6) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.xp-breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: var(--fs-md);
+  color: #92400E;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounceStars {
+  0% { transform: scale(0.3); opacity: 0; }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ==========================================================================
+   Mobile Responsiveness for Mission Engine & Interactive Stages
+   ========================================================================== */
+@media (max-width: 768px) {
+  .mission-shell {
+    border-width: 2px;
+    border-radius: var(--radius-xl);
+    margin-top: var(--space-2);
+    margin-bottom: var(--space-6);
+  }
+
+  .mission-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .mission-breadcrumbs {
+    font-size: var(--fs-xs);
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mission-steps-stepper {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: var(--space-2);
+  }
+  .mission-steps-stepper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .step-node {
+    white-space: nowrap;
+    font-size: 11px;
+    padding: 0.25rem 0.55rem;
+  }
+
+  .stage-panel {
+    padding: var(--space-4);
+  }
+
+  .story-title {
+    font-size: var(--fs-xl);
+  }
+
+  .story-dialogue-box {
+    padding: var(--space-4);
+    font-size: var(--fs-md);
+    margin: var(--space-4) 0;
+  }
+
+  .challenge-layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .interactive-viewport {
+    min-height: 280px;
+    padding: var(--space-3);
+  }
+
+  .interactive-control-panel {
+    padding: var(--space-4);
+  }
+
+  .plant-svg-container {
+    width: 200px;
+    height: 200px;
+  }
+
+  .plant-gauges-row {
+    gap: var(--space-2);
+  }
+
+  .gauge-item {
+    padding: var(--space-2);
+  }
+
+  .gauge-title {
+    font-size: 10px;
+  }
+
+  .gauge-value {
+    font-size: var(--fs-md);
+  }
+
+  .robot-grid {
+    grid-template-columns: repeat(4, clamp(52px, 19vw, 68px));
+    grid-template-rows: repeat(4, clamp(52px, 19vw, 68px));
+    gap: 4px;
+    padding: 6px;
+  }
+
+  .robot-cell {
+    font-size: 1.3rem;
+  }
+
+  .command-palette {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-2);
+  }
+
+  .btn-command-card {
+    justify-content: center;
+    padding: 0.6rem 0.4rem;
+    font-size: var(--fs-xs);
+  }
+
+  .reflection-option-label {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--fs-sm);
+  }
+
+  .stars-row {
+    font-size: 2.8rem;
+  }
+}
+

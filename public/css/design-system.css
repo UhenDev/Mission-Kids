@@ -1,0 +1,275 @@
+/* ==========================================================================
+   MISSION KIDS — Design System Tokens & Base Styles
+   Playful Precision Philosophy
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Nunito:wght@600;700;800;900&display=swap');
+
+:root {
+  /* Brand Core Palette */
+  --color-primary: #2563EB;
+  --color-primary-hover: #1D4ED8;
+  --color-primary-light: #EFF6FF;
+  --color-secondary: #F59E0B;
+  --color-secondary-hover: #D97706;
+  --color-secondary-light: #FEF3C7;
+  --color-accent: #10B981;
+  --color-accent-hover: #059669;
+  --color-accent-light: #D1FAE5;
+  --color-coral: #EF4444;
+  --color-coral-light: #FEE2E2;
+  --color-purple: #8B5CF6;
+  --color-purple-light: #EDE9FE;
+
+  /* Neutrals & Surfaces */
+  --bg-app: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #F1F5F9;
+  --border-subtle: #E2E8F0;
+  --border-interactive: #CBD5E1;
+  --border-focus: #93C5FD;
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  --text-light: #94A3B8;
+  --text-inverse: #FFFFFF;
+
+  /* World Theming */
+  --world-number: #F59E0B;
+  --world-number-bg: #FFFBEB;
+  --world-number-dark: #B45309;
+  --world-discovery: #10B981;
+  --world-discovery-bg: #ECFDF5;
+  --world-discovery-dark: #047857;
+  --world-thinking: #6366F1;
+  --world-thinking-bg: #EEF2FF;
+  --world-thinking-dark: #4338CA;
+
+  /* Typography */
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Fredoka', 'Plus Jakarta Sans', cursive, sans-serif;
+  --font-fun: 'Nunito', 'Fredoka', sans-serif;
+
+  --fs-xs: 0.75rem;    /* 12px */
+  --fs-sm: 0.875rem;   /* 14px */
+  --fs-base: 1rem;     /* 16px */
+  --fs-md: 1.125rem;   /* 18px */
+  --fs-lg: 1.25rem;    /* 20px */
+  --fs-xl: 1.5rem;     /* 24px */
+  --fs-2xl: 1.875rem;  /* 30px */
+  --fs-3xl: 2.25rem;   /* 36px */
+  --fs-4xl: 2.75rem;   /* 44px */
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Radii */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-2xl: 2.25rem;
+  --radius-pill: 9999px;
+
+  /* Tactile Physical Shadows */
+  --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 6px 16px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 12px 30px -4px rgba(15, 23, 42, 0.12);
+  --shadow-card: 0 8px 24px rgba(37, 99, 235, 0.06);
+
+  /* Tactile Button Depths */
+  --btn-depth-primary: 0 5px 0 #1D4ED8;
+  --btn-depth-secondary: 0 5px 0 #D97706;
+  --btn-depth-accent: 0 5px 0 #047857;
+  --btn-depth-coral: 0 5px 0 #DC2626;
+  --btn-depth-purple: 0 5px 0 #6D28D9;
+  --btn-depth-active: 0 1px 0 transparent;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-bounce: 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  color: var(--text-main);
+  background-color: var(--bg-app);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  line-height: 1.25;
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+p {
+  color: var(--text-muted);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Layout Utilities */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+.main-content {
+  flex: 1;
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-12);
+}
+
+/* Tactile 3D Buttons */
+.btn-kid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0.8rem 1.6rem;
+  font-family: var(--font-heading);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+  touch-action: manipulation;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+  min-height: 48px;
+}
+
+.btn-kid:active {
+  transform: translateY(4px);
+}
+
+.btn-kid:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btn-kid-primary {
+  background-color: var(--color-primary);
+  color: var(--text-inverse);
+  box-shadow: var(--btn-depth-primary);
+}
+.btn-kid-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+}
+.btn-kid-primary:active:not(:disabled) {
+  box-shadow: var(--btn-depth-active);
+}
+
+.btn-kid-secondary {
+  background-color: var(--color-secondary);
+  color: var(--text-inverse);
+  box-shadow: var(--btn-depth-secondary);
+}
+.btn-kid-secondary:hover:not(:disabled) {
+  background-color: var(--color-secondary-hover);
+}
+.btn-kid-secondary:active:not(:disabled) {
+  box-shadow: var(--btn-depth-active);
+}
+
+.btn-kid-accent {
+  background-color: var(--color-accent);
+  color: var(--text-inverse);
+  box-shadow: var(--btn-depth-accent);
+}
+.btn-kid-accent:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+}
+.btn-kid-accent:active:not(:disabled) {
+  box-shadow: var(--btn-depth-active);
+}
+
+.btn-kid-purple {
+  background-color: var(--color-purple);
+  color: var(--text-inverse);
+  box-shadow: var(--btn-depth-purple);
+}
+.btn-kid-purple:hover:not(:disabled) {
+  background-color: #7C3AED;
+}
+.btn-kid-purple:active:not(:disabled) {
+  box-shadow: var(--btn-depth-active);
+}
+
+.btn-kid-ghost {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border: 2px solid var(--border-interactive);
+  box-shadow: 0 4px 0 var(--border-interactive);
+}
+.btn-kid-ghost:hover:not(:disabled) {
+  background-color: var(--bg-surface-elevated);
+}
+.btn-kid-ghost:active:not(:disabled) {
+  box-shadow: var(--btn-depth-active);
+}
+
+/* Pills & Tags */
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-pill-primary {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.badge-pill-secondary {
+  background-color: var(--color-secondary-light);
+  color: var(--color-secondary-hover);
+}
+
+.badge-pill-accent {
+  background-color: var(--color-accent-light);
+  color: var(--color-accent-hover);
+}
+
+.badge-pill-purple {
+  background-color: var(--color-purple-light);
+  color: var(--color-purple);
+}

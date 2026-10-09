@@ -1,0 +1,254 @@
+/* ==========================================================================
+   MISSION KIDS — World Exploration & Adventure Map Styles
+   ========================================================================== */
+
+.worlds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+}
+
+.world-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  border: 3px solid var(--border-subtle);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition-bounce), box-shadow var(--transition-bounce);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 280px;
+}
+
+.world-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+.world-card.theme-number {
+  border-color: #FCD34D;
+  background: linear-gradient(180deg, #FFFBEB 0%, #FFFFFF 60%);
+}
+
+.world-card.theme-discovery {
+  border-color: #6EE7B7;
+  background: linear-gradient(180deg, #ECFDF5 0%, #FFFFFF 60%);
+}
+
+.world-card.theme-thinking {
+  border-color: #A5B4FC;
+  background: linear-gradient(180deg, #EEF2FF 0%, #FFFFFF 60%);
+}
+
+.world-badge-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+  margin-bottom: var(--space-4);
+}
+
+.theme-number .world-badge-icon {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.theme-discovery .world-badge-icon {
+  background: #D1FAE5;
+  color: #059669;
+}
+
+.theme-thinking .world-badge-icon {
+  background: #E0E7FF;
+  color: #4F46E5;
+}
+
+.world-title {
+  font-size: var(--fs-2xl);
+  margin-bottom: var(--space-2);
+}
+
+.world-subtitle {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: var(--space-6);
+}
+
+/* ADVENTURE MAP TRAIL */
+.adventure-map-shell {
+  background: #FFFFFF;
+  border: 3px solid var(--border-subtle);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  margin-top: var(--space-6);
+  position: relative;
+}
+
+.adventure-trail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.adventure-trail::before {
+  content: '';
+  position: absolute;
+  top: 40px;
+  bottom: 40px;
+  width: 6px;
+  border-left: 4px dashed #CBD5E1;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.mission-map-node {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 3px solid var(--border-interactive);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-5) var(--space-6);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.mission-map-node:hover:not(.locked) {
+  transform: scale(1.02);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.mission-map-node.available {
+  border-color: var(--color-primary);
+  background: #EFF6FF;
+}
+
+.mission-map-node.completed {
+  border-color: #10B981;
+  background: #F0FDF4;
+}
+
+.mission-map-node.locked {
+  opacity: 0.65;
+  background: #F8FAFC;
+  cursor: not-allowed;
+}
+
+.node-left-col {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.node-number-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  background: #E2E8F0;
+  color: var(--text-muted);
+}
+
+.available .node-number-circle {
+  background: var(--color-primary);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.completed .node-number-circle {
+  background: #10B981;
+  color: #FFFFFF;
+}
+
+.node-meta h3 {
+  font-size: var(--fs-lg);
+  margin-bottom: var(--space-1);
+}
+
+.node-meta p {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+/* Mobile Responsiveness for Worlds & Adventure Map */
+@media (max-width: 768px) {
+  .worlds-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .world-card {
+    padding: var(--space-5);
+    min-height: auto;
+    border-radius: var(--radius-xl);
+  }
+
+  .adventure-map-shell {
+    padding: var(--space-4);
+    border-radius: var(--radius-xl);
+  }
+
+  .adventure-trail {
+    gap: var(--space-5);
+  }
+
+  .adventure-trail::before {
+    left: 28px;
+    transform: none;
+  }
+
+  .mission-map-node {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    border-radius: var(--radius-xl);
+  }
+
+  .node-left-col {
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .node-number-circle {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    font-size: var(--fs-md);
+  }
+
+  .mission-map-node > div:last-child {
+    width: 100%;
+  }
+
+  .mission-map-node > div:last-child a,
+  .mission-map-node > div:last-child span {
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
+}
+
