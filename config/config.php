@@ -49,7 +49,7 @@ return [
         'enabled' => true,
         // Optional LLM API Key (Gemini, Groq, or OpenAI compatible)
         'api_key' => getenv('GEMINI_API_KEY') ?: '',
-        'model' => getenv('AI_MODEL') ?: 'gemini-1.5-flash',
+        'model' => getenv('AI_MODEL') ?: 'gemini-2.5-flash',
         'timeout_seconds' => (int)(getenv('AI_TIMEOUT') ?: 4),
         'fallback_enabled' => true, // 100% deterministic pedagogic fallback
     ],

@@ -44,6 +44,16 @@ class ApiController
         $inputRaw = file_get_contents('php://input');
         $body = json_decode($inputRaw, true) ?: [];
 
+        // Validate CSRF for state-modifying POST requests
+        $csrfToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? ($body['csrf_token'] ?? null);
+        if (in_array($action, ['complete_mission', 'record_attempt', 'update_profile'], true)) {
+            if (!Security::validateCsrfToken($csrfToken)) {
+                http_response_code(403);
+                echo json_encode(['success' => false, 'error' => 'Sesi keamanan kedaluwarsa atau tidak valid. Silakan muat ulang halaman ya!']);
+                exit;
+            }
+        }
+
         switch ($action) {
             case 'get_hint':
                 $this->handleGetHint($userId, $body);

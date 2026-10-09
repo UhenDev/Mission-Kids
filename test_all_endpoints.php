@@ -127,33 +127,48 @@ $res = makeRequest($baseUrl . '/?page=api&action=get_hint', 'POST', $hintPayload
 $hintData = json_decode($res['body'], true);
 assertTest('POST API get_hint returns success', !empty($hintData['success']) && !empty($hintData['hint_text']));
 
-// 8. Test API record_attempt
+// 8. Test API record_attempt (With CSRF)
 $attemptPayload = json_encode([
     'mission_id' => 4,
     'hints_used' => 1,
     'is_success' => true,
     'reflection_answer' => 'Tanaman butuh air dan matahari secukupnya'
 ]);
-$res = makeRequest($baseUrl . '/?page=api&action=record_attempt', 'POST', $attemptPayload, ['Content-Type: application/json']);
+$res = makeRequest($baseUrl . '/?page=api&action=record_attempt', 'POST', $attemptPayload, [
+    'Content-Type: application/json',
+    'X-CSRF-Token: ' . $regCsrf
+]);
 $attemptData = json_decode($res['body'], true);
 assertTest('POST API record_attempt returns success', !empty($attemptData['success']));
 
-// 9. Test API complete_mission
+// 9. Test API complete_mission: CSRF Reject Test without Token
+$badCompRes = makeRequest($baseUrl . '/?page=api&action=complete_mission', 'POST', json_encode(['mission_id' => 4]), [
+    'Content-Type: application/json'
+]);
+assertTest('POST API complete_mission rejects missing CSRF (HTTP 403)', $badCompRes['code'] === 403);
+
+// 10. Test API complete_mission (With valid CSRF)
 $compPayload = json_encode([
     'mission_id' => 4,
     'hints_used' => 0,
     'reflection_answer' => 'Tanaman butuh air dan sinar matahari yang cukup seimbang.'
 ]);
-$res = makeRequest($baseUrl . '/?page=api&action=complete_mission', 'POST', $compPayload, ['Content-Type: application/json']);
+$res = makeRequest($baseUrl . '/?page=api&action=complete_mission', 'POST', $compPayload, [
+    'Content-Type: application/json',
+    'X-CSRF-Token: ' . $regCsrf
+]);
 $compData = json_decode($res['body'], true);
 assertTest('POST API complete_mission awards XP and stars', !empty($compData['success']) && isset($compData['stars']) && $compData['stars'] >= 1);
 
-// 10. Test API update_profile
+// 11. Test API update_profile (With CSRF)
 $profPayload = json_encode([
     'nickname' => 'Kapten Bintang',
     'avatar_id' => 'super_bear'
 ]);
-$res = makeRequest($baseUrl . '/?page=api&action=update_profile', 'POST', $profPayload, ['Content-Type: application/json']);
+$res = makeRequest($baseUrl . '/?page=api&action=update_profile', 'POST', $profPayload, [
+    'Content-Type: application/json',
+    'X-CSRF-Token: ' . $regCsrf
+]);
 $profData = json_decode($res['body'], true);
 assertTest('POST API update_profile returns success', !empty($profData['success']));
 

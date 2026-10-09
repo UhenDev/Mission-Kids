@@ -176,8 +176,12 @@ class MissionEngine {
     try {
       const response = await fetch('?page=api&action=complete_mission', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': this.data.csrf_token || ''
+        },
         body: JSON.stringify({
+          csrf_token: this.data.csrf_token || '',
           mission_id: this.id,
           hints_used: this.hintsUsed,
           reflection_answer: this.selectedReflection,
@@ -190,20 +194,18 @@ class MissionEngine {
         this.setStep('reward');
       } else {
         alert(data.error || "Gagal menyimpan hasil.");
+        if (btnSubmit) {
+          btnSubmit.disabled = false;
+          btnSubmit.textContent = "Coba Simpan Lagi 🚀";
+        }
       }
     } catch (err) {
       console.error("Error completing mission:", err);
-      // Fallback local completion screen
-      this.renderRewardScreen({
-        stars: 3,
-        total_awarded_xp: 150,
-        xp_breakdown: [
-          { label: 'Misi Selesai!', amount: 100 },
-          { label: 'Bonus Refleksi', amount: 50 }
-        ],
-        level_info: { total_xp: 150 }
-      });
-      this.setStep('reward');
+      alert("Koneksi ke server terputus! Hasil misimu belum berhasil disimpan. Pastikan internetmu aktif dan klik tombol untuk mencoba lagi ya!");
+      if (btnSubmit) {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = "Coba Simpan Lagi 🚀";
+      }
     }
   }
 

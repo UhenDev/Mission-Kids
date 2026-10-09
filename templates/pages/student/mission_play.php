@@ -203,7 +203,7 @@ require __DIR__ . '/../../layouts/header.php';
 
 <!-- Raw Mission Configuration Data for Frontend Engine -->
 <script id="mission-config-json" type="application/json">
-<?= $mission['config_json'] ?>
+<?= htmlspecialchars($mission['config_json'], ENT_NOQUOTES, 'UTF-8') ?>
 </script>
 
 <script>

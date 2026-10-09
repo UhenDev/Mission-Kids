@@ -77,7 +77,8 @@ class MikoAiService
 
     private function callGeminiApi(array $mission, int $hintLevel, int $attemptCount, array $currentState, string $nickname, string $apiKey): ?string
     {
-        $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' . urlencode($apiKey);
+        $model = (string)($this->config['ai']['model'] ?? 'gemini-2.5-flash');
+        $url = 'https://generativelanguage.googleapis.com/v1beta/models/' . urlencode($model) . ':generateContent?key=' . urlencode($apiKey);
 
         $levelGuidance = match ($hintLevel) {
             1 => "Level 1 (Konseptual): Ajukan pertanyaan pemicu rasa ingin tahu anak tanpa menyebut alat/angka spesifik. Jangan bocorkan jawaban.",
