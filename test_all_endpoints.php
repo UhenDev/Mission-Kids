@@ -147,11 +147,25 @@ $badCompRes = makeRequest($baseUrl . '/?page=api&action=complete_mission', 'POST
 ]);
 assertTest('POST API complete_mission rejects missing CSRF (HTTP 403)', $badCompRes['code'] === 403);
 
-// 10. Test API complete_mission (With valid CSRF)
+// 10a. Test API complete_mission: Invalid Solution Rejection (HTTP 422)
+$invalidCompPayload = json_encode([
+    'mission_id' => 4,
+    'hints_used' => 0,
+    'reflection_answer' => 'Tanaman butuh air',
+    'solution_payload' => ['water' => 10, 'sunlight' => 10]
+]);
+$badSolRes = makeRequest($baseUrl . '/?page=api&action=complete_mission', 'POST', $invalidCompPayload, [
+    'Content-Type: application/json',
+    'X-CSRF-Token: ' . $regCsrf
+]);
+assertTest('POST API complete_mission rejects invalid solution (HTTP 422)', $badSolRes['code'] === 422);
+
+// 10b. Test API complete_mission: Valid Solution (With CSRF & Solution Payload)
 $compPayload = json_encode([
     'mission_id' => 4,
     'hints_used' => 0,
-    'reflection_answer' => 'Tanaman butuh air dan sinar matahari yang cukup seimbang.'
+    'reflection_answer' => 'Akar tanaman bisa membusuk dan tanaman sulit bernapas.',
+    'solution_payload' => ['water' => 75, 'sunlight' => 80]
 ]);
 $res = makeRequest($baseUrl . '/?page=api&action=complete_mission', 'POST', $compPayload, [
     'Content-Type: application/json',

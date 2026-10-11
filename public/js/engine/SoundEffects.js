@@ -7,6 +7,9 @@ class SoundEffects {
   constructor() {
     this.ctx = null;
     this.muted = localStorage.getItem('mk_sound_muted') === 'true';
+    this.bgmRunning = false;
+    this.bgmTimer = null;
+    this.bgmStep = 0;
   }
 
   initCtx() {
@@ -31,6 +34,11 @@ class SoundEffects {
     this.updateToggleButtons();
     if (!this.muted) {
       this.playTap();
+      if (window.CURRENT_MISSION) {
+        this.startBgm();
+      }
+    } else {
+      this.stopBgm();
     }
     return this.muted;
   }
@@ -39,6 +47,9 @@ class SoundEffects {
     document.querySelectorAll('.sound-toggle-btn').forEach(btn => {
       btn.innerHTML = this.muted ? '🔇 <span class="sound-label">Bisu</span>' : '🔊 <span class="sound-label">Suara</span>';
       btn.title = this.muted ? 'Nyalakan Suara Ceria' : 'Matikan Suara';
+    });
+    document.querySelectorAll('.btn-mission-bgm').forEach(btn => {
+      btn.innerHTML = this.bgmRunning ? '🎵 Musik: Nyala' : '🔇 Musik: Mati';
     });
   }
 
@@ -156,6 +167,99 @@ class SoundEffects {
       osc.start(now);
       osc.stop(now + 0.2);
     } catch (e) {}
+  }
+
+  // 6. Mission Playful Procedural BGM (Background Music)
+  startBgm() {
+    if (this.muted || this.bgmRunning) return;
+    this.initCtx();
+    if (!this.ctx) return;
+    this.bgmRunning = true;
+    this.bgmStep = 0;
+    this.updateToggleButtons();
+
+    // Cheerful Pentatonic Playful Notes (Frequency in Hz)
+    const melody = [
+      523.25, 659.25, 783.99, 1046.50, // C5, E5, G5, C6
+      880.00, 783.99, 659.25, 783.99,  // A5, G5, E5, G5
+      587.33, 659.25, 783.99, 880.00,  // D5, E5, G5, A5
+      1046.50, 783.99, 659.25, 523.25  // C6, G5, E5, C5
+    ];
+
+    const bass = [
+      130.81, 130.81, 130.81, 130.81, // C3
+      174.61, 174.61, 174.61, 174.61, // F3
+      196.00, 196.00, 196.00, 196.00, // G3
+      130.81, 130.81, 196.00, 130.81  // C3, C3, G3, C3
+    ];
+
+    const stepDuration = 0.32; // ~94 BPM cheerful gentle tempo
+
+    const playNextStep = () => {
+      if (!this.bgmRunning || this.muted || !this.ctx) return;
+
+      const now = this.ctx.currentTime;
+      const freq = melody[this.bgmStep % melody.length];
+      const bassFreq = bass[this.bgmStep % bass.length];
+
+      try {
+        // Treble Chime (Soft Marimba / Music Box tone)
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.04, now + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0005, now + stepDuration * 0.95);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + stepDuration);
+
+        // Soft Bass accompaniment every 4 beats
+        if (this.bgmStep % 4 === 0) {
+          const bassOsc = this.ctx.createOscillator();
+          const bassGain = this.ctx.createGain();
+          bassOsc.type = 'triangle';
+          bassOsc.frequency.setValueAtTime(bassFreq, now);
+
+          bassGain.gain.setValueAtTime(0, now);
+          bassGain.gain.linearRampToValueAtTime(0.03, now + 0.02);
+          bassGain.gain.exponentialRampToValueAtTime(0.0005, now + stepDuration * 1.8);
+
+          bassOsc.connect(bassGain);
+          bassGain.connect(this.ctx.destination);
+          bassOsc.start(now);
+          bassOsc.stop(now + stepDuration * 1.8);
+        }
+      } catch (e) {}
+
+      this.bgmStep++;
+      this.bgmTimer = setTimeout(playNextStep, stepDuration * 1000);
+    };
+
+    playNextStep();
+  }
+
+  stopBgm() {
+    this.bgmRunning = false;
+    if (this.bgmTimer) {
+      clearTimeout(this.bgmTimer);
+      this.bgmTimer = null;
+    }
+    this.updateToggleButtons();
+  }
+
+  toggleBgm() {
+    if (this.bgmRunning) {
+      this.stopBgm();
+      return false;
+    } else {
+      this.startBgm();
+      return true;
+    }
   }
 }
 

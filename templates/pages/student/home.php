@@ -1,6 +1,7 @@
 <?php
 /**
  * MISSION KIDS — Student Home (Markas Petualang)
+ * Refined, Cohesive, Child-Friendly Dashboard
  */
 
 declare(strict_types=1);
@@ -9,173 +10,145 @@ require __DIR__ . '/../../layouts/header.php';
 ?>
 
 <div class="container">
-  <!-- Top Greeting & Progress Hero -->
-  <section class="card-kid" style="background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%); border-color: #BFDBFE; padding: var(--space-8); margin-bottom: var(--space-8);">
-    <div style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); flex-wrap: wrap;">
-      <div style="display: flex; align-items: center; gap: var(--space-4);">
-        <div style="width: 76px; height: 76px; border-radius: 50%; background: #DBEAFE; display: flex; align-items: center; justify-content: center; font-size: 2.8rem; border: 3px solid #93C5FD; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);">
+  <!-- Top Row: Profile Card & Quest Recommendation Card -->
+  <div class="dashboard-top-row">
+    <!-- Left Card: Profile & Level Summary -->
+    <div class="dash-profile-card-mockup">
+      <div style="display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-4);">
+        <div class="welcome-avatar-disc" id="hero-avatar-disc" style="width: 64px; height: 64px; font-size: 2.2rem; min-width: 64px;" title="Ketuk aku untuk sapaan ceria!">
           <?= match ($profile['avatar_id'] ?? 'astro_cat') {
               'astro_cat' => '🐱',
               'super_bear' => '🐻',
               'clever_fox' => '🦊',
               'star_owl' => '🦉',
+              'rocket_boy' => '👦',
+              'wonder_girl' => '👧',
+              'botty_bot' => '🤖',
+              'happy_dino' => '🦕',
               default => '🚀'
           } ?>
         </div>
         <div>
-          <div class="badge-pill badge-pill-primary" style="margin-bottom: var(--space-1);">
-            <?= e($levelInfo['badge']) ?> Level <?= (int)$levelInfo['level'] ?> — <?= e($levelInfo['name']) ?>
-          </div>
-          <h1 style="font-size: var(--fs-2xl); margin-bottom: var(--space-1);">
+          <h1 style="font-family: var(--font-heading); font-size: var(--fs-xl); color: #0F172A; margin-bottom: 2px;">
             Halo, <?= e($profile['nickname']) ?>! 👋
           </h1>
-          <p style="font-size: var(--fs-sm);">
-            MIKO siap menemanimu. Siap memecahkan misi petualangan hari ini?
+          <p style="font-size: var(--fs-xs); color: var(--text-muted); margin: 0;">
+            Siap untuk petualangan hari ini?
           </p>
         </div>
       </div>
 
-      <!-- XP Level Progress Box -->
-      <div style="min-width: 260px; flex: 1; max-width: 380px;">
-        <div class="meter-wrapper">
-          <div class="meter-header">
-            <span>Level <?= (int)$levelInfo['level'] ?></span>
-            <span><?= (int)$levelInfo['total_xp'] ?> / <?= (int)$levelInfo['next_min_xp'] ?> XP</span>
-          </div>
-          <div class="progress-bar-kid" style="height: 18px;">
-            <div class="progress-fill-kid" style="width: <?= (int)$levelInfo['progress_percent'] ?>%;"></div>
-          </div>
-          <div style="text-align: right; font-size: var(--fs-xs); color: var(--text-light); margin-top: 2px;">
-            <?php if ($levelInfo['level'] < 5): ?>
-              Butuh <?= (int)($levelInfo['next_min_xp'] - $levelInfo['total_xp']) ?> XP lagi menuju Level <?= (int)$levelInfo['next_level'] ?>!
-            <?php else: ?>
-              Kamu berada di Level Tertinggi! Luar Biasa!
-            <?php endif; ?>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Mission of the Day (Featured Quest) -->
-  <?php if (!empty($recommendedMission)): ?>
-    <section style="margin-bottom: var(--space-8);">
-      <div class="card-kid" style="border: 3px solid #FBBF24; background: linear-gradient(135deg, #FFFBEB 0%, #FFFFFF 100%); display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); flex-wrap: wrap;">
-        <div style="display: flex; align-items: center; gap: var(--space-5);">
-          <div style="width: 64px; height: 64px; border-radius: var(--radius-xl); background: #FEF3C7; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2);">
-            🎯
-          </div>
-          <div>
-            <div class="badge-pill badge-pill-secondary" style="margin-bottom: var(--space-1);">
-              Rekomendasi Misi Hari Ini • <?= e($recommendedMission['world_title'] ?? 'Dunia Petualangan') ?>
-            </div>
-            <h2 style="font-size: var(--fs-xl); margin-bottom: var(--space-1);">
-              <?= e($recommendedMission['title']) ?>
-            </h2>
-            <p style="font-size: var(--fs-sm); max-width: 600px;">
-              <?= e($recommendedMission['subtitle']) ?>
-            </p>
-          </div>
-        </div>
-
-        <a href="?page=mission&slug=<?= urlencode($recommendedMission['slug']) ?>" class="btn-kid btn-kid-secondary btn-featured-quest" style="padding: 0.9rem 2rem; font-size: var(--fs-md);" id="btn-play-today">
-          Jalankan Misi Sekarang ⚡ (+<?= (int)$recommendedMission['xp_reward'] ?> XP)
-        </a>
-      </div>
-    </section>
-  <?php endif; ?>
-
-  <!-- 3 Learning Worlds Hub -->
-  <section style="margin-bottom: var(--space-10);">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4);">
+      <!-- Level & XP Progress Meter -->
       <div>
-        <h2 style="font-size: var(--fs-2xl); margin-bottom: var(--space-1);">Dunia Petualangan</h2>
-        <p style="font-size: var(--fs-sm);">Pilih dunia yang ingin kamu jelajahi:</p>
+        <div style="display: flex; align-items: center; justify-content: space-between; font-size: var(--fs-xs); font-weight: 700; color: #1E3A8A; margin-bottom: 6px;">
+          <span>Level <?= (int)$levelInfo['level'] ?> • <?= e($levelInfo['name']) ?></span>
+          <span style="color: var(--text-muted);"><?= (int)$levelInfo['total_xp'] ?> / <?= (int)$levelInfo['next_min_xp'] ?> XP</span>
+        </div>
+        <div class="progress-bar-kid" style="height: 12px;">
+          <div class="progress-fill-kid" style="width: <?= (int)$levelInfo['progress_percent'] ?>%; background: linear-gradient(90deg, #3B82F6, #1D4ED8);"></div>
+        </div>
       </div>
-      <a href="?page=worlds" class="btn-kid btn-kid-ghost" style="font-size: var(--fs-sm); padding: 0.5rem 1.2rem;">
-        Lihat Peta Lengkap 🗺️
-      </a>
     </div>
 
-    <div class="worlds-grid">
-      <?php foreach ($worlds as $w): ?>
-        <?php 
-          $themeClass = match($w['slug']) {
-              'number-city' => 'theme-number',
-              'discovery-lab' => 'theme-discovery',
-              'thinking-lab' => 'theme-thinking',
-              default => 'theme-discovery'
-          };
-          $icon = match($w['slug']) {
-              'number-city' => '🧮',
-              'discovery-lab' => '🌿',
-              'thinking-lab' => '🤖',
-              default => '⭐'
-          };
-          $btnClass = match($w['slug']) {
-              'number-city' => 'btn-kid-secondary',
-              'discovery-lab' => 'btn-kid-accent',
-              'thinking-lab' => 'btn-kid-purple',
-              default => 'btn-kid-primary'
-          };
-        ?>
-        <div class="world-card <?= $themeClass ?>">
-          <div>
-            <div class="world-badge-icon"><?= $icon ?></div>
-            <h3 class="world-title"><?= e($w['title']) ?></h3>
-            <p class="world-subtitle"><?= e($w['subtitle']) ?></p>
-
-            <!-- Progress Meter -->
-            <div class="meter-wrapper" style="margin-bottom: var(--space-6);">
-              <div class="meter-header">
-                <span>Progres Selesai</span>
-                <span><?= (int)$w['completed_missions'] ?> / <?= (int)$w['total_missions'] ?> Misi</span>
-              </div>
-              <div class="progress-bar-kid">
-                <div class="progress-fill-kid" style="width: <?= (int)$w['progress_percent'] ?>%;"></div>
-              </div>
-            </div>
+    <!-- Right Card: Rekomendasi Misi Hari Ini -->
+    <?php if (!empty($recommendedMission)): ?>
+      <div class="dash-quest-card-mockup">
+        <div style="flex: 1;">
+          <div class="badge-pill badge-pill-secondary" style="margin-bottom: var(--space-2); display: inline-flex; align-items: center; gap: 4px; font-size: 11px;">
+            <span>🎯</span> Rekomendasi Misi Hari Ini
           </div>
+          <h2 style="font-family: var(--font-heading); font-size: var(--fs-lg); font-weight: 800; color: #78350F; margin-bottom: 4px;">
+            <?= e($recommendedMission['title']) ?>
+          </h2>
+          <p style="font-size: var(--fs-xs); color: #92400E; margin: 0; line-height: 1.4;">
+            <?= e($recommendedMission['subtitle']) ?>
+          </p>
+        </div>
 
-          <a href="?page=worlds#world-<?= e($w['slug']) ?>" class="btn-kid <?= $btnClass ?>" style="width: 100%;">
-            Jelajahi Misi 🚀
+        <div>
+          <a href="?page=mission&slug=<?= urlencode($recommendedMission['slug']) ?>" class="hero-cta-btn-pill shine-effect" id="btn-play-today" style="background: linear-gradient(135deg, #F59E0B, #D97706); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35); padding: 0.8rem 1.6rem; font-size: var(--fs-sm); white-space: nowrap;">
+            <span>Mulai Misi</span>
+            <span>➔</span>
           </a>
         </div>
-      <?php endforeach; ?>
-    </div>
-  </section>
+      </div>
+    <?php endif; ?>
+  </div>
 
-  <!-- Skill Progress Journey -->
-  <section style="margin-bottom: var(--space-8);">
-    <div class="card-kid">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-2);">
-        <div>
-          <h2 style="font-size: var(--fs-xl); margin-bottom: var(--space-1);">Jejak Keterampilan Belajar</h2>
-          <p style="font-size: var(--fs-sm);">Perkembangan aktivitas dan daya nalar yang telah kamu asah:</p>
-        </div>
-        <a href="?page=progress" style="font-size: var(--fs-sm); color: var(--color-primary); font-weight: 700;">
+  <!-- Main Bottom Row: Dunia Petualangan & Keterampilan Belajar -->
+  <div class="dashboard-bottom-row">
+    <!-- Left: Dunia Petualangan Grid -->
+    <div>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4);">
+        <h2 style="font-family: var(--font-heading); font-size: var(--fs-xl); font-weight: 800; color: #0F172A; margin: 0;">
+          Dunia Petualangan
+        </h2>
+        <a href="?page=worlds" class="btn-kid btn-kid-ghost" style="font-size: var(--fs-xs); padding: 0.35rem 0.9rem; min-height: 34px;">
+          Lihat Peta Lengkap 🗺️
+        </a>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4);">
+        <?php foreach ($worlds as $w): ?>
+          <?php 
+            $thumb = match($w['slug']) {
+              'number-city' => 'assets/images/number-city.jpg',
+              'discovery-lab' => 'assets/images/discovery-lab.jpg',
+              'thinking-lab' => 'assets/images/thinking-lab.jpg',
+              default => 'assets/images/discovery-lab.jpg'
+            };
+          ?>
+          <a href="?page=worlds#world-<?= e($w['slug']) ?>" class="world-card-h-item" style="text-decoration: none; color: inherit;">
+            <div style="height: 110px; overflow: hidden; background: #F1F5F9;">
+              <img src="<?= $thumb ?>" alt="<?= e($w['title']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div style="padding: var(--space-3) var(--space-4);">
+              <h3 style="font-family: var(--font-heading); font-size: var(--fs-sm); font-weight: 800; color: #0F172A; margin-bottom: 2px;">
+                <?= e($w['title']) ?>
+              </h3>
+              <div style="font-size: 11px; color: var(--text-muted); font-weight: 700;">
+                <?= (int)$w['completed_missions'] ?>/<?= (int)$w['total_missions'] ?> misi selesai
+              </div>
+            </div>
+          </a>
+        <?php endforeach; ?>
+      </div>
+    </div>
+
+    <!-- Right: Keterampilan Belajar -->
+    <div>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4);">
+        <h2 style="font-family: var(--font-heading); font-size: var(--fs-xl); font-weight: 800; color: #0F172A; margin: 0;">
+          Keterampilan Belajar
+        </h2>
+        <a href="?page=progress" style="font-size: var(--fs-xs); color: var(--color-primary); font-weight: 700; text-decoration: none;">
           Detail Jejak Belajar &rarr;
         </a>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-5);">
-        <?php foreach ($skills as $key => $sk): ?>
-          <div style="background: var(--bg-surface-elevated); border: 2px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--space-4);">
-            <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-2);">
-              <span style="font-size: 1.5rem;"><?= $sk['icon'] ?></span>
-              <strong style="font-size: var(--fs-sm);"><?= e($sk['title']) ?></strong>
+      <div style="background: #FFFFFF; border: 2px solid #E2E8F0; border-radius: 20px; padding: var(--space-5); box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);">
+        <div style="font-size: var(--fs-xs); color: var(--text-light); margin-bottom: var(--space-3); font-weight: 600;">
+          Jejak Keterampilan Belajar kamu terus berkembang:
+        </div>
+        <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+          <?php foreach ($skills as $key => $sk): ?>
+            <div>
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 1.2rem;"><?= $sk['icon'] ?></span>
+                  <strong style="font-size: var(--fs-xs); color: #1E293B;"><?= e($sk['title']) ?></strong>
+                </div>
+                <span style="font-size: var(--fs-xs); font-weight: 800; color: #2563EB;"><?= (int)$sk['percent'] ?>%</span>
+              </div>
+              <div class="progress-bar-kid" style="height: 8px;">
+                <div class="progress-fill-kid" style="width: <?= (int)$sk['percent'] ?>%; background: linear-gradient(90deg, #38BDF8, #2563EB);"></div>
+              </div>
             </div>
-            <div class="progress-bar-kid" style="height: 12px; margin-top: var(--space-2);">
-              <div class="progress-fill-kid progress-fill-primary" style="width: <?= (int)$sk['percent'] ?>%;"></div>
-            </div>
-            <div style="text-align: right; font-size: var(--fs-xs); color: var(--text-muted); margin-top: 4px; font-weight: 700;">
-              <?= (int)$sk['percent'] ?>%
-            </div>
-          </div>
-        <?php endforeach; ?>
+          <?php endforeach; ?>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
 </div>
 
 <?php require __DIR__ . '/../../layouts/footer.php'; ?>

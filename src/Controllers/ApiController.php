@@ -85,6 +85,14 @@ class ApiController
         $attemptCount = (int)($body['attempt_count'] ?? 0);
         $currentState = (array)($body['current_state'] ?? []);
 
+        // Track hints delivered in session to prevent client-side hint spoofing
+        if (!empty($missionSlug)) {
+            $mikoHints = (array)Session::get('miko_hints', []);
+            $prev = (int)($mikoHints[$missionSlug] ?? 0);
+            $mikoHints[$missionSlug] = max($prev, $hintLevel);
+            Session::set('miko_hints', $mikoHints);
+        }
+
         $profile = $this->auth->getStudentProfile($userId);
         $nickname = $profile['nickname'] ?? 'Sahabat Cilik';
 
@@ -95,8 +103,11 @@ class ApiController
     private function handleCompleteMission(int $userId, array $body): void
     {
         $missionId = (int)($body['mission_id'] ?? 0);
-        $hintsUsed = (int)($body['hints_used'] ?? 0);
+        $clientHintsUsed = (int)($body['hints_used'] ?? 0);
         $reflectionAnswer = !empty($body['reflection_answer']) ? (string)$body['reflection_answer'] : null;
+        $solutionPayload = isset($body['solution_payload']) && is_array($body['solution_payload']) 
+            ? $body['solution_payload'] 
+            : null;
 
         if ($missionId <= 0) {
             http_response_code(400);
@@ -104,7 +115,32 @@ class ApiController
             return;
         }
 
-        $result = $this->missionProgress->completeMission($userId, $missionId, $hintsUsed, $reflectionAnswer);
+        $mission = $this->missionProgress->getMissionById($missionId);
+        if (!$mission) {
+            http_response_code(404);
+            echo json_encode(['success' => false, 'error' => 'Misi tidak ditemukan.']);
+            return;
+        }
+
+        // Compare client hints_used with hints tracked on server session
+        $mikoHints = (array)Session::get('miko_hints', []);
+        $serverHints = (int)($mikoHints[$mission['slug']] ?? 0);
+        $effectiveHintsUsed = max($clientHintsUsed, $serverHints);
+
+        $result = $this->missionProgress->completeMission($userId, $missionId, $effectiveHintsUsed, $reflectionAnswer, $solutionPayload);
+        
+        if (!$result['success']) {
+            if (!empty($result['validation_failed'])) {
+                http_response_code(422);
+            } else {
+                http_response_code(403);
+            }
+        } else {
+            // Clean up session hint tracking for this completed mission
+            unset($mikoHints[$mission['slug']]);
+            Session::set('miko_hints', $mikoHints);
+        }
+
         echo json_encode($result);
     }
 
@@ -116,10 +152,16 @@ class ApiController
         $reflectionAnswer = !empty($body['reflection_answer']) ? (string)$body['reflection_answer'] : null;
 
         if ($missionId > 0) {
-            $this->missionProgress->recordAttempt($userId, $missionId, $hintsUsed, $isSuccess, $reflectionAnswer);
+            $mission = $this->missionProgress->getMissionById($missionId);
+            if ($mission && $this->missionProgress->isMissionAvailable($userId, $mission)) {
+                $this->missionProgress->recordAttempt($userId, $missionId, $hintsUsed, $isSuccess, $reflectionAnswer);
+                echo json_encode(['success' => true]);
+                return;
+            }
         }
 
-        echo json_encode(['success' => true]);
+        http_response_code(403);
+        echo json_encode(['success' => false, 'error' => 'Misi tidak tersedia atau masih terkunci.']);
     }
 
     private function handleUpdateProfile(int $userId, array $body): void

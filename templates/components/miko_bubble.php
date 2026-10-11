@@ -13,7 +13,10 @@ $currentNick = Session::get('nickname', 'Sahabat Cilik');
       <div class="miko-bubble-title">
         <span>💡</span> Sahabat MIKO
       </div>
-      <button class="miko-bubble-close" id="miko-bubble-close" aria-label="Tutup pesan MIKO">&times;</button>
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <button type="button" class="miko-bubble-speak" id="miko-bubble-speak" title="Dengarkan Suara MIKO" aria-label="Dengarkan suara MIKO" style="background: none; border: none; cursor: pointer; font-size: 13px; padding: 2px;">🔊</button>
+        <button class="miko-bubble-close" id="miko-bubble-close" aria-label="Tutup pesan MIKO">&times;</button>
+      </div>
     </div>
     <div class="miko-bubble-text" id="miko-bubble-text">
       Halo <?= e($currentNick) ?>! MIKO siap menemanimu bereksplorasi. Kalau butuh bantuan di dalam misi, klik tombol petunjuk ya!
@@ -22,7 +25,7 @@ $currentNick = Session::get('nickname', 'Sahabat Cilik');
 
   <!-- MIKO Trigger Button with Inline SVG Avatar -->
   <button class="miko-avatar-btn miko-living-avatar" id="miko-avatar-trigger" title="Bicara dengan MIKO" aria-label="Buka bantuan MIKO">
-    <svg width="44" height="44" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <!-- Antenna -->
       <line x1="50" y1="12" x2="50" y2="28" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
       <circle cx="50" cy="10" r="7" fill="#FBBF24"/>

@@ -77,7 +77,7 @@ $mission = $progressService->getMissionBySlug('tanaman-layu', $testUserId);
 assertTest("Mission: Fetch by Slug (Tanaman Layu)", !empty($mission) && $mission['slug'] === 'tanaman-layu');
 
 // Complete Mission 2.1 (Tanaman Layu)
-$completeRes = $progressService->completeMission($testUserId, (int)$mission['id'], 1, 'Air dan cahaya penting untuk tanaman');
+$completeRes = $progressService->completeMission($testUserId, (int)$mission['id'], 1, 'Akar tanaman bisa membusuk dan tanaman sulit bernapas.', ['water' => 75, 'sunlight' => 80]);
 assertTest("Mission: Complete Mission", $completeRes['success'] === true, $completeRes['error'] ?? '');
 assertTest("Mission: XP Awarded", $completeRes['total_awarded_xp'] >= 100, "XP: " . ($completeRes['total_awarded_xp'] ?? 0));
 assertTest("Mission: 3 Stars Rating", ($completeRes['stars'] ?? 0) === 3);

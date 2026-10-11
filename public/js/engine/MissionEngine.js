@@ -22,10 +22,21 @@ class MissionEngine {
   }
 
   init() {
+    // Dock MIKO to the side-top during missions so it doesn't block controls
+    const mikoDock = document.getElementById('miko-dock');
+    if (mikoDock) {
+      mikoDock.classList.add('dock-side-top');
+    }
+
     this.bindNavigationButtons();
     this.bindChallengeButtons();
     this.bindReflection();
     this.setStep('story');
+
+    // Auto-start playful background music if sound enabled
+    if (window.SoundFX && !window.SoundFX.isMuted()) {
+      window.SoundFX.startBgm();
+    }
   }
 
   setStep(stepName) {
@@ -112,12 +123,57 @@ class MissionEngine {
             this.setStep('reflection');
           });
 
+          // Show centered celebratory success modal
+          const modal = document.getElementById('modal-challenge-success');
+          const modalMsg = document.getElementById('modal-success-msg');
+          if (modalMsg) {
+            modalMsg.textContent = result.message || 'Jawabanmu benar dan semua langkah sudah tepat!';
+          }
+          if (modal) {
+            modal.classList.add('active');
+            const btnModalReflect = document.getElementById('btn-modal-to-reflection');
+            if (btnModalReflect) {
+              btnModalReflect.onclick = () => {
+                modal.classList.remove('active');
+                this.setStep('reflection');
+              };
+            }
+            const btnModalStay = document.getElementById('btn-modal-stay');
+            if (btnModalStay) {
+              btnModalStay.onclick = () => {
+                modal.classList.remove('active');
+              };
+            }
+          }
+
+          if (window.Celebration) {
+            window.Celebration.burst({ count: 120 });
+          }
+          if (window.SoundFX) {
+            window.SoundFX.playSuccess();
+          }
+
           this.companion.say("Luar biasa! Kamu berhasil memecahkan tantangannya! Ayo lanjutkan ke refleksi pembelajaran! 🌟");
         } else {
           feedbackBox.style.background = '#FEE2E2';
           feedbackBox.style.color = '#991B1B';
           feedbackBox.style.border = '2px solid #FCA5A5';
           feedbackBox.innerHTML = `⚠️ <strong>${result.message}</strong>`;
+
+          // Asynchronously record failed attempt so backend attempt count accurately breaks first-try bonus
+          fetch('?page=api&action=record_attempt', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': this.data.csrf_token || ''
+            },
+            body: JSON.stringify({
+              csrf_token: this.data.csrf_token || '',
+              mission_id: this.id,
+              hints_used: this.hintsUsed,
+              is_success: false
+            })
+          }).catch(() => {});
 
           if (this.attemptCount >= 2) {
             this.companion.showHintBadge();
@@ -174,6 +230,10 @@ class MissionEngine {
     }
 
     try {
+      const solutionPayload = this.handler && typeof this.handler.getSolutionPayload === 'function'
+        ? this.handler.getSolutionPayload()
+        : null;
+
       const response = await fetch('?page=api&action=complete_mission', {
         method: 'POST',
         headers: {
@@ -185,6 +245,7 @@ class MissionEngine {
           mission_id: this.id,
           hints_used: this.hintsUsed,
           reflection_answer: this.selectedReflection,
+          solution_payload: solutionPayload
         })
       });
 
@@ -210,6 +271,11 @@ class MissionEngine {
   }
 
   renderRewardScreen(result) {
+    // 0. Stop mission BGM so celebration fanfare shines
+    if (window.SoundFX) {
+      window.SoundFX.stopBgm();
+    }
+
     // 1. Trigger Canvas Confetti & Sound Fanfare
     if (window.Celebration) {
       window.Celebration.burst({ count: 160 });

@@ -52,18 +52,35 @@ class GamificationService
 
     public function awardXp(int $userId, int $amount, string $sourceType, ?int $refId = null): array
     {
-        // Get old total XP
-        $stmtOld = $this->db->prepare("SELECT total_xp, current_level FROM profiles WHERE user_id = :uid LIMIT 1");
-        $stmtOld->execute([':uid' => $userId]);
-        $profile = $stmtOld->fetch();
-        $oldXp = $profile ? (int)$profile['total_xp'] : 0;
-        $oldLvl = $profile ? (int)$profile['current_level'] : 1;
+        // 1. Idempotency protection for one-time reward types (mission_clear, first_try_bonus, reflection_bonus, achievement_unlock)
+        if (in_array($sourceType, ['mission_clear', 'first_try_bonus', 'reflection_bonus', 'achievement_unlock'], true)) {
+            $stmtCheck = $this->db->prepare("SELECT id FROM xp_transactions WHERE user_id = :uid AND source_type = :src AND reference_id = :ref LIMIT 1");
+            $stmtCheck->execute([
+                ':uid' => $userId,
+                ':src' => $sourceType,
+                ':ref' => $refId
+            ]);
+            if ($stmtCheck->fetch()) {
+                // Idempotent duplicate: reward already exists in database, do not double award!
+                $stmtCur = $this->db->prepare("SELECT total_xp, current_level FROM profiles WHERE user_id = :uid LIMIT 1");
+                $stmtCur->execute([':uid' => $userId]);
+                $cur = $stmtCur->fetch();
+                $curXp = $cur ? (int)$cur['total_xp'] : 0;
+                $curLvl = $cur ? (int)$cur['current_level'] : 1;
+                return [
+                    'old_xp' => $curXp,
+                    'new_xp' => $curXp,
+                    'awarded' => 0,
+                    'duplicate_prevented' => true,
+                    'old_level' => $curLvl,
+                    'new_level' => $curLvl,
+                    'leveled_up' => false,
+                    'level_info' => $this->calculateLevel($curXp)
+                ];
+            }
+        }
 
-        $newXp = $oldXp + $amount;
-        $newLevelData = $this->calculateLevel($newXp);
-        $newLvl = $newLevelData['level'];
-
-        // Record transaction
+        // 2. Record transaction in xp_transactions
         $stmtTx = $this->db->prepare("INSERT INTO xp_transactions (user_id, amount, source_type, reference_id) VALUES (:uid, :amount, :src, :ref)");
         $stmtTx->execute([
             ':uid' => $userId,
@@ -72,13 +89,28 @@ class GamificationService
             ':ref' => $refId
         ]);
 
-        // Update profile
-        $stmtUp = $this->db->prepare("UPDATE profiles SET total_xp = :xp, current_level = :lvl WHERE user_id = :uid");
+        // 3. Atomic increment on profiles.total_xp (eliminates lost-update race condition)
+        $stmtUp = $this->db->prepare("UPDATE profiles SET total_xp = total_xp + :amount WHERE user_id = :uid");
         $stmtUp->execute([
-            ':xp' => $newXp,
-            ':lvl' => $newLvl,
+            ':amount' => $amount,
             ':uid' => $userId
         ]);
+
+        // 4. Fetch fresh atomic total_xp and recalculate level
+        $stmtFresh = $this->db->prepare("SELECT total_xp, current_level FROM profiles WHERE user_id = :uid LIMIT 1");
+        $stmtFresh->execute([':uid' => $userId]);
+        $fresh = $stmtFresh->fetch();
+        $newXp = $fresh ? (int)$fresh['total_xp'] : $amount;
+        $oldLvl = $fresh ? (int)$fresh['current_level'] : 1;
+        $oldXp = $newXp - $amount;
+
+        $newLevelData = $this->calculateLevel($newXp);
+        $newLvl = $newLevelData['level'];
+
+        if ($newLvl !== $oldLvl) {
+            $stmtLvl = $this->db->prepare("UPDATE profiles SET current_level = :lvl WHERE user_id = :uid");
+            $stmtLvl->execute([':lvl' => $newLvl, ':uid' => $userId]);
+        }
 
         $leveledUp = $newLvl > $oldLvl;
 
@@ -86,6 +118,7 @@ class GamificationService
             'old_xp' => $oldXp,
             'new_xp' => $newXp,
             'awarded' => $amount,
+            'duplicate_prevented' => false,
             'old_level' => $oldLvl,
             'new_level' => $newLvl,
             'leveled_up' => $leveledUp,

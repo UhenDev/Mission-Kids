@@ -23,6 +23,13 @@ require __DIR__ . '/../../layouts/header.php';
         <strong><?= e($mission['title']) ?></strong>
       </div>
 
+      <!-- Quick Audio & Music Controls -->
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button type="button" class="btn-kid btn-kid-ghost btn-mission-bgm" id="btn-toggle-bgm" title="Putar / Hentikan Musik Petualangan" style="padding: 0.4rem 0.85rem; font-size: 13px; border-radius: 999px;">
+          🎵 Musik: Nyala
+        </button>
+      </div>
+
       <!-- 7-Step Stepper -->
       <div class="mission-steps-stepper" id="mission-stepper">
         <div class="step-node active" data-step="story">1. Cerita</div>
@@ -215,6 +222,45 @@ window.CURRENT_MISSION = {
   config: JSON.parse(document.getElementById('mission-config-json').textContent),
   csrf_token: <?= json_encode($csrfToken) ?>
 };
+</script>
+
+<!-- Centered Challenge Success Alert Modal -->
+<div class="modal-overlay" id="modal-challenge-success" role="dialog" aria-modal="true" aria-labelledby="modal-success-title">
+  <div class="modal-content" style="border: 3px solid #86EFAC; box-shadow: 0 20px 40px -10px rgba(22, 163, 74, 0.25);">
+    <div style="font-size: 4rem; line-height: 1; margin-bottom: var(--space-2); animation: popIn 0.4s var(--transition-bounce);">
+      🎉
+    </div>
+    <div class="badge-pill badge-pill-accent" style="margin-bottom: var(--space-3); display: inline-block;">
+      Tantangan Terpecahkan!
+    </div>
+    <h2 id="modal-success-title" style="font-size: var(--fs-2xl); color: #15803D; margin-bottom: var(--space-2); font-family: var(--font-heading);">
+      Hore, Kamu Hebat Sekali!
+    </h2>
+    <p id="modal-success-msg" style="font-size: var(--fs-md); color: var(--text-main); margin-bottom: var(--space-6); background: #F0FDF4; padding: var(--space-3); border-radius: var(--radius-lg); border: 1px dashed #86EFAC;">
+      Jawabanmu benar dan semua langkah sudah tepat!
+    </p>
+    <div style="display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap;">
+      <button type="button" class="btn-kid btn-kid-ghost" id="btn-modal-stay" style="padding: 0.8rem 1.4rem;">
+        Lihat Arena 👀
+      </button>
+      <button type="button" class="btn-kid btn-kid-primary" id="btn-modal-to-reflection" style="padding: 0.8rem 1.8rem; font-size: var(--fs-md);">
+        Lanjut ke Refleksi & Hadiah &rarr; 🚀
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const btnBgm = document.getElementById('btn-toggle-bgm');
+  if (btnBgm) {
+    btnBgm.addEventListener('click', () => {
+      if (window.SoundFX) {
+        window.SoundFX.toggleBgm();
+      }
+    });
+  }
+});
 </script>
 
 <!-- Load Mission Engine Scripts -->

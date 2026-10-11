@@ -28,19 +28,19 @@ declare(strict_types=1);
   <nav class="mobile-bottom-nav" aria-label="Navigasi Cepat Ponsel">
     <a href="?page=home" class="mobile-nav-item <?= $currentPage === 'home' ? 'active' : '' ?>">
       <span class="mobile-nav-icon">🏠</span>
-      <span class="mobile-nav-label">Markas</span>
+      <span class="mobile-nav-label">Beranda</span>
     </a>
     <a href="?page=worlds" class="mobile-nav-item <?= in_array($currentPage, ['worlds', 'mission']) ? 'active' : '' ?>">
       <span class="mobile-nav-icon">🗺️</span>
-      <span class="mobile-nav-label">Misi</span>
+      <span class="mobile-nav-label">Dunia</span>
     </a>
     <a href="?page=achievements" class="mobile-nav-item <?= $currentPage === 'achievements' ? 'active' : '' ?>">
       <span class="mobile-nav-icon">🏅</span>
-      <span class="mobile-nav-label">Medali</span>
+      <span class="mobile-nav-label">Pencapaian</span>
     </a>
     <a href="?page=progress" class="mobile-nav-item <?= $currentPage === 'progress' ? 'active' : '' ?>">
-      <span class="mobile-nav-icon">📊</span>
-      <span class="mobile-nav-label">Jejak</span>
+      <span class="mobile-nav-icon">👤</span>
+      <span class="mobile-nav-label">Profil</span>
     </a>
   </nav>
 

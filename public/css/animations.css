@@ -344,3 +344,21 @@
 .sound-toggle-btn:active {
   transform: scale(0.94);
 }
+
+/* 11. Accessibility: Respect Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .floating-badge-item,
+  .brand-icon,
+  .star-pop-1,
+  .star-pop-2,
+  .star-pop-3 {
+    animation: none !important;
+  }
+}
+

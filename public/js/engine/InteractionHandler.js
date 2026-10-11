@@ -146,9 +146,17 @@ class InteractionHandler {
           <span>💧 Siram Air Tanah</span>
           <span id="label-slider-water">15%</span>
         </label>
-        <input type="range" min="0" max="100" value="15" class="kid-slider" id="slider-water">
+        <div class="stepper-slider-row">
+          <button type="button" class="btn-stepper" id="btn-water-minus" aria-label="Kurangi air tanah 5%" title="Kurangi 5%">
+            −
+          </button>
+          <input type="range" min="0" max="100" step="5" value="15" class="kid-slider" id="slider-water" aria-label="Penggeser air tanah">
+          <button type="button" class="btn-stepper" id="btn-water-plus" aria-label="Tambah air tanah 5%" title="Tambah 5%">
+            +
+          </button>
+        </div>
         <span style="font-size: var(--fs-xs); color: var(--text-light);">
-          Target ideal tanaman: 60% – 85%
+          Target ideal tanaman: 60% – 85% (Geser atau tekan tombol − / +)
         </span>
       </div>
 
@@ -157,9 +165,17 @@ class InteractionHandler {
           <span>☀️ Buka Tirai Sinar Matahari</span>
           <span id="label-slider-sun">20%</span>
         </label>
-        <input type="range" min="0" max="100" value="20" class="kid-slider" id="slider-sun" style="accent-color: #F59E0B;">
+        <div class="stepper-slider-row">
+          <button type="button" class="btn-stepper" id="btn-sun-minus" aria-label="Kurangi sinar matahari 5%" title="Kurangi 5%">
+            −
+          </button>
+          <input type="range" min="0" max="100" step="5" value="20" class="kid-slider" id="slider-sun" style="accent-color: #F59E0B;" aria-label="Penggeser sinar matahari">
+          <button type="button" class="btn-stepper" id="btn-sun-plus" aria-label="Tambah sinar matahari 5%" title="Tambah 5%">
+            +
+          </button>
+        </div>
         <span style="font-size: var(--fs-xs); color: var(--text-light);">
-          Target ideal cahaya: 65% – 90%
+          Target ideal cahaya: 65% – 90% (Geser atau tekan tombol − / +)
         </span>
       </div>
     `;
@@ -259,6 +275,23 @@ class InteractionHandler {
 
     sliderWater.addEventListener('input', updateSimulation);
     sliderSun.addEventListener('input', updateSimulation);
+
+    document.getElementById('btn-water-minus').addEventListener('click', () => {
+      sliderWater.value = Math.max(0, parseInt(sliderWater.value) - 5);
+      updateSimulation();
+    });
+    document.getElementById('btn-water-plus').addEventListener('click', () => {
+      sliderWater.value = Math.min(100, parseInt(sliderWater.value) + 5);
+      updateSimulation();
+    });
+    document.getElementById('btn-sun-minus').addEventListener('click', () => {
+      sliderSun.value = Math.max(0, parseInt(sliderSun.value) - 5);
+      updateSimulation();
+    });
+    document.getElementById('btn-sun-plus').addEventListener('click', () => {
+      sliderSun.value = Math.min(100, parseInt(sliderSun.value) + 5);
+      updateSimulation();
+    });
   }
 
   // =========================================================================
@@ -399,6 +432,7 @@ class InteractionHandler {
   // =========================================================================
   mountBakeryShop(canvasEl, controlsEl) {
     this.state = { donutsInTray: 0, coinsInTray: 0 };
+    const coinHistory = [];
 
     canvasEl.innerHTML = `
       <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
@@ -416,6 +450,9 @@ class InteractionHandler {
           <span id="tray-empty-hint" style="color: var(--text-muted); font-size: var(--fs-sm);">
             Nampan masih kosong. Ketuk donat dan koin kembalian di sebelah kanan!
           </span>
+        </div>
+        <div style="font-size: var(--fs-xs); color: var(--text-muted); margin-top: var(--space-2); text-align: center;">
+          💡 <em>Tips: Ketuk langsung donat atau koin di nampan untuk membatalkan/mengambilnya kembali.</em>
         </div>
       </div>
     `;
@@ -439,13 +476,23 @@ class InteractionHandler {
         </button>
       </div>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-4); font-size: var(--fs-sm); font-weight: 700;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-4); font-size: var(--fs-sm); font-weight: 700; flex-wrap: wrap; gap: var(--space-2);">
         <span>Donat di Nampan: <strong id="count-donuts" style="color: #D97706;">0</strong></span>
         <span>Kembalian: <strong id="count-coins" style="color: #2563EB;">Rp 0</strong></span>
       </div>
 
-      <button type="button" class="btn-kid btn-kid-ghost" id="btn-clear-tray" style="margin-top: var(--space-3); padding: 0.4rem 1rem; font-size: var(--fs-xs);">
-        Bersihkan Nampan 🔄
+      <!-- Dedicated Subtraction / Undo Controls -->
+      <div style="display: flex; gap: var(--space-2); margin-top: var(--space-3); flex-wrap: wrap;">
+        <button type="button" class="btn-undo-step" id="btn-sub-donut" disabled aria-label="Ambil satu donat dari nampan">
+          − Ambil 1 Donat
+        </button>
+        <button type="button" class="btn-undo-step" id="btn-sub-coin" disabled aria-label="Batalkan koin terakhir dari nampan">
+          − Batalkan Koin Terakhir
+        </button>
+      </div>
+
+      <button type="button" class="btn-kid btn-kid-ghost" id="btn-clear-tray" style="margin-top: var(--space-3); padding: 0.45rem 1rem; font-size: var(--fs-xs);">
+        Bersihkan Seluruh Nampan 🔄
       </button>
     `;
 
@@ -453,29 +500,55 @@ class InteractionHandler {
     const emptyHint = document.getElementById('tray-empty-hint');
     const countD = document.getElementById('count-donuts');
     const countC = document.getElementById('count-coins');
+    const btnSubDonut = document.getElementById('btn-sub-donut');
+    const btnSubCoin = document.getElementById('btn-sub-coin');
 
     const updateTrayDisplay = () => {
-      emptyHint.style.display = (this.state.donutsInTray === 0 && this.state.coinsInTray === 0) ? 'block' : 'none';
+      const isEmpty = (this.state.donutsInTray === 0 && this.state.coinsInTray === 0);
+      emptyHint.style.display = isEmpty ? 'block' : 'none';
       countD.textContent = this.state.donutsInTray;
       countC.textContent = `Rp ${this.state.coinsInTray.toLocaleString('id-ID')}`;
+      btnSubDonut.disabled = (this.state.donutsInTray <= 0);
+      btnSubCoin.disabled = (this.state.coinsInTray <= 0 || coinHistory.length === 0);
     };
 
     document.getElementById('btn-add-donut').addEventListener('click', () => {
       this.state.donutsInTray++;
-      const item = document.createElement('span');
-      item.textContent = '🍩';
-      item.style.fontSize = '2rem';
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'tray-item-clickable';
+      item.dataset.type = 'donut';
+      item.title = 'Ketuk donat ini untuk mengambilnya kembali';
+      item.setAttribute('aria-label', 'Donat di nampan. Ketuk untuk membatalkan.');
+      item.innerHTML = '🍩<span class="remove-badge" aria-hidden="true">&times;</span>';
+      item.addEventListener('click', () => {
+        this.state.donutsInTray = Math.max(0, this.state.donutsInTray - 1);
+        item.remove();
+        updateTrayDisplay();
+      });
       tray.appendChild(item);
       updateTrayDisplay();
     });
 
     const addCoin = (val) => {
       this.state.coinsInTray += val;
-      const item = document.createElement('span');
-      item.textContent = `🪙 ${val}`;
-      item.className = 'queued-card';
-      item.style.background = '#F59E0B';
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'tray-item-clickable tray-coin-clickable';
+      item.dataset.type = 'coin';
+      item.dataset.val = String(val);
+      item.title = `Ketuk koin Rp ${val.toLocaleString('id-ID')} ini untuk mengambilnya kembali`;
+      item.setAttribute('aria-label', `Koin Rp ${val}. Ketuk untuk membatalkan.`);
+      item.innerHTML = `🪙 ${val}<span class="remove-badge" aria-hidden="true">&times;</span>`;
+      item.addEventListener('click', () => {
+        this.state.coinsInTray = Math.max(0, this.state.coinsInTray - val);
+        const idx = coinHistory.lastIndexOf(item);
+        if (idx !== -1) coinHistory.splice(idx, 1);
+        item.remove();
+        updateTrayDisplay();
+      });
       tray.appendChild(item);
+      coinHistory.push(item);
       updateTrayDisplay();
     };
 
@@ -483,9 +556,31 @@ class InteractionHandler {
     document.getElementById('btn-add-coin-1000').addEventListener('click', () => addCoin(1000));
     document.getElementById('btn-add-coin-2000').addEventListener('click', () => addCoin(2000));
 
+    btnSubDonut.addEventListener('click', () => {
+      if (this.state.donutsInTray > 0) {
+        const donuts = tray.querySelectorAll('[data-type="donut"]');
+        if (donuts.length > 0) {
+          donuts[donuts.length - 1].remove();
+        }
+        this.state.donutsInTray = Math.max(0, this.state.donutsInTray - 1);
+        updateTrayDisplay();
+      }
+    });
+
+    btnSubCoin.addEventListener('click', () => {
+      if (coinHistory.length > 0) {
+        const lastCoin = coinHistory.pop();
+        const val = parseInt(lastCoin.dataset.val || '0');
+        this.state.coinsInTray = Math.max(0, this.state.coinsInTray - val);
+        lastCoin.remove();
+        updateTrayDisplay();
+      }
+    });
+
     document.getElementById('btn-clear-tray').addEventListener('click', () => {
       this.state.donutsInTray = 0;
       this.state.coinsInTray = 0;
+      coinHistory.length = 0;
       tray.innerHTML = '';
       tray.appendChild(emptyHint);
       updateTrayDisplay();
@@ -623,12 +718,22 @@ class InteractionHandler {
       </div>
 
       <div style="margin-top: var(--space-4);">
-        <div style="display: flex; justify-content: space-between; font-size: var(--fs-xs); font-weight: 700; margin-bottom: 4px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: var(--fs-xs); font-weight: 700; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
           <span>Antrean Instruksi Robot:</span>
-          <button type="button" id="btn-clear-robot" style="background: none; border: none; color: #DC2626; cursor: pointer;">Hapus Semua ✕</button>
+          <div style="display: flex; align-items: center; gap: var(--space-2);">
+            <button type="button" class="btn-undo-step" id="btn-undo-robot" disabled title="Hapus perintah langkah paling terakhir" aria-label="Hapus langkah terakhir">
+              ⌫ Hapus Langkah Terakhir
+            </button>
+            <button type="button" id="btn-clear-robot" style="background: none; border: none; color: #DC2626; cursor: pointer; padding: 4px 6px; font-size: 12px; font-weight: 700;" title="Kosongkan seluruh antrean">
+              Hapus Semua ✕
+            </button>
+          </div>
         </div>
         <div class="command-queue-tray" id="robot-queue-tray">
           <span style="color: var(--text-light); font-size: var(--fs-xs);">Belum ada kartu langkah...</span>
+        </div>
+        <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+          💡 <em>Tips: Ketuk kartu langkah mana saja di antrean atau tombol "Hapus Langkah Terakhir" untuk membatalkannya.</em>
         </div>
       </div>
     `;
@@ -639,6 +744,16 @@ class InteractionHandler {
     document.getElementById('cmd-forward').addEventListener('click', () => this.addRobotCommand('FORWARD', '⬆️ Maju'));
     document.getElementById('cmd-turn-right').addEventListener('click', () => this.addRobotCommand('TURN_RIGHT', '↪️ Belok Kanan'));
     document.getElementById('cmd-turn-left').addEventListener('click', () => this.addRobotCommand('TURN_LEFT', '↩️ Belok Kiri'));
+
+    document.getElementById('btn-undo-robot').addEventListener('click', () => {
+      if (this.state.queue.length > 0) {
+        this.state.queue.pop();
+        this.state.bot = { x: 0, y: 0, dir: 'right' };
+        this.renderRobotQueue();
+        this.renderRobotGrid();
+      }
+    });
+
     document.getElementById('btn-clear-robot').addEventListener('click', () => {
       this.state.queue = [];
       this.state.bot = { x: 0, y: 0, dir: 'right' };
@@ -654,16 +769,40 @@ class InteractionHandler {
 
   renderRobotQueue() {
     const tray = document.getElementById('robot-queue-tray');
+    const btnUndo = document.getElementById('btn-undo-robot');
+    const btnClear = document.getElementById('btn-clear-robot');
+
+    if (!tray) return;
+
     if (this.state.queue.length === 0) {
       tray.innerHTML = `<span style="color: var(--text-light); font-size: var(--fs-xs);">Belum ada kartu langkah...</span>`;
+      if (btnUndo) btnUndo.disabled = true;
+      if (btnClear) btnClear.style.opacity = '0.5';
       return;
     }
+
+    if (btnUndo) btnUndo.disabled = false;
+    if (btnClear) btnClear.style.opacity = '1';
+
     tray.innerHTML = '';
     this.state.queue.forEach((item, idx) => {
-      const card = document.createElement('span');
+      const card = document.createElement('button');
+      card.type = 'button';
       card.className = 'queued-card';
       card.id = `q-card-${idx}`;
-      card.textContent = `${idx + 1}. ${item.label}`;
+      card.title = `Ketuk untuk membatalkan langkah #${idx + 1}`;
+      card.setAttribute('aria-label', `Langkah #${idx + 1}: ${item.label}. Ketuk untuk menghapus.`);
+      card.style.cursor = 'pointer';
+      card.style.border = 'none';
+      card.innerHTML = `${idx + 1}. ${item.label} <span class="remove-badge" aria-hidden="true">&times;</span>`;
+
+      card.addEventListener('click', () => {
+        this.state.queue.splice(idx, 1);
+        this.state.bot = { x: 0, y: 0, dir: 'right' };
+        this.renderRobotQueue();
+        this.renderRobotGrid();
+      });
+
       tray.appendChild(card);
     });
   }
@@ -933,6 +1072,60 @@ class InteractionHandler {
     }
 
     return { success: true, message: "Tantangan selesai!" };
+  }
+
+  getSolutionPayload() {
+    if (this.slug === 'tanaman-layu') {
+      return {
+        water: this.state.water ?? 0,
+        sunlight: this.state.sunlight ?? 0
+      };
+    }
+    if (this.slug === 'misteri-bayangan') {
+      return {
+        torch_distance: this.state.torch_dist ?? 80
+      };
+    }
+    if (this.slug === 'perjalanan-air') {
+      return {
+        sequence: Array.isArray(this.state.slots) ? this.state.slots : []
+      };
+    }
+    if (this.slug === 'toko-kue') {
+      return {
+        donuts: this.state.donutsInTray ?? 0,
+        change: this.state.coinsInTray ?? 0
+      };
+    }
+    if (this.slug === 'jembatan-angka') {
+      return {
+        selected_value: this.state.selectedValue ?? null
+      };
+    }
+    if (this.slug === 'kota-pola') {
+      return {
+        selected_color: this.state.selectedColor ?? null
+      };
+    }
+    if (this.slug === 'robot-pulang') {
+      return {
+        command_queue: Array.isArray(this.state.queue) 
+          ? this.state.queue.map(cmd => typeof cmd === 'string' ? cmd : (cmd.type || ''))
+          : []
+      };
+    }
+    if (this.slug === 'jalan-rahasia') {
+      return {
+        chosen_path: this.state.chosenPath ?? null
+      };
+    }
+    if (this.slug === 'robot-mengulang') {
+      return {
+        loop_count: this.state.loopCount ?? 1,
+        actions: Array.isArray(this.state.actions) ? this.state.actions : []
+      };
+    }
+    return {};
   }
 }
 
