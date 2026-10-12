@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
-      // Speech bubble reaction
+      // Speech bubble reaction & cute Miko voice
       if (avatarBubble) {
         const randomQuote = avatarGreetings[Math.floor(Math.random() * avatarGreetings.length)];
         avatarBubble.textContent = randomQuote;
@@ -133,6 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
         avatarQuoteTimer = setTimeout(() => {
           avatarBubble.style.display = 'none';
         }, 2600);
+
+        if (window.mikoCompanion && typeof window.mikoCompanion.speak === 'function') {
+          window.mikoCompanion.speak(randomQuote);
+        }
       }
     });
   }

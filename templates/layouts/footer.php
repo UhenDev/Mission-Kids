@@ -43,12 +43,13 @@ declare(strict_types=1);
       <span class="mobile-nav-label">Profil</span>
     </a>
   </nav>
-
-  <?php require __DIR__ . '/../components/miko_bubble.php'; ?>
 <?php endif; ?>
 
+<!-- MIKO Floating Companion (Tersedia di setiap halaman) -->
+<?php require __DIR__ . '/../components/miko_bubble.php'; ?>
+
 <!-- App Script -->
-<script src="js/app.js?v=3.2"></script>
+<script src="js/app.js?v=3.3"></script>
 
 </body>
 </html>

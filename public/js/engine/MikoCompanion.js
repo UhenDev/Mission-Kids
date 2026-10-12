@@ -40,20 +40,29 @@ class MikoCompanion {
   resolveAudioClip(text) {
     if (!text) return null;
     const lower = text.toLowerCase();
-    if (lower.includes('si robot ceria') || lower.includes('butuh bantuan di dalam misi')) {
+    if (lower.includes('si robot ceria') || lower.includes('butuh bantuan') || lower.includes('miko dan aku')) {
       return 'audio/miko/cheer_1.mp3';
     }
-    if (lower.includes('xp dan bintang')) {
+    if (lower.includes('xp dan bintang') || lower.includes('raih bintang')) {
       return 'audio/miko/cheer_2.mp3';
     }
-    if (lower.includes('sedikit demi sedikit') || lower.includes('otakmu')) {
+    if (lower.includes('sedikit demi sedikit') || lower.includes('otakmu') || lower.includes('belajar logika')) {
       return 'audio/miko/cheer_3.mp3';
     }
-    if (lower.includes('dunia petualangan')) {
+    if (lower.includes('dunia petualangan') || lower.includes('bertualang hari ini') || lower.includes('siap bertualang')) {
       return 'audio/miko/cheer_4.mp3';
     }
-    if (lower.includes('jangan takut salah')) {
+    if (lower.includes('jangan takut salah') || lower.includes('lanjutkan petualanganmu')) {
       return 'audio/miko/cheer_5.mp3';
+    }
+    if (lower.includes('arena tantangan') || lower.includes('selamat datang')) {
+      return 'audio/miko/mission_welcome.mp3';
+    }
+    if (lower.includes('jangan menyerah')) {
+      return 'audio/miko/mission_retry.mp3';
+    }
+    if (lower.includes('keberhasilanmu') || lower.includes('xp baru') || lower.includes('horeee')) {
+      return 'audio/miko/mission_xp.mp3';
     }
     if (lower.includes('memecahkan tantangannya') || lower.includes('luar biasa')) {
       return 'audio/miko/mission_success.mp3';
