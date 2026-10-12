@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <!-- Load Mission Engine Scripts -->
-<script src="js/engine/InteractionHandler.js?v=3.1"></script>
-<script src="js/engine/MissionEngine.js?v=3.1"></script>
+<script src="js/engine/InteractionHandler.js?v=3.2"></script>
+<script src="js/engine/MissionEngine.js?v=3.2"></script>
 
 <?php require __DIR__ . '/../../layouts/footer.php'; ?>

@@ -12,6 +12,7 @@ class MikoCompanion {
     this.bubbleText = document.getElementById('miko-bubble-text');
     this.levelDisplay = document.getElementById('hint-level-display');
     this.hintIndicator = document.getElementById('miko-hint-indicator');
+    this.currentAudio = null;
     this.lastSpokenText = '';
 
     const speakBtn = document.getElementById('miko-bubble-speak');
@@ -34,6 +35,45 @@ class MikoCompanion {
         };
       }
     }
+  }
+
+  resolveAudioClip(text) {
+    if (!text) return null;
+    const lower = text.toLowerCase();
+    if (lower.includes('si robot ceria') || lower.includes('butuh bantuan di dalam misi')) {
+      return 'audio/miko/cheer_1.mp3';
+    }
+    if (lower.includes('xp dan bintang')) {
+      return 'audio/miko/cheer_2.mp3';
+    }
+    if (lower.includes('sedikit demi sedikit') || lower.includes('otakmu')) {
+      return 'audio/miko/cheer_3.mp3';
+    }
+    if (lower.includes('dunia petualangan')) {
+      return 'audio/miko/cheer_4.mp3';
+    }
+    if (lower.includes('jangan takut salah')) {
+      return 'audio/miko/cheer_5.mp3';
+    }
+    if (lower.includes('memecahkan tantangannya') || lower.includes('luar biasa')) {
+      return 'audio/miko/mission_success.mp3';
+    }
+    if (lower.includes('menyiapkan petunjuk')) {
+      return 'audio/miko/hint_preparing.mp3';
+    }
+    if (lower.includes('level 1') || lower.includes('level satu')) {
+      return 'audio/miko/hint_level_1.mp3';
+    }
+    if (lower.includes('level 2') || lower.includes('level dua')) {
+      return 'audio/miko/hint_level_2.mp3';
+    }
+    if (lower.includes('level 3') || lower.includes('level tiga')) {
+      return 'audio/miko/hint_level_3.mp3';
+    }
+    if (lower.includes('halo') || lower.includes('miko siap')) {
+      return 'audio/miko/greeting_default.mp3';
+    }
+    return null;
   }
 
   getBestCuteVoice() {
@@ -74,6 +114,50 @@ class MikoCompanion {
     }
   }
 
+  stopSpeaking() {
+    if (this.currentAudio) {
+      try {
+        this.currentAudio.pause();
+        this.currentAudio.currentTime = 0;
+      } catch (e) {}
+      this.currentAudio = null;
+    }
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      try { window.speechSynthesis.cancel(); } catch (e) {}
+    }
+    this.setSpeakingState(false);
+  }
+
+  speakBrowserTTS(text) {
+    if (typeof window === 'undefined' || !window.speechSynthesis) {
+      this.setSpeakingState(false);
+      return;
+    }
+
+    try {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'id-ID';
+
+      const voice = this.getBestCuteVoice();
+      if (voice) {
+        utterance.voice = voice;
+        if (voice.lang) utterance.lang = voice.lang;
+      }
+
+      utterance.pitch = 1.32;
+      utterance.rate = 1.06;
+      utterance.volume = 1.0;
+
+      utterance.onstart = () => this.setSpeakingState(true);
+      utterance.onend = () => this.setSpeakingState(false);
+      utterance.onerror = () => this.setSpeakingState(false);
+
+      window.speechSynthesis.speak(utterance);
+    } catch (e) {
+      this.setSpeakingState(false);
+    }
+  }
+
   speak(text) {
     if (typeof window === 'undefined') return;
     // Auto-unmute if user requested Miko to talk
@@ -82,9 +166,7 @@ class MikoCompanion {
     }
 
     try {
-      if (window.speechSynthesis) {
-        try { window.speechSynthesis.cancel(); } catch (e) {}
-      }
+      this.stopSpeaking();
 
       const clean = String(text).replace(/<[^>]*>/g, '').trim();
       if (!clean) return;
@@ -95,42 +177,34 @@ class MikoCompanion {
         window.SoundFX.playMikoChirp();
       }
 
-      // 2. Speak with Cute Human Voice (SpeechSynthesis)
-      if (window.speechSynthesis) {
-        const utterance = new SpeechSynthesisUtterance(clean);
-        utterance.lang = 'id-ID';
+      // 2. Play Natural Studio Audio Clip if matched
+      const audioUrl = this.resolveAudioClip(clean);
+      if (audioUrl) {
+        const audio = new Audio(audioUrl);
+        this.currentAudio = audio;
+        this.setSpeakingState(true);
 
-        const voice = this.getBestCuteVoice();
-        if (voice) {
-          utterance.voice = voice;
-          if (voice.lang) utterance.lang = voice.lang;
+        audio.onended = () => {
+          this.setSpeakingState(false);
+          this.currentAudio = null;
+        };
+        audio.onerror = () => {
+          this.currentAudio = null;
+          this.speakBrowserTTS(clean);
+        };
+
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            this.currentAudio = null;
+            this.speakBrowserTTS(clean);
+          });
         }
-
-        // Cute, cheerful, friendly human kid/mascot tone:
-        // Pitch 1.32 gives high, sweet, energetic clarity
-        utterance.pitch = 1.32;
-        utterance.rate = 1.06;
-        utterance.volume = 1.0;
-
-        utterance.onstart = () => {
-          this.setSpeakingState(true);
-        };
-        utterance.onend = () => {
-          this.setSpeakingState(false);
-        };
-        utterance.onerror = () => {
-          this.setSpeakingState(false);
-        };
-
-        // Short 50ms pause so the greeting chirp sounds distinct
-        setTimeout(() => {
-          try {
-            window.speechSynthesis.speak(utterance);
-          } catch (e) {
-            this.setSpeakingState(false);
-          }
-        }, 50);
+        return;
       }
+
+      // 3. Fallback to Web Speech API
+      this.speakBrowserTTS(clean);
     } catch (e) {
       this.setSpeakingState(false);
     }

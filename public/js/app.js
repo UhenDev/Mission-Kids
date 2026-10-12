@@ -65,7 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       } else {
         // Stop speech when closing bubble
-        if (window.speechSynthesis) {
+        const companion = window.mikoCompanion || (window.CURRENT_MISSION_ENGINE && window.CURRENT_MISSION_ENGINE.companion);
+        if (companion && typeof companion.stopSpeaking === 'function') {
+          companion.stopSpeaking();
+        } else if (window.speechSynthesis) {
           try { window.speechSynthesis.cancel(); } catch (e) {}
         }
       }
@@ -76,7 +79,10 @@ document.addEventListener('DOMContentLoaded', () => {
     mikoClose.addEventListener('click', (e) => {
       e.stopPropagation();
       mikoBubble.classList.remove('active');
-      if (window.speechSynthesis) {
+      const companion = window.mikoCompanion || (window.CURRENT_MISSION_ENGINE && window.CURRENT_MISSION_ENGINE.companion);
+      if (companion && typeof companion.stopSpeaking === 'function') {
+        companion.stopSpeaking();
+      } else if (window.speechSynthesis) {
         try { window.speechSynthesis.cancel(); } catch (e) {}
       }
       if (window.SoundFX) window.SoundFX.playTap();
