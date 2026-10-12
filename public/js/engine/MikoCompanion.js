@@ -28,17 +28,36 @@ class MikoCompanion {
 
     if (typeof window !== 'undefined') {
       window.mikoCompanion = this;
-    }
-
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-      try {
-        window.speechSynthesis.cancel();
-        // Neutralize browser speechSynthesis to guarantee no male AI voice can ever play
-        window.speechSynthesis.speak = function() {
-          try { window.speechSynthesis.cancel(); } catch (e) {}
+      if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          this.voices = window.speechSynthesis.getVoices();
         };
-      } catch (e) {}
+      }
     }
+  }
+
+  getBestCuteVoice() {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return null;
+    const voices = window.speechSynthesis.getVoices() || [];
+    if (voices.length === 0) return null;
+
+    // 1. Natural / Google Indonesian voice (e.g. Google Bahasa Indonesia, Microsoft Gadis Online)
+    const idNatural = voices.find(v => v.lang && (v.lang.startsWith('id') || v.lang.includes('ID')) && /natural|gadis|google|ardi/i.test(v.name));
+    if (idNatural) return idNatural;
+
+    // 2. Any Indonesian voice
+    const anyId = voices.find(v => v.lang && (v.lang.startsWith('id') || v.lang.includes('ID') || /indonesia/i.test(v.name)));
+    if (anyId) return anyId;
+
+    // 3. Cute / friendly female voice (e.g. Zira, Jenny, Gadis, Samantha)
+    const cuteFemale = voices.find(v => /gadis|zira|jenny|female|samantha|victoria|karen/i.test(v.name));
+    if (cuteFemale) return cuteFemale;
+
+    // 4. Any voice that is NOT David or Mark (exclude stiff adult male English)
+    const nonDavid = voices.find(v => !/david|mark|george|richard/i.test(v.name));
+    if (nonDavid) return nonDavid;
+
+    return voices[0] || null;
   }
 
   setSpeakingState(isSpeaking) {
@@ -63,34 +82,58 @@ class MikoCompanion {
     }
 
     try {
-      // Cancel any browser TTS to ensure no stiff male voice ever interferes
       if (window.speechSynthesis) {
         try { window.speechSynthesis.cancel(); } catch (e) {}
-      }
-      if (window.SoundFX && typeof window.SoundFX.stopRobotCartoon === 'function') {
-        window.SoundFX.stopRobotCartoon();
       }
 
       const clean = String(text).replace(/<[^>]*>/g, '').trim();
       if (!clean) return;
       this.lastSpokenText = clean;
 
-      // 1. Play cute signature robotic chirp intro (pi-po!)
+      // 1. Play cute signature chime intro (pi-po!)
       if (window.SoundFX && typeof window.SoundFX.playMikoChirp === 'function') {
         window.SoundFX.playMikoChirp();
       }
 
-      // 2. Pure Cute Cheerful Robot Voice (Animalese / Chibi Robot Chatter)
-      setTimeout(() => {
-        if (window.SoundFX && typeof window.SoundFX.speakRobotCartoon === 'function') {
-          window.SoundFX.speakRobotCartoon(
-            clean,
-            () => this.setSpeakingState(true),
-            () => this.setSpeakingState(false)
-          );
+      // 2. Speak with Cute Human Voice (SpeechSynthesis)
+      if (window.speechSynthesis) {
+        const utterance = new SpeechSynthesisUtterance(clean);
+        utterance.lang = 'id-ID';
+
+        const voice = this.getBestCuteVoice();
+        if (voice) {
+          utterance.voice = voice;
+          if (voice.lang) utterance.lang = voice.lang;
         }
-      }, 75);
-    } catch (e) {}
+
+        // Cute, cheerful, friendly human kid/mascot tone:
+        // Pitch 1.32 gives high, sweet, energetic clarity
+        utterance.pitch = 1.32;
+        utterance.rate = 1.06;
+        utterance.volume = 1.0;
+
+        utterance.onstart = () => {
+          this.setSpeakingState(true);
+        };
+        utterance.onend = () => {
+          this.setSpeakingState(false);
+        };
+        utterance.onerror = () => {
+          this.setSpeakingState(false);
+        };
+
+        // Short 50ms pause so the greeting chirp sounds distinct
+        setTimeout(() => {
+          try {
+            window.speechSynthesis.speak(utterance);
+          } catch (e) {
+            this.setSpeakingState(false);
+          }
+        }, 50);
+      }
+    } catch (e) {
+      this.setSpeakingState(false);
+    }
   }
 
   say(message, autoOpen = true) {

@@ -5,16 +5,6 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Ensure any browser TTS is neutralized globally to guarantee no male AI voice ever sounds
-  if (typeof window !== 'undefined' && window.speechSynthesis) {
-    try {
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak = function() {
-        try { window.speechSynthesis.cancel(); } catch (e) {}
-      };
-    } catch (e) {}
-  }
-
   // 1. MIKO Floating Companion Trigger & Speech Cycling
   const mikoTrigger = document.getElementById('miko-avatar-trigger');
   const mikoBubble = document.getElementById('miko-bubble');
@@ -66,20 +56,15 @@ document.addEventListener('DOMContentLoaded', () => {
             count: 16
           });
         }
-        // Speak out loud with cheerful robot voice whenever MIKO is clicked!
+        // Speak out loud with cute human voice whenever MIKO is clicked!
         if (spokenText) {
           const companion = window.mikoCompanion || (window.CURRENT_MISSION_ENGINE && window.CURRENT_MISSION_ENGINE.companion);
           if (companion && typeof companion.speak === 'function') {
             companion.speak(spokenText);
-          } else if (window.SoundFX && typeof window.SoundFX.speakRobotCartoon === 'function') {
-            window.SoundFX.speakRobotCartoon(spokenText);
           }
         }
       } else {
         // Stop speech when closing bubble
-        if (window.SoundFX && typeof window.SoundFX.stopRobotCartoon === 'function') {
-          window.SoundFX.stopRobotCartoon();
-        }
         if (window.speechSynthesis) {
           try { window.speechSynthesis.cancel(); } catch (e) {}
         }
@@ -91,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
     mikoClose.addEventListener('click', (e) => {
       e.stopPropagation();
       mikoBubble.classList.remove('active');
-      if (window.SoundFX && typeof window.SoundFX.stopRobotCartoon === 'function') {
-        window.SoundFX.stopRobotCartoon();
+      if (window.speechSynthesis) {
+        try { window.speechSynthesis.cancel(); } catch (e) {}
       }
       if (window.SoundFX) window.SoundFX.playTap();
     });

@@ -26,9 +26,9 @@ $currentPage = $_GET['page'] ?? ($isLoggedIn ? 'home' : 'landing');
   <link rel="stylesheet" href="css/worlds.css?v=3.0">
 
   <!-- Core Interactive Sound & Celebration Scripts -->
-  <script src="js/engine/SoundEffects.js?v=3.0"></script>
-  <script src="js/engine/CelebrationEffects.js?v=3.0"></script>
-  <script src="js/engine/MikoCompanion.js?v=3.0"></script>
+  <script src="js/engine/SoundEffects.js?v=3.1"></script>
+  <script src="js/engine/CelebrationEffects.js?v=3.1"></script>
+  <script src="js/engine/MikoCompanion.js?v=3.1"></script>
 </head>
 <body>
 
