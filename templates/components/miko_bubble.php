@@ -11,10 +11,10 @@ $currentNick = Session::get('nickname', 'Sahabat Cilik');
   <div class="miko-bubble-container" id="miko-bubble">
     <div class="miko-bubble-header">
       <div class="miko-bubble-title">
-        <span>💡</span> Sahabat MIKO
+        <span>🤖</span> Sahabat MIKO Ceria
       </div>
       <div style="display: flex; align-items: center; gap: 6px;">
-        <button type="button" class="miko-bubble-speak" id="miko-bubble-speak" title="Dengarkan Suara MIKO" aria-label="Dengarkan suara MIKO" style="background: none; border: none; cursor: pointer; font-size: 13px; padding: 2px;">🔊</button>
+        <button type="button" class="miko-bubble-speak" id="miko-bubble-speak" title="Dengarkan Suara Robot MIKO" aria-label="Dengarkan suara robot MIKO" style="background: none; border: none; cursor: pointer; font-size: 14px; padding: 2px;">🔊</button>
         <button class="miko-bubble-close" id="miko-bubble-close" aria-label="Tutup pesan MIKO">&times;</button>
       </div>
     </div>

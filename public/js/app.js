@@ -5,16 +5,31 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Ensure any browser TTS is neutralized globally to guarantee no male AI voice ever sounds
+  if (typeof window !== 'undefined' && window.speechSynthesis) {
+    try {
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak = function() {
+        try { window.speechSynthesis.cancel(); } catch (e) {}
+      };
+    } catch (e) {}
+  }
+
   // 1. MIKO Floating Companion Trigger & Speech Cycling
   const mikoTrigger = document.getElementById('miko-avatar-trigger');
   const mikoBubble = document.getElementById('miko-bubble');
   const mikoClose = document.getElementById('miko-bubble-close');
   const mikoText = document.getElementById('miko-bubble-text');
 
+  // Ensure Miko Companion instance is available globally
+  if (!window.mikoCompanion && typeof window.MikoCompanion === 'function') {
+    window.mikoCompanion = new window.MikoCompanion('app');
+  }
+
   const mikoCheerPhrases = [
-    "Halo Sahabat Cilik! Kalau kamu butuh bantuan di dalam misi, klik tombol petunjuk ya! 💡",
+    "Halo Sahabat Cilik! Aku MIKO si robot ceria! Kalau butuh bantuan di dalam misi, klik aku ya! 💡",
     "Tahukah kamu? Setiap misi yang berhasil diselesaikan memberimu XP dan bintang baru! ⭐",
-    "Belajar sedikit demi sedikit setiap hari membuat otakmu semakin cerdas! 🧠✨",
+    "Belajar sedikit demi sedikit setiap hari membuat otakmu semakin hebat dan cerdas! 🧠✨",
     "Ayo pilih salah satu dunia petualangan dan selesaikan tantangannya hari ini! 🚀",
     "Kamu hebat! Jangan takut salah, karena dari salah kita bisa belajar hal baru! 🌟"
   ];
@@ -26,10 +41,22 @@ document.addEventListener('DOMContentLoaded', () => {
       mikoBubble.classList.toggle('active');
 
       if (isOpening) {
-        if (window.SoundFX) window.SoundFX.playTap();
+        if (window.SoundFX && window.SoundFX.isMuted()) {
+          window.SoundFX.toggleMute();
+        } else if (window.SoundFX) {
+          window.SoundFX.playTap();
+        }
+
+        let spokenText = '';
         if (mikoText) {
-          mikoPhraseIdx = (mikoPhraseIdx + 1) % mikoCheerPhrases.length;
-          mikoText.textContent = mikoCheerPhrases[mikoPhraseIdx];
+          if (!mikoBubble.dataset.openedOnce) {
+            mikoBubble.dataset.openedOnce = 'true';
+            spokenText = mikoText.textContent.trim();
+          } else {
+            mikoPhraseIdx = (mikoPhraseIdx + 1) % mikoCheerPhrases.length;
+            mikoText.textContent = mikoCheerPhrases[mikoPhraseIdx];
+            spokenText = mikoCheerPhrases[mikoPhraseIdx];
+          }
         }
         if (window.Celebration) {
           const rect = mikoTrigger.getBoundingClientRect();
@@ -39,6 +66,23 @@ document.addEventListener('DOMContentLoaded', () => {
             count: 16
           });
         }
+        // Speak out loud with cheerful robot voice whenever MIKO is clicked!
+        if (spokenText) {
+          const companion = window.mikoCompanion || (window.CURRENT_MISSION_ENGINE && window.CURRENT_MISSION_ENGINE.companion);
+          if (companion && typeof companion.speak === 'function') {
+            companion.speak(spokenText);
+          } else if (window.SoundFX && typeof window.SoundFX.speakRobotCartoon === 'function') {
+            window.SoundFX.speakRobotCartoon(spokenText);
+          }
+        }
+      } else {
+        // Stop speech when closing bubble
+        if (window.SoundFX && typeof window.SoundFX.stopRobotCartoon === 'function') {
+          window.SoundFX.stopRobotCartoon();
+        }
+        if (window.speechSynthesis) {
+          try { window.speechSynthesis.cancel(); } catch (e) {}
+        }
       }
     });
   }
@@ -47,6 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
     mikoClose.addEventListener('click', (e) => {
       e.stopPropagation();
       mikoBubble.classList.remove('active');
+      if (window.SoundFX && typeof window.SoundFX.stopRobotCartoon === 'function') {
+        window.SoundFX.stopRobotCartoon();
+      }
       if (window.SoundFX) window.SoundFX.playTap();
     });
   }

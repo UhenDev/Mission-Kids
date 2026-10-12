@@ -18,32 +18,78 @@ class MikoCompanion {
     if (speakBtn && typeof speakBtn.addEventListener === 'function') {
       speakBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (this.lastSpokenText) {
-          this.speak(this.lastSpokenText);
+        const currentText = this.bubbleText ? this.bubbleText.textContent.trim() : '';
+        const text = currentText || this.lastSpokenText;
+        if (text) {
+          this.speak(text);
         }
       });
+    }
+
+    if (typeof window !== 'undefined') {
+      window.mikoCompanion = this;
+    }
+
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      try {
+        window.speechSynthesis.cancel();
+        // Neutralize browser speechSynthesis to guarantee no male AI voice can ever play
+        window.speechSynthesis.speak = function() {
+          try { window.speechSynthesis.cancel(); } catch (e) {}
+        };
+      } catch (e) {}
+    }
+  }
+
+  setSpeakingState(isSpeaking) {
+    if (typeof document === 'undefined') return;
+    const avatar = document.getElementById('miko-avatar-trigger')
+      || document.getElementById('miko-avatar-btn')
+      || (typeof document.querySelector === 'function' ? document.querySelector('.miko-avatar-btn') : null);
+    if (avatar && avatar.classList) {
+      if (isSpeaking) {
+        avatar.classList.add('miko-speaking');
+      } else {
+        avatar.classList.remove('miko-speaking');
+      }
     }
   }
 
   speak(text) {
-    if (typeof window === 'undefined' || !window.speechSynthesis) return;
-    if (window.SoundFX && window.SoundFX.isMuted()) return;
+    if (typeof window === 'undefined') return;
+    // Auto-unmute if user requested Miko to talk
+    if (window.SoundFX && window.SoundFX.isMuted()) {
+      window.SoundFX.toggleMute();
+    }
+
     try {
-      window.speechSynthesis.cancel();
+      // Cancel any browser TTS to ensure no stiff male voice ever interferes
+      if (window.speechSynthesis) {
+        try { window.speechSynthesis.cancel(); } catch (e) {}
+      }
+      if (window.SoundFX && typeof window.SoundFX.stopRobotCartoon === 'function') {
+        window.SoundFX.stopRobotCartoon();
+      }
+
       const clean = String(text).replace(/<[^>]*>/g, '').trim();
       if (!clean) return;
       this.lastSpokenText = clean;
 
-      const utterance = new SpeechSynthesisUtterance(clean);
-      utterance.lang = 'id-ID';
-      utterance.rate = 1.0;
-      utterance.pitch = 1.25;
+      // 1. Play cute signature robotic chirp intro (pi-po!)
+      if (window.SoundFX && typeof window.SoundFX.playMikoChirp === 'function') {
+        window.SoundFX.playMikoChirp();
+      }
 
-      const voices = window.speechSynthesis.getVoices();
-      const idVoice = voices.find(v => v.lang && (v.lang.startsWith('id') || v.lang.includes('ID')));
-      if (idVoice) utterance.voice = idVoice;
-
-      window.speechSynthesis.speak(utterance);
+      // 2. Pure Cute Cheerful Robot Voice (Animalese / Chibi Robot Chatter)
+      setTimeout(() => {
+        if (window.SoundFX && typeof window.SoundFX.speakRobotCartoon === 'function') {
+          window.SoundFX.speakRobotCartoon(
+            clean,
+            () => this.setSpeakingState(true),
+            () => this.setSpeakingState(false)
+          );
+        }
+      }, 75);
     } catch (e) {}
   }
 

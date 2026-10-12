@@ -48,7 +48,7 @@ declare(strict_types=1);
 <?php endif; ?>
 
 <!-- App Script -->
-<script src="js/app.js"></script>
+<script src="js/app.js?v=3.0"></script>
 
 </body>
 </html>

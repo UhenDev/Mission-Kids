@@ -135,6 +135,68 @@ class SoundEffects {
     } catch (e) {}
   }
 
+  // 3b. Falling / Shooting Star Shower (Celestial Twinkle Cascade)
+  playStarShower() {
+    if (this.muted) return;
+    try {
+      this.initCtx();
+      if (!this.ctx) return;
+      const pitches = [1046.50, 1318.51, 1567.98, 2093.00, 2637.02]; // C6, E6, G6, C7, E7
+      const now = this.ctx.currentTime;
+      pitches.forEach((freq, idx) => {
+        const t = now + idx * 0.08;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, t);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.08, t + 0.12);
+        gain.gain.setValueAtTime(0.15, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.35);
+      });
+    } catch (e) {}
+  }
+
+  // 3c. Cute MIKO Robot Chirp (Playful 2-tone pi-po greeting before speaking)
+  playMikoChirp() {
+    if (this.muted) return;
+    try {
+      this.initCtx();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+
+      // Beep 1 (cheerful upward sine)
+      const osc1 = this.ctx.createOscillator();
+      const gain1 = this.ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(620, now);
+      osc1.frequency.exponentialRampToValueAtTime(880, now + 0.05);
+      gain1.gain.setValueAtTime(0.18, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
+      osc1.connect(gain1);
+      gain1.connect(this.ctx.destination);
+      osc1.start(now);
+      osc1.stop(now + 0.055);
+
+      // Beep 2 (higher playful chirp)
+      const osc2 = this.ctx.createOscillator();
+      const gain2 = this.ctx.createGain();
+      const t2 = now + 0.06;
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(880, t2);
+      osc2.frequency.exponentialRampToValueAtTime(1320, t2 + 0.07);
+      gain2.gain.setValueAtTime(0.16, t2);
+      gain2.gain.exponentialRampToValueAtTime(0.001, t2 + 0.075);
+      osc2.connect(gain2);
+      gain2.connect(this.ctx.destination);
+      osc2.start(t2);
+      osc2.stop(t2 + 0.075);
+    } catch (e) {}
+  }
+
   // 4. Mission Complete Fanfare
   playCelebration() {
     if (this.muted) return;
@@ -259,6 +321,144 @@ class SoundEffects {
     } else {
       this.startBgm();
       return true;
+    }
+  }
+
+  // 7. Procedural Cute Cartoon Voice (Animalese / Robot Talk)
+  speakRobotCartoon(text, onStart, onEnd) {
+    // If user clicked or triggered Miko to talk, ensure unmuted so voice is always heard!
+    if (this.muted) {
+      this.muted = false;
+      try { localStorage.setItem('mk_sound_muted', 'false'); } catch (e) {}
+      this.updateToggleButtons();
+    }
+    this.initCtx();
+    if (!this.ctx) {
+      if (typeof onEnd === 'function') onEnd();
+      return;
+    }
+
+    const startSeq = () => this.startRobotCartoonSequence(text, onStart, onEnd);
+
+    if (this.ctx.state === 'suspended') {
+      this.ctx.resume().then(startSeq).catch(() => {
+        if (typeof onEnd === 'function') onEnd();
+      });
+      return;
+    }
+
+    startSeq();
+  }
+
+  startRobotCartoonSequence(text, onStart, onEnd) {
+    this.stopRobotCartoon();
+
+    if (typeof onStart === 'function') onStart();
+
+    const clean = String(text).replace(/<[^>]*>/g, '').trim();
+    const words = clean.split(/\s+/).filter(w => w.length > 0);
+    if (words.length === 0) {
+      if (typeof onEnd === 'function') onEnd();
+      return;
+    }
+
+    // Convert words to energetic cartoon syllables (capped at 20 syllables for snappy delivery)
+    const syllables = [];
+    for (let i = 0; i < words.length && syllables.length < 20; i++) {
+      const w = words[i];
+      const cleaned = w.toLowerCase().replace(/[^a-z0-9!?.,]/g, '');
+      const parts = cleaned.match(/[bcdfghjklmnpqrstvwxyz]*[aeiou]+[bcdfghjklmnpqrstvwxyz]*/g) || [cleaned];
+      parts.forEach((p, pIdx) => {
+        if (syllables.length < 20) {
+          syllables.push({
+            text: p,
+            isEndWord: pIdx === parts.length - 1,
+            isExclamation: w.includes('!'),
+            isQuestion: w.includes('?'),
+            isPause: w.includes(',') || w.includes('.')
+          });
+        }
+      });
+    }
+
+    if (syllables.length === 0) {
+      if (typeof onEnd === 'function') onEnd();
+      return;
+    }
+
+    // Playful, cheerful electronic pentatonic scale for cute robot companion (A4 - C6)
+    const robotScale = [440.00, 523.25, 587.33, 659.25, 783.99, 880.00, 987.77, 1046.50];
+
+    let sIdx = 0;
+    const playNext = () => {
+      if (sIdx >= syllables.length || this.muted || !this.ctx) {
+        this.stopRobotCartoon();
+        if (typeof onEnd === 'function') onEnd();
+        return;
+      }
+
+      const syl = syllables[sIdx];
+      const now = this.ctx.currentTime;
+      const stepDuration = 0.082; // ~82ms per snappy bouncy syllable
+
+      try {
+        let freq = robotScale[(sIdx * 2 + Math.floor(sIdx / 3)) % robotScale.length];
+        if (syl.isExclamation) freq *= 1.22;
+        if (syl.isQuestion) freq *= 1.28;
+
+        // Primary cute voice oscillator (triangle / sine blend)
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = sIdx % 2 === 0 ? 'triangle' : 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+        const targetFreq = syl.isQuestion ? freq * 1.30 : (syl.isExclamation ? freq * 1.18 : freq * 0.95);
+        osc.frequency.exponentialRampToValueAtTime(targetFreq, now + stepDuration * 0.85);
+
+        // Rich, clearly audible volume envelope (linear ramp up, sustained body, quick release)
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.32, now + 0.008);
+        gain.gain.setValueAtTime(0.30, now + stepDuration * 0.75);
+        gain.gain.linearRampToValueAtTime(0.001, now + stepDuration);
+
+        // Secondary harmonic overtone for cheerful electronic timbre
+        const subOsc = this.ctx.createOscillator();
+        const subGain = this.ctx.createGain();
+        subOsc.type = 'triangle';
+        subOsc.frequency.setValueAtTime(freq * 1.5, now);
+        subOsc.frequency.exponentialRampToValueAtTime(targetFreq * 1.5, now + stepDuration * 0.85);
+
+        subGain.gain.setValueAtTime(0.001, now);
+        subGain.gain.linearRampToValueAtTime(0.16, now + 0.008);
+        subGain.gain.setValueAtTime(0.14, now + stepDuration * 0.70);
+        subGain.gain.linearRampToValueAtTime(0.001, now + stepDuration);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        subOsc.connect(subGain);
+        subGain.connect(this.ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + stepDuration);
+        subOsc.start(now);
+        subOsc.stop(now + stepDuration);
+      } catch (e) {}
+
+      sIdx++;
+      let delay = stepDuration * 1000 + 12;
+      if (syl.isEndWord) delay += 35;
+      if (syl.isPause) delay += 90;
+
+      this.cartoonSpeechTimer = setTimeout(playNext, delay);
+    };
+
+    playNext();
+  }
+
+  stopRobotCartoon() {
+    if (this.cartoonSpeechTimer) {
+      clearTimeout(this.cartoonSpeechTimer);
+      this.cartoonSpeechTimer = null;
     }
   }
 }

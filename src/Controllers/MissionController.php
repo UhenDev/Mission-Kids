@@ -49,7 +49,7 @@ class MissionController
         }
 
         $profile = $this->auth->getStudentProfile($userId);
-        $levelInfo = $this->gamification->calculateLevel((int)$profile['total_xp']);
+        $levelInfo = $this->gamification->calculateLevel((int)($profile['total_xp'] ?? 0));
         $mission = $this->missionProgress->getMissionBySlug($slug, $userId);
 
         if (!$mission) {

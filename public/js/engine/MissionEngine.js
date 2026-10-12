@@ -147,10 +147,12 @@ class MissionEngine {
           }
 
           if (window.Celebration) {
-            window.Celebration.burst({ count: 120 });
+            window.Celebration.burst({ count: 90 });
+            window.Celebration.starShower({ count: 45, shootingStars: 6 });
           }
           if (window.SoundFX) {
             window.SoundFX.playSuccess();
+            window.SoundFX.playStarShower();
           }
 
           this.companion.say("Luar biasa! Kamu berhasil memecahkan tantangannya! Ayo lanjutkan ke refleksi pembelajaran! 🌟");
@@ -276,12 +278,14 @@ class MissionEngine {
       window.SoundFX.stopBgm();
     }
 
-    // 1. Trigger Canvas Confetti & Sound Fanfare
+    // 1. Trigger Canvas Confetti, Star Shower & Sound Fanfare
     if (window.Celebration) {
-      window.Celebration.burst({ count: 160 });
+      window.Celebration.burst({ count: 120 });
+      window.Celebration.starShower({ count: 55, shootingStars: 8 });
     }
     if (window.SoundFX) {
       window.SoundFX.playCelebration();
+      window.SoundFX.playStarShower();
     }
 
     // 2. Staggered Animated Stars

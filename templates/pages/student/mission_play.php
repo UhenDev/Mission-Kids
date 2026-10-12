@@ -226,12 +226,15 @@ window.CURRENT_MISSION = {
 
 <!-- Centered Challenge Success Alert Modal -->
 <div class="modal-overlay" id="modal-challenge-success" role="dialog" aria-modal="true" aria-labelledby="modal-success-title">
-  <div class="modal-content" style="border: 3px solid #86EFAC; box-shadow: 0 20px 40px -10px rgba(22, 163, 74, 0.25);">
-    <div style="font-size: 4rem; line-height: 1; margin-bottom: var(--space-2); animation: popIn 0.4s var(--transition-bounce);">
-      🎉
+  <div class="modal-content" style="border: 3px solid #86EFAC; box-shadow: 0 20px 40px -10px rgba(22, 163, 74, 0.25); position: relative; overflow: hidden;">
+    <!-- Falling Star & Celebration Icon Banner -->
+    <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: var(--space-2);">
+      <span class="anim-shooting-star" style="font-size: 2.2rem; display: inline-block;" title="Bintang Jatuh">🌠</span>
+      <span style="font-size: 3.8rem; line-height: 1; display: inline-block; animation: popIn 0.4s var(--transition-bounce);">🎉</span>
+      <span class="anim-twinkle-star" style="font-size: 2.2rem; display: inline-block;" title="Bintang Cemerlang">⭐</span>
     </div>
     <div class="badge-pill badge-pill-accent" style="margin-bottom: var(--space-3); display: inline-block;">
-      Tantangan Terpecahkan!
+      ✨ Bintang Jatuh Keberhasilan! ✨
     </div>
     <h2 id="modal-success-title" style="font-size: var(--fs-2xl); color: #15803D; margin-bottom: var(--space-2); font-family: var(--font-heading);">
       Hore, Kamu Hebat Sekali!
@@ -264,8 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <!-- Load Mission Engine Scripts -->
-<script src="js/engine/InteractionHandler.js"></script>
-<script src="js/engine/MikoCompanion.js"></script>
-<script src="js/engine/MissionEngine.js"></script>
+<script src="js/engine/InteractionHandler.js?v=3.0"></script>
+<script src="js/engine/MissionEngine.js?v=3.0"></script>
 
 <?php require __DIR__ . '/../../layouts/footer.php'; ?>
