@@ -516,6 +516,70 @@
   flex-shrink: 0;
 }
 
+.btn-nav-sound {
+  border-radius: var(--radius-pill);
+  padding: 0.45rem 1.1rem;
+  font-size: var(--fs-xs);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px solid #CBD5E1;
+  background: #FFFFFF;
+  color: #334155;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-nav-sound:hover {
+  background: #EFF6FF;
+  border-color: #93C5FD;
+  color: #1D4ED8;
+}
+
+.btn-nav-auth-login {
+  border-radius: var(--radius-pill);
+  padding: 0.45rem 1.35rem;
+  border: 1.5px solid #CBD5E1;
+  background: #FFFFFF;
+  color: #1E3A8A;
+  font-weight: 800;
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-nav-auth-login:hover {
+  background: #F8FAFC;
+  border-color: #94A3B8;
+  transform: translateY(-1px);
+}
+
+.btn-nav-auth-register {
+  border-radius: var(--radius-pill);
+  padding: 0.45rem 1.45rem;
+  background: linear-gradient(135deg, #2563EB, #1D4ED8);
+  color: #FFFFFF !important;
+  font-weight: 800;
+  font-size: var(--fs-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
+  border: none;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-nav-auth-register:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+}
+
 .btn-nav-auth {
   padding: 0.45rem 1.1rem;
   min-height: 40px;
@@ -533,10 +597,10 @@
   display: inline;
 }
 
-/* Mobile Responsiveness */
+/* Mobile Responsiveness for App Navigation */
 @media (max-width: 768px) {
-  body {
-    padding-bottom: 74px; /* Ruang untuk navigasi bawah jempol */
+  body.has-bottom-nav {
+    padding-bottom: 74px; /* Ruang untuk navigasi bawah jempol bagi siswa login */
   }
 
   .header-container {
@@ -1496,7 +1560,7 @@
 
 .editorial-benefits-grid {
   display: grid;
-  grid-template-columns: 1fr 1.35fr;
+  grid-template-columns: 1fr 1.6fr;
   align-items: center;
   gap: 3.5rem;
 }
@@ -1523,37 +1587,38 @@
 }
 
 .benefits-pillars-column {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
 }
 
 .benefit-clean-card {
   display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  background: #FFFFFF;
-  border: 1.5px solid #E2E8F0;
-  border-radius: 20px;
-  padding: 1.15rem 1.4rem;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
-  transition: transform 0.25s var(--transition-bounce), border-color 0.2s;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  transition: transform 0.25s var(--transition-bounce);
 }
 
 .benefit-clean-card:hover {
-  transform: translateX(6px);
-  border-color: #BFDBFE;
+  transform: translateY(-4px);
 }
 
 .benefit-icon-badge {
   width: 52px;
   height: 52px;
   min-width: 52px;
-  border-radius: 16px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
+  font-size: 1.55rem;
+  margin-bottom: 0.85rem;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
 }
 
 .badge-color-blue { background: #EFF6FF; border: 1.5px solid #BFDBFE; }
@@ -1562,16 +1627,17 @@
 
 .benefit-card-title {
   font-family: var(--font-heading);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 800;
   color: #0F172A;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.35rem;
+  line-height: 1.3;
 }
 
 .benefit-card-desc {
-  font-size: 0.875rem;
+  font-size: 0.825rem;
   color: #64748B;
-  line-height: 1.45;
+  line-height: 1.5;
   margin: 0;
 }
 
@@ -1583,10 +1649,10 @@
 }
 
 .cta-adventure-box {
-  background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 50%, #2563EB 100%);
+  background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 45%, #2563EB 100%);
   border-radius: 32px;
-  padding: 2.5rem 3rem;
-  box-shadow: 0 20px 48px -10px rgba(37, 99, 235, 0.4);
+  padding: 2.75rem 3.5rem;
+  box-shadow: 0 20px 48px -10px rgba(37, 99, 235, 0.35);
   display: flex;
   align-items: center;
   gap: 2.5rem;
@@ -1597,8 +1663,8 @@
 
 .cta-flying-miko-col {
   flex-shrink: 0;
-  width: 140px;
-  height: 140px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid rgba(255, 255, 255, 0.4);
@@ -1655,6 +1721,114 @@
 .btn-cta-gold:hover {
   transform: translateY(-3px) scale(1.02);
   box-shadow: 0 14px 30px rgba(245, 158, 11, 0.55);
+}
+
+/* ==========================================================================
+   6. Modern 3-Column Footer Layout
+   ========================================================================== */
+.app-main-footer {
+  background: #FFFFFF;
+  border-top: 1.5px solid #E2E8F0;
+  padding: 2.25rem 0;
+  margin-top: auto;
+}
+
+.footer-content-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.footer-brand-side {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.footer-brand-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50% !important;
+  font-size: 1rem;
+}
+
+.footer-brand-title {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  color: #1E3A8A;
+  letter-spacing: -0.01em;
+}
+
+.footer-tagline-text {
+  font-size: 0.8rem;
+  color: #64748B;
+  font-weight: 600;
+  border-left: 2px solid #E2E8F0;
+  padding-left: 12px;
+}
+
+.footer-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.footer-nav-link {
+  color: #475569;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-nav-link:hover {
+  color: #2563EB;
+}
+
+.footer-meta-side {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: #64748B;
+}
+
+.footer-social-group {
+  display: flex;
+  gap: 8px;
+}
+
+.footer-social-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #EFF6FF;
+  color: #2563EB;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 800;
+  transition: all 0.2s ease;
+}
+
+.footer-social-btn:hover {
+  background: #DBEAFE;
+  transform: translateY(-2px);
+}
+
+.footer-copyright-text {
+  white-space: nowrap;
 }
 
 /* Backward Compatibility Aliases for components */
@@ -1866,7 +2040,16 @@
   }
 }
 
-/* Responsive Rules for Landing Page Redesign */
+/* ==========================================================================
+   Comprehensive Responsive System for Landing Page (Desktop, Tablet, Mobile)
+   ========================================================================== */
+
+.landing-redesign-container {
+  overflow-x: clip;
+  width: 100%;
+}
+
+/* 1. Large Tablet / Laptop (max-width: 960px) */
 @media (max-width: 960px) {
   .hero-adventure-grid {
     grid-template-columns: 1fr;
@@ -1875,6 +2058,10 @@
   }
   .hero-left-column {
     text-align: center;
+  }
+  .hero-category-tag {
+    margin-left: auto;
+    margin-right: auto;
   }
   .hero-description {
     margin-left: auto;
@@ -1886,7 +2073,9 @@
   .hero-ribbon-pills {
     grid-template-columns: repeat(2, 1fr);
     justify-content: center;
-    gap: 0.75rem;
+    gap: 1rem;
+    max-width: 480px;
+    margin: 0 auto;
   }
   .hero-visual-frame {
     margin: 0 auto;
@@ -1894,19 +2083,32 @@
   }
   .worlds-interactive-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.15rem;
   }
   .miko-spotlight-grid {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 2.5rem;
+    gap: 2.25rem;
   }
-  .miko-mascot-img {
+  .miko-mascot-wrapper {
     margin: 0 auto;
+    max-width: 320px;
+  }
+  .miko-text-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .miko-section-desc {
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
   }
   .editorial-benefits-grid {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 2rem;
+    gap: 2.5rem;
   }
   .benefits-intro-column {
     text-align: center;
@@ -1914,11 +2116,17 @@
   .benefits-subtext {
     margin-left: auto;
     margin-right: auto;
+    max-width: 480px;
+  }
+  .benefits-pillars-column {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    text-align: left;
   }
   .cta-adventure-box {
     flex-direction: column;
     text-align: center;
-    padding: 2.2rem 1.5rem;
+    padding: 2.5rem 2rem;
     gap: 1.5rem;
   }
   .cta-box-center-content {
@@ -1927,28 +2135,246 @@
   .footer-content-row {
     flex-direction: column;
     text-align: center;
-    gap: 1.25rem;
+    gap: 1.5rem;
+  }
+  .footer-brand-side {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .footer-tagline-text {
+    border-left: none;
+    padding-left: 0;
   }
 }
 
-@media (max-width: 580px) {
-  .hero-ribbon-pills {
+/* 2. Standard Mobile Phone & Tablet (max-width: 768px) */
+@media (max-width: 768px) {
+  .hero-adventure-section {
+    padding: 1.5rem 0 2.25rem;
+  }
+  .hero-headline {
+    font-size: clamp(2rem, 7vw, 2.75rem);
+  }
+  .benefits-pillars-column {
     grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+  .benefit-clean-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.15rem;
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 18px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
     text-align: left;
   }
-  .worlds-interactive-grid {
-    grid-template-columns: 1fr;
+  .benefit-icon-badge {
+    margin-bottom: 0;
+    flex-shrink: 0;
   }
-  .hero-floating-callout {
+}
+
+/* 3. Small Mobile Screen (max-width: 580px) */
+@media (max-width: 580px) {
+  .header-container {
+    height: 58px;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    gap: 0.5rem;
+  }
+  .brand-logo {
+    font-size: 1.05rem;
+    gap: 6px;
+  }
+  .brand-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+  .header-guest-actions {
+    gap: 5px;
+  }
+  .btn-nav-sound {
+    padding: 0.35rem 0.65rem;
+    font-size: 11px;
+  }
+  .nav-sound-text {
     display: none;
+  }
+  .btn-nav-auth-login {
+    padding: 0.35rem 0.85rem;
+    font-size: 12px;
+  }
+  .btn-nav-auth-register {
+    padding: 0.35rem 0.95rem;
+    font-size: 12px;
+  }
+  .hero-category-tag {
+    font-size: 11px;
+    padding: 0.35rem 0.85rem;
+    max-width: 100%;
+    white-space: normal;
+  }
+  .hero-headline {
+    font-size: 2.15rem;
+    line-height: 1.15;
+  }
+  .hero-description {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin-bottom: 1.5rem;
   }
   .hero-cta-group {
     flex-direction: column;
     width: 100%;
+    gap: 0.75rem;
   }
   .hero-btn-primary, .hero-btn-secondary {
     width: 100%;
     justify-content: center;
+    padding: 0.85rem 1.5rem;
+    font-size: 1rem;
+  }
+  .hero-ribbon-pills {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    padding-top: 1rem;
+    max-width: 100%;
+  }
+  .hero-ribbon-item {
+    gap: 5px;
+  }
+  .ribbon-icon {
+    font-size: 1.1rem;
+  }
+  .ribbon-text {
+    font-size: 0.75rem;
+  }
+  .hero-floating-callout {
+    top: 10px;
+    right: 8px;
+  }
+  .callout-bubble-content {
+    font-size: 0.72rem;
+    padding: 0.35rem 0.75rem;
+  }
+  .callout-curve-arrow {
+    display: none;
+  }
+  .section-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .section-title-bold {
+    font-size: 1.85rem;
+  }
+  .section-subtitle-muted {
+    font-size: 0.95rem;
+  }
+  .worlds-trail-map-container {
+    border-radius: 18px;
+    margin-bottom: 1rem;
+  }
+  .worlds-interactive-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .world-node-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.85rem 1rem;
+    border-radius: 16px;
+  }
+  .world-card-icon-pill {
+    width: 42px;
+    height: 42px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+  .world-card-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .world-card-name {
+    font-size: 1.05rem;
+    margin-bottom: 2px;
+  }
+  .world-card-theme {
+    font-size: 0.75rem;
+    margin-bottom: 0;
+    line-height: 1.3;
+  }
+  .world-card-cta {
+    flex-shrink: 0;
+    font-size: 0.8rem;
+  }
+  .miko-mascot-wrapper {
+    max-width: 280px;
+  }
+  .miko-waving-balloon {
+    top: -10px;
+    right: -4px;
+    padding: 0.45rem 0.75rem;
+    max-width: 170px;
+  }
+  .miko-balloon-heading {
+    font-size: 0.8rem;
+  }
+  .miko-balloon-sub {
+    font-size: 0.7rem;
+  }
+  .miko-section-heading {
+    font-size: 1.85rem;
+  }
+  .miko-section-desc {
+    font-size: 0.95rem;
+  }
+  .btn-miko-listen-voice {
+    width: 100%;
+    justify-content: center;
+  }
+  .benefits-headline {
+    font-size: 1.85rem;
+  }
+  .benefits-subtext {
+    font-size: 0.95rem;
+  }
+  .cta-adventure-box {
+    padding: 2rem 1.25rem;
+    border-radius: 22px;
+  }
+  .cta-flying-miko-col {
+    width: 90px;
+    height: 90px;
+  }
+  .cta-banner-heading {
+    font-size: 1.65rem;
+  }
+  .cta-banner-subtext {
+    font-size: 0.92rem;
+  }
+  .btn-cta-gold {
+    width: 100%;
+    justify-content: center;
+    padding: 0.8rem 1.5rem;
+    font-size: 1.05rem;
+  }
+}
+
+/* 4. Extra Small Phones (iPhone SE, 320px - 360px) */
+@media (max-width: 360px) {
+  .brand-logo span {
+    font-size: 0.95rem;
+  }
+  .btn-nav-auth-login {
+    padding: 0.35rem 0.65rem;
+  }
+  .btn-nav-auth-register {
+    padding: 0.35rem 0.75rem;
   }
 }
 

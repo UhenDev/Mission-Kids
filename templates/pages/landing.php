@@ -18,8 +18,7 @@ require __DIR__ . '/../layouts/header.php';
       <!-- Left Column: Copywriting & CTAs -->
       <div class="hero-left-column">
         <div class="badge-pill badge-pill-primary hero-category-tag">
-          <span style="font-size: 1rem;">🚀</span>
-          <span>Platform Edukasi Interaktif untuk Anak • Petualangan Misimu Dimulai di Sini.</span>
+          Platform Edukasi Interaktif untuk Anak
         </div>
 
         <h1 class="hero-headline">
@@ -44,11 +43,11 @@ require __DIR__ . '/../layouts/header.php';
         <!-- Key Features Mini Ribbon -->
         <div class="hero-ribbon-pills">
           <div class="hero-ribbon-item">
-            <span class="ribbon-icon">🎒</span>
+            <span class="ribbon-icon">🏠</span>
             <span class="ribbon-text">Belajar Sambil Bermain</span>
           </div>
           <div class="hero-ribbon-item">
-            <span class="ribbon-icon">🏰</span>
+            <span class="ribbon-icon">🎒</span>
             <span class="ribbon-text">4 Dunia Petualangan</span>
           </div>
           <div class="hero-ribbon-item">
@@ -56,7 +55,7 @@ require __DIR__ . '/../layouts/header.php';
             <span class="ribbon-text">12 Misi Menarik</span>
           </div>
           <div class="hero-ribbon-item">
-            <span class="ribbon-icon">🎖️</span>
+            <span class="ribbon-icon">🏅</span>
             <span class="ribbon-text">Penghargaan & Medali</span>
           </div>
         </div>
@@ -70,7 +69,7 @@ require __DIR__ . '/../layouts/header.php';
           <div class="hero-floating-callout">
             <div class="callout-bubble-content">
               <span>Ayo jelajahi dunia bersama MIKO!</span>
-              <span class="callout-sparkle">✨</span>
+              <span class="callout-sparkle">🪁</span>
             </div>
             <div class="callout-curve-arrow">⤵</div>
           </div>
@@ -258,7 +257,7 @@ require __DIR__ . '/../layouts/header.php';
         <!-- Pillar 3: Dapatkan Penghargaan -->
         <div class="benefit-clean-card">
           <div class="benefit-icon-badge badge-color-purple">
-            <span>🎖️</span>
+            <span>🏅</span>
           </div>
           <div class="benefit-card-content">
             <h3 class="benefit-card-title">Dapatkan Penghargaan</h3>

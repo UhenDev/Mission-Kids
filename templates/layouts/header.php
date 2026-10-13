@@ -30,12 +30,12 @@ $currentPage = $_GET['page'] ?? ($isLoggedIn ? 'home' : 'landing');
   <script src="js/engine/CelebrationEffects.js?v=3.3"></script>
   <script src="js/engine/MikoCompanion.js?v=3.3"></script>
 </head>
-<body>
+<body class="<?= $isLoggedIn ? 'has-bottom-nav' : 'landing-guest-page' ?>">
 
 <header class="app-header">
   <div class="container header-container">
     <a href="<?= $isLoggedIn ? '?page=home' : '?page=landing' ?>" class="brand-logo" id="nav-brand-logo">
-      <div class="brand-icon" style="animation: floatRocket 4s ease-in-out infinite;">🚀</div>
+      <div class="brand-icon" style="border-radius: 50%; animation: floatRocket 4s ease-in-out infinite;">🚀</div>
       <span>MISSION KIDS</span>
     </a>
 
@@ -128,14 +128,14 @@ $currentPage = $_GET['page'] ?? ($isLoggedIn ? 'home' : 'landing');
       </nav>
 
       <div class="header-guest-actions">
-        <button type="button" class="btn-kid btn-kid-ghost btn-nav-sound" onclick="if(window.SoundFX) { window.SoundFX.toggleMute(); } if(window.mikoCompanion) { window.mikoCompanion.speak('Halo Sahabat Cilik! Aku MIKO, siap bertualang bersamamu!'); }" title="Nyalakan Suara MIKO" id="btn-sound-toggle-guest" style="border-radius: var(--radius-pill); padding: 0.45rem 1rem; font-size: var(--fs-xs); display: inline-flex; align-items: center; gap: 6px; border-color: #E2E8F0; background: #FFFFFF; color: #334155;">
-          <span>🔊</span> <span>Suara MIKO</span>
+        <button type="button" class="btn-kid btn-nav-sound" onclick="if(window.SoundFX) { window.SoundFX.toggleMute(); } if(window.mikoCompanion) { window.mikoCompanion.speak('Halo Sahabat Cilik! Aku MIKO, siap bertualang bersamamu!'); }" title="Nyalakan Suara MIKO" id="btn-sound-toggle-guest">
+          <span>🔊</span> <span class="nav-sound-text">Suara MIKO</span>
         </button>
-        <a href="?page=login" class="btn-kid btn-kid-ghost btn-nav-auth" id="btn-nav-login" style="border-radius: var(--radius-pill); padding: 0.45rem 1.3rem; border-color: #E2E8F0; background: #FFFFFF; color: #1E3A8A; font-weight: 700;">
+        <a href="?page=login" class="btn-kid btn-nav-auth-login" id="btn-nav-login">
           Masuk
         </a>
-        <a href="?page=register" class="btn-kid btn-kid-primary btn-nav-auth shine-effect" id="btn-nav-register" style="border-radius: var(--radius-pill); padding: 0.45rem 1.4rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
-          <span>👤+</span> <span>Daftar</span>
+        <a href="?page=register" class="btn-kid btn-nav-auth-register shine-effect" id="btn-nav-register">
+          <span>👤+</span> <span class="nav-reg-text">Daftar</span>
         </a>
       </div>
     <?php endif; ?>
