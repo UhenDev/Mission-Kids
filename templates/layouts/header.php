@@ -128,14 +128,14 @@ $currentPage = $_GET['page'] ?? ($isLoggedIn ? 'home' : 'landing');
       </nav>
 
       <div class="header-guest-actions">
-        <button type="button" class="sound-toggle-btn" onclick="window.SoundFX.toggleMute()" title="Atur Suara Ceria" id="btn-sound-toggle-guest">
-          🔊
+        <button type="button" class="btn-kid btn-kid-ghost btn-nav-sound" onclick="if(window.SoundFX) { window.SoundFX.toggleMute(); } if(window.mikoCompanion) { window.mikoCompanion.speak('Halo Sahabat Cilik! Aku MIKO, siap bertualang bersamamu!'); }" title="Nyalakan Suara MIKO" id="btn-sound-toggle-guest" style="border-radius: var(--radius-pill); padding: 0.45rem 1rem; font-size: var(--fs-xs); display: inline-flex; align-items: center; gap: 6px; border-color: #E2E8F0; background: #FFFFFF; color: #334155;">
+          <span>🔊</span> <span>Suara MIKO</span>
         </button>
-        <a href="?page=login" class="btn-kid btn-kid-ghost btn-nav-auth" id="btn-nav-login" style="border-radius: var(--radius-pill); padding: 0.45rem 1.2rem;">
-          Login
+        <a href="?page=login" class="btn-kid btn-kid-ghost btn-nav-auth" id="btn-nav-login" style="border-radius: var(--radius-pill); padding: 0.45rem 1.3rem; border-color: #E2E8F0; background: #FFFFFF; color: #1E3A8A; font-weight: 700;">
+          Masuk
         </a>
-        <a href="?page=register" class="btn-kid btn-kid-primary btn-nav-auth shine-effect" id="btn-nav-register" style="border-radius: var(--radius-pill); padding: 0.45rem 1.4rem;">
-          Daftar
+        <a href="?page=register" class="btn-kid btn-kid-primary btn-nav-auth shine-effect" id="btn-nav-register" style="border-radius: var(--radius-pill); padding: 0.45rem 1.4rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+          <span>👤+</span> <span>Daftar</span>
         </a>
       </div>
     <?php endif; ?>

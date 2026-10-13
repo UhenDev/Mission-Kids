@@ -997,241 +997,682 @@
    MISSION KIDS — Mockup Design System (Hero, Showcase, Auth Split, Dashboard)
    ========================================================================== */
 
-/* 1. Hero Grid Split */
-.hero-grid-split {
+/* ==========================================================================
+   MISSION KIDS — LANDING PAGE REDESIGN: Adventure Meets Professionalism
+   ========================================================================== */
+
+/* 1. Hero Adventure Split */
+.hero-adventure-section {
+  padding: 2.5rem 0 3.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-adventure-grid {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
   align-items: center;
-  gap: var(--space-8);
-  padding: var(--space-8) 0 var(--space-10);
+  gap: 3.5rem;
 }
 
-.hero-content-left {
+.hero-left-column {
   text-align: left;
 }
 
-.hero-title-main {
+.hero-category-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #EFF6FF;
+  border: 1.5px solid #BFDBFE;
+  color: #1D4ED8;
+  font-weight: 700;
+  font-size: var(--fs-xs);
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--radius-pill);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);
+}
+
+.hero-headline {
   font-family: var(--font-heading);
-  font-size: clamp(2.3rem, 4.5vw, 3.4rem);
-  font-weight: 800;
+  font-size: clamp(2.4rem, 4.6vw, 3.8rem);
+  font-weight: 900;
   color: #1E3A8A;
-  line-height: 1.15;
-  margin-bottom: var(--space-4);
-  letter-spacing: -0.02em;
+  line-height: 1.12;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.025em;
 }
 
-.hero-subtext-main {
-  font-size: var(--fs-lg);
-  line-height: 1.6;
+.hero-headline-accent {
+  color: #2563EB;
+  position: relative;
+  display: inline-block;
+}
+
+.hero-description {
+  font-size: clamp(1rem, 1.8vw, 1.15rem);
+  line-height: 1.65;
   color: #475569;
-  margin-bottom: var(--space-6);
-  max-width: 500px;
+  margin-bottom: 2rem;
+  max-width: 520px;
+  font-weight: 500;
 }
 
-.hero-cta-btn-pill {
+.hero-cta-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+.hero-btn-primary {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: linear-gradient(135deg, #2563EB, #1D4ED8);
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
   color: #FFFFFF !important;
   font-family: var(--font-heading);
-  font-size: 1.15rem;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 800;
   padding: 0.95rem 2.2rem;
   border-radius: var(--radius-pill);
-  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
-  transition: transform 0.25s var(--transition-bounce), box-shadow 0.25s ease;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
   text-decoration: none;
+  transition: transform 0.25s var(--transition-bounce), box-shadow 0.25s ease;
   border: none;
-  cursor: pointer;
 }
 
-.hero-cta-btn-pill:hover {
+.hero-btn-primary:hover {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.45);
+  box-shadow: 0 16px 32px rgba(37, 99, 235, 0.45);
 }
 
-.hero-media-right {
+.btn-arrow-icon {
+  font-size: 1.2rem;
+  transition: transform 0.2s ease;
+}
+
+.hero-btn-primary:hover .btn-arrow-icon {
+  transform: translateX(4px);
+}
+
+.hero-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFFFF;
+  border: 2px solid #CBD5E1;
+  color: #1E293B !important;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 800;
+  padding: 0.9rem 1.8rem;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.hero-btn-secondary:hover {
+  background: #F8FAFC;
+  border-color: #94A3B8;
+  transform: translateY(-2px);
+}
+
+.btn-play-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #EFF6FF;
+  color: #2563EB;
+  font-size: 11px;
+}
+
+/* Key Features Mini Ribbon */
+.hero-ribbon-pills {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 1.25rem;
+  align-items: center;
+  padding-top: 1.25rem;
+  border-top: 1.5px solid #F1F5F9;
+}
+
+.hero-ribbon-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.ribbon-icon {
+  font-size: 1.2rem;
+}
+
+.ribbon-text {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
+  white-space: nowrap;
+}
+
+/* Hero Visual Frame & Floating Callout */
+.hero-right-column {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.hero-art-wrapper {
+.hero-visual-frame {
   position: relative;
-  border-radius: 28px;
-  box-shadow: 0 20px 45px -10px rgba(37, 99, 235, 0.22);
+  width: 100%;
+  max-width: 520px;
+}
+
+.hero-main-illustration {
+  width: 100%;
+  height: auto;
+  border-radius: 32px;
+  box-shadow: 0 20px 48px -12px rgba(37, 99, 235, 0.22);
+  border: 4px solid #FFFFFF;
+  display: block;
   transition: transform 0.4s var(--transition-bounce);
 }
 
-.hero-art-wrapper:hover {
-  transform: translateY(-6px) scale(1.02);
+.hero-visual-frame:hover .hero-main-illustration {
+  transform: translateY(-5px) scale(1.015);
 }
 
-.hero-art-image {
-  width: 100%;
-  max-width: 480px;
-  height: auto;
-  border-radius: 28px;
-  display: block;
-  border: 4px solid #FFFFFF;
-}
-
-.hero-float-bubble {
+.hero-floating-callout {
   position: absolute;
   top: 18px;
-  right: -12px;
+  right: -8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  animation: floatGentle 4s ease-in-out infinite;
+  z-index: 10;
+}
+
+.callout-bubble-content {
   background: #FFFFFF;
   border: 2px solid #60A5FA;
-  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.18);
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.16);
   border-radius: var(--radius-pill);
   padding: 0.5rem 1.1rem;
   font-family: var(--font-heading);
-  font-size: var(--fs-xs);
-  font-weight: 700;
+  font-size: 0.82rem;
+  font-weight: 800;
   color: #1D4ED8;
   display: flex;
   align-items: center;
   gap: 6px;
-  animation: floatGentle 4s ease-in-out infinite;
-  z-index: 5;
+  white-space: nowrap;
 }
 
-/* 2. Fitur Unggulan Cards */
-.features-section-title {
+.callout-sparkle {
+  color: #F59E0B;
+}
+
+.callout-curve-arrow {
+  font-size: 1.3rem;
+  color: #3B82F6;
+  margin-top: -4px;
+  margin-right: 18px;
+  transform: rotate(-15deg);
+}
+
+/* ==========================================================================
+   2. Worlds Adventure Section & Connected Trail
+   ========================================================================== */
+.worlds-adventure-section {
+  padding: 3.5rem 0 4rem;
+}
+
+.section-header-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.section-title-bold {
   font-family: var(--font-heading);
-  font-size: var(--fs-2xl);
-  font-weight: 800;
+  font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+  font-weight: 900;
   color: #0F172A;
-  margin-bottom: var(--space-4);
-  text-align: left;
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.02em;
 }
 
-.features-grid-row {
+.section-subtitle-muted {
+  font-size: var(--fs-md);
+  color: #64748B;
+  max-width: 620px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.link-bold-accent {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #2563EB;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.link-bold-accent:hover {
+  color: #1D4ED8;
+  transform: translateX(4px);
+}
+
+/* Worlds Panorama Map */
+.worlds-trail-map-container {
+  width: 100%;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.1);
+  border: 3px solid #FFFFFF;
+  margin-bottom: 2rem;
+  background: #E0F2FE;
+}
+
+.worlds-trail-map-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.worlds-trail-map-container:hover .worlds-trail-map-img {
+  transform: scale(1.02);
+}
+
+/* 4 Worlds Node Cards */
+.worlds-interactive-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-4);
-  margin-bottom: var(--space-10);
+  gap: 1.25rem;
 }
 
-.feature-pill-card {
+.world-node-card {
   background: #FFFFFF;
   border: 2px solid #E2E8F0;
   border-radius: 20px;
-  padding: var(--space-5);
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
-  transition: transform 0.3s var(--transition-bounce), border-color 0.2s, box-shadow 0.3s;
+  padding: 1.15rem 1.15rem 1.25rem;
+  text-decoration: none;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  transition: transform 0.25s var(--transition-bounce), border-color 0.2s, box-shadow 0.25s;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+}
+
+.world-node-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.12);
+}
+
+.world-card-number:hover { border-color: #FBBF24; }
+.world-card-discovery:hover { border-color: #34D399; }
+.world-card-thinking:hover { border-color: #A78BFA; }
+.world-card-space:hover { border-color: #60A5FA; }
+
+.world-card-icon-pill {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  margin-bottom: 0.85rem;
+}
+
+.icon-bg-number { background: #FEF3C7; }
+.icon-bg-discovery { background: #ECFDF5; }
+.icon-bg-thinking { background: #F3E8FF; }
+.icon-bg-space { background: #EFF6FF; }
+
+.world-card-name {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 0.25rem;
+}
+
+.world-card-theme {
+  font-size: 0.78rem;
+  color: #64748B;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 1.1rem;
+  flex: 1;
+}
+
+.world-card-cta {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: transform 0.2s ease;
+}
+
+.world-node-card:hover .world-card-cta {
+  transform: translateX(4px);
+}
+
+.cta-text-number { color: #D97706; }
+.cta-text-discovery { color: #059669; }
+.cta-text-thinking { color: #7C3AED; }
+.cta-text-space { color: #2563EB; }
+
+/* ==========================================================================
+   3. MIKO Spotlight Section (Interactive Showcase)
+   ========================================================================== */
+.miko-spotlight-section {
+  padding: 3.5rem 0 4rem;
+  background: linear-gradient(180deg, #F8FAFC 0%, #EFF6FF 100%);
+  border-top: 1.5px solid #E2E8F0;
+  border-bottom: 1.5px solid #E2E8F0;
+}
+
+.miko-spotlight-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  align-items: center;
+  gap: 3.5rem;
+}
+
+.miko-mascot-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.miko-mascot-img {
+  width: 100%;
+  max-width: 380px;
+  border-radius: 32px;
+  box-shadow: 0 16px 36px rgba(37, 99, 235, 0.15);
+  border: 4px solid #FFFFFF;
+  display: block;
+}
+
+.miko-waving-balloon {
+  position: absolute;
+  top: -16px;
+  right: -10px;
+  background: #FFFFFF;
+  border: 2px solid #8B5CF6;
+  border-radius: 18px;
+  padding: 0.65rem 1.1rem;
+  box-shadow: 0 10px 24px rgba(139, 92, 246, 0.18);
+  display: flex;
+  flex-direction: column;
+  animation: floatGentle 4.5s ease-in-out infinite;
+  max-width: 220px;
+}
+
+.miko-balloon-heading {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #7C3AED;
+}
+
+.miko-balloon-sub {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #4C1D95;
+  line-height: 1.3;
+}
+
+.badge-pill-miko {
+  background: #EDE9FE;
+  color: #6D28D9;
+  border: 1.5px solid #DDD6FE;
+  font-size: var(--fs-xs);
+  margin-bottom: 0.75rem;
+}
+
+.miko-section-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3.5vw, 2.6rem);
+  font-weight: 900;
+  color: #1E3A8A;
+  margin-bottom: 0.85rem;
+  letter-spacing: -0.02em;
+}
+
+.miko-section-desc {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: #475569;
+  margin-bottom: 1.75rem;
+}
+
+.btn-miko-listen-voice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #2563EB, #1D4ED8);
+  color: #FFFFFF !important;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 800;
+  padding: 0.85rem 1.8rem;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s var(--transition-bounce), box-shadow 0.2s ease;
+}
+
+.btn-miko-listen-voice:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 26px rgba(37, 99, 235, 0.4);
+}
+
+/* ==========================================================================
+   4. Editorial Learning Benefits (Kenapa Memilih MISSION KIDS)
+   ========================================================================== */
+.editorial-benefits-section {
+  padding: 4rem 0;
+}
+
+.editorial-benefits-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  align-items: center;
+  gap: 3.5rem;
+}
+
+.benefits-intro-column {
   text-align: left;
 }
 
-.feature-pill-card:hover {
-  transform: translateY(-5px);
-  border-color: #93C5FD;
-  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.1);
+.benefits-headline {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3.5vw, 2.7rem);
+  font-weight: 900;
+  color: #0F172A;
+  line-height: 1.15;
+  margin-bottom: 0.85rem;
+  letter-spacing: -0.02em;
 }
 
-.feature-icon-circle {
+.benefits-subtext {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #64748B;
+  max-width: 440px;
+}
+
+.benefits-pillars-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.benefit-clean-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 1.15rem 1.4rem;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
+  transition: transform 0.25s var(--transition-bounce), border-color 0.2s;
+}
+
+.benefit-clean-card:hover {
+  transform: translateX(6px);
+  border-color: #BFDBFE;
+}
+
+.benefit-icon-badge {
   width: 52px;
   height: 52px;
-  border-radius: 50%;
+  min-width: 52px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
-  margin-bottom: var(--space-3);
-  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.6);
 }
 
-.feature-icon-blue { background: #EFF6FF; border: 2px solid #BFDBFE; color: #2563EB; }
-.feature-icon-purple { background: #FAF5FF; border: 2px solid #E9D5FF; color: #8B5CF6; }
-.feature-icon-cyan { background: #F0FDF4; border: 2px solid #BBF7D0; color: #059669; }
-.feature-icon-gold { background: #FFFBEB; border: 2px solid #FDE68A; color: #D97706; }
+.badge-color-blue { background: #EFF6FF; border: 1.5px solid #BFDBFE; }
+.badge-color-yellow { background: #FEF3C7; border: 1.5px solid #FDE68A; }
+.badge-color-purple { background: #FAF5FF; border: 1.5px solid #E9D5FF; }
 
-.feature-card-heading {
+.benefit-card-title {
   font-family: var(--font-heading);
-  font-size: var(--fs-md);
+  font-size: 1.1rem;
   font-weight: 800;
   color: #0F172A;
-  margin-bottom: var(--space-1);
+  margin-bottom: 0.2rem;
 }
 
-.feature-card-desc {
-  font-size: var(--fs-xs);
+.benefit-card-desc {
+  font-size: 0.875rem;
   color: #64748B;
-  line-height: 1.5;
+  line-height: 1.45;
   margin: 0;
 }
 
-/* 3. 3 Dunia Petualangan Cards with Thumbnails */
-.worlds-showcase-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-5);
-  margin-bottom: var(--space-10);
+/* ==========================================================================
+   5. CTA Closing Banner: Petualangan Seru Menunggumu!
+   ========================================================================== */
+.cta-adventure-banner-section {
+  padding: 1rem 0 4rem;
 }
 
-.world-showcase-card {
-  background: #FFFFFF;
-  border: 2px solid #E2E8F0;
-  border-radius: 22px;
-  overflow: hidden;
-  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
-  transition: transform 0.3s var(--transition-bounce), box-shadow 0.3s, border-color 0.2s;
+.cta-adventure-box {
+  background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 50%, #2563EB 100%);
+  border-radius: 32px;
+  padding: 2.5rem 3rem;
+  box-shadow: 0 20px 48px -10px rgba(37, 99, 235, 0.4);
   display: flex;
-  flex-direction: column;
-}
-
-.world-showcase-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 36px rgba(37, 99, 235, 0.12);
-  border-color: #BFDBFE;
-}
-
-.world-thumb-container {
-  width: 100%;
-  height: 180px;
-  overflow: hidden;
+  align-items: center;
+  gap: 2.5rem;
+  color: #FFFFFF;
   position: relative;
-  background: #F1F5F9;
+  overflow: hidden;
 }
 
-.world-thumb-img {
+.cta-flying-miko-col {
+  flex-shrink: 0;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1E3A8A;
+}
+
+.cta-flying-miko-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
 }
 
-.world-showcase-card:hover .world-thumb-img {
-  transform: scale(1.08);
-}
-
-.world-showcase-body {
-  padding: var(--space-4) var(--space-5) var(--space-5);
-  display: flex;
-  flex-direction: column;
+.cta-box-center-content {
   flex: 1;
   text-align: left;
 }
 
-.world-showcase-title {
+.cta-banner-heading {
   font-family: var(--font-heading);
-  font-size: var(--fs-lg);
-  font-weight: 800;
-  color: #0F172A;
-  margin-bottom: 2px;
+  font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+  font-weight: 900;
+  color: #FFFFFF;
+  margin-bottom: 0.45rem;
+  letter-spacing: -0.02em;
 }
 
-.world-showcase-sub {
-  font-size: var(--fs-xs);
-  color: #64748B;
-  font-weight: 600;
-  margin-bottom: var(--space-4);
+.cta-banner-subtext {
+  font-size: 1.05rem;
+  color: #DBEAFE;
+  margin: 0;
+  line-height: 1.5;
 }
+
+.btn-cta-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+  color: #78350F !important;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 900;
+  padding: 0.85rem 2.2rem;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);
+  text-decoration: none;
+  transition: transform 0.25s var(--transition-bounce), box-shadow 0.25s ease;
+}
+
+.btn-cta-gold:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 14px 30px rgba(245, 158, 11, 0.55);
+}
+
+/* Backward Compatibility Aliases for components */
+.hero-grid-split { display: grid; grid-template-columns: 1.15fr 1fr; align-items: center; gap: var(--space-8); }
+.hero-content-left { text-align: left; }
+.hero-title-main { font-family: var(--font-heading); font-size: clamp(2.3rem, 4.5vw, 3.4rem); font-weight: 800; color: #1E3A8A; line-height: 1.15; }
+.hero-subtext-main { font-size: var(--fs-lg); line-height: 1.6; color: #475569; }
+.hero-cta-btn-pill { background: linear-gradient(135deg, #2563EB, #1D4ED8); color: #FFF; padding: 0.95rem 2.2rem; border-radius: var(--radius-pill); text-decoration: none; display: inline-flex; }
+.hero-art-image { width: 100%; border-radius: 28px; }
+.features-section-title { font-family: var(--font-heading); font-size: var(--fs-2xl); font-weight: 800; }
+.features-grid-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
+.feature-pill-card { background: #FFF; border: 2px solid #E2E8F0; border-radius: 20px; padding: var(--space-5); }
+.worlds-showcase-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
+.world-showcase-card { background: #FFF; border: 2px solid #E2E8F0; border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; }
+.world-thumb-container { width: 100%; height: 180px; overflow: hidden; position: relative; }
+.world-thumb-img { width: 100%; height: 100%; object-fit: cover; }
+.world-showcase-title { font-family: var(--font-heading); font-size: var(--fs-lg); font-weight: 800; }
+.world-showcase-sub { font-size: var(--fs-xs); color: #64748B; }
 
 /* 4. Split Auth Layout (Login & Register) */
 .auth-split-wrapper {
@@ -1422,6 +1863,92 @@
   }
   .auth-form-side {
     padding: var(--space-5);
+  }
+}
+
+/* Responsive Rules for Landing Page Redesign */
+@media (max-width: 960px) {
+  .hero-adventure-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2.5rem;
+  }
+  .hero-left-column {
+    text-align: center;
+  }
+  .hero-description {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-cta-group {
+    justify-content: center;
+  }
+  .hero-ribbon-pills {
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: center;
+    gap: 0.75rem;
+  }
+  .hero-visual-frame {
+    margin: 0 auto;
+    max-width: 440px;
+  }
+  .worlds-interactive-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .miko-spotlight-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2.5rem;
+  }
+  .miko-mascot-img {
+    margin: 0 auto;
+  }
+  .editorial-benefits-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2rem;
+  }
+  .benefits-intro-column {
+    text-align: center;
+  }
+  .benefits-subtext {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cta-adventure-box {
+    flex-direction: column;
+    text-align: center;
+    padding: 2.2rem 1.5rem;
+    gap: 1.5rem;
+  }
+  .cta-box-center-content {
+    text-align: center;
+  }
+  .footer-content-row {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 580px) {
+  .hero-ribbon-pills {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+  .worlds-interactive-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-floating-callout {
+    display: none;
+  }
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-btn-primary, .hero-btn-secondary {
+    width: 100%;
+    justify-content: center;
   }
 }
 
