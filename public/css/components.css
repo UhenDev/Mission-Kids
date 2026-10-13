@@ -619,7 +619,46 @@
   }
 
   .header-guest-actions {
+    display: flex;
+    align-items: center;
     gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .btn-nav-sound {
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .nav-sound-text {
+    display: none !important;
+  }
+
+  .btn-nav-auth-login {
+    padding: 0 0.85rem !important;
+    min-height: 36px !important;
+    height: 36px !important;
+    font-size: 13px !important;
+    border-radius: var(--radius-pill);
+    white-space: nowrap !important;
+    flex-shrink: 0;
+  }
+
+  .btn-nav-auth-register {
+    padding: 0 0.95rem !important;
+    min-height: 36px !important;
+    height: 36px !important;
+    font-size: 13px !important;
+    border-radius: var(--radius-pill);
+    white-space: nowrap !important;
     flex-shrink: 0;
   }
 
@@ -642,16 +681,21 @@
 
   .brand-logo {
     gap: 6px;
+    min-width: 0;
+    flex-shrink: 1;
   }
 
   .brand-logo span {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .brand-icon {
     width: 32px;
     height: 32px;
     font-size: var(--fs-sm);
+    flex-shrink: 0;
   }
 
   .student-nickname-nav {
@@ -2161,15 +2205,29 @@
   .footer-content-row {
     flex-direction: column;
     text-align: center;
+    align-items: center;
     gap: 1.5rem;
   }
   .footer-brand-side {
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 6px;
   }
   .footer-tagline-text {
     border-left: none;
     padding-left: 0;
+  }
+  .footer-meta-side {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+    width: 100%;
+  }
+  .footer-copyright-text {
+    white-space: normal;
+    text-align: center;
   }
 }
 
@@ -2179,19 +2237,20 @@
     padding: 2rem 0 3rem;
   }
   .hero-headline {
-    font-size: clamp(2.2rem, 7.5vw, 3rem);
+    font-size: clamp(2rem, 6.5vw, 2.75rem);
+    word-break: break-word;
   }
   .hero-visual-frame {
     max-width: 100%;
   }
   .hero-main-illustration {
-    border-radius: 22px;
+    border-radius: 20px;
   }
   .miko-spotlight-section {
-    padding: 3.5rem 0 4rem;
+    padding: 3rem 0 3.5rem;
   }
   .miko-mascot-img {
-    max-width: 360px;
+    max-width: 340px;
   }
   .benefits-pillars-column {
     grid-template-columns: 1fr;
@@ -2207,223 +2266,441 @@
     padding: 1rem 1.25rem;
     box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
     text-align: left;
+    width: 100%;
+    box-sizing: border-box;
   }
   .benefit-icon-badge {
     margin-bottom: 0;
     flex-shrink: 0;
   }
+  .footer-meta-side {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.65rem;
+    width: 100%;
+  }
+  .footer-copyright-text {
+    white-space: normal;
+    text-align: center;
+  }
 }
 
-/* 3. Small Mobile Screen (max-width: 580px) */
-@media (max-width: 580px) {
+/* 3. Mobile Phones (max-width: 640px) */
+@media (max-width: 640px) {
   .header-container {
-    height: 58px;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-    gap: 0.5rem;
+    height: 56px;
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
+    gap: 0.45rem;
   }
   .brand-logo {
-    font-size: 1.05rem;
-    gap: 6px;
+    font-size: 1rem;
+    gap: 5px;
+    min-width: 0;
+  }
+  .brand-logo span {
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .brand-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 1rem;
+    width: 30px;
+    height: 30px;
+    font-size: 0.95rem;
+    flex-shrink: 0;
   }
   .header-guest-actions {
-    gap: 5px;
+    gap: 4px;
+    flex-shrink: 0;
   }
   .btn-nav-sound {
-    padding: 0.35rem 0.65rem;
-    font-size: 11px;
+    width: 34px;
+    height: 34px;
+    min-height: 34px;
+    padding: 0;
+    font-size: 13px;
+    border-radius: 50%;
   }
   .nav-sound-text {
-    display: none;
+    display: none !important;
   }
   .btn-nav-auth-login {
-    padding: 0.35rem 0.85rem;
-    font-size: 12px;
+    padding: 0 0.75rem !important;
+    min-height: 34px !important;
+    height: 34px !important;
+    font-size: 12px !important;
+    border-radius: var(--radius-pill);
   }
   .btn-nav-auth-register {
-    padding: 0.35rem 0.95rem;
-    font-size: 12px;
+    padding: 0 0.85rem !important;
+    min-height: 34px !important;
+    height: 34px !important;
+    font-size: 12px !important;
+    border-radius: var(--radius-pill);
+  }
+  .hero-adventure-section {
+    padding: 1.5rem 0 2.25rem;
   }
   .hero-category-tag {
     font-size: 11px;
     padding: 0.35rem 0.85rem;
     max-width: 100%;
     white-space: normal;
+    margin-bottom: 0.85rem;
   }
   .hero-headline {
-    font-size: 2.2rem;
-    line-height: 1.12;
+    font-size: clamp(1.75rem, 7.5vw, 2.25rem);
+    line-height: 1.15;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    margin-bottom: 0.85rem;
   }
   .hero-description {
     font-size: 0.95rem;
     line-height: 1.55;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.35rem;
+    max-width: 100%;
   }
   .hero-cta-group {
     flex-direction: column;
     width: 100%;
-    gap: 0.75rem;
+    max-width: 320px;
+    margin: 0 auto 1.5rem;
+    gap: 0.65rem;
   }
   .hero-btn-primary, .hero-btn-secondary {
     width: 100%;
     justify-content: center;
-    padding: 0.85rem 1.5rem;
-    font-size: 1rem;
+    padding: 0.8rem 1.25rem;
+    font-size: 0.98rem;
+    min-height: 46px;
+    box-sizing: border-box;
   }
   .hero-ribbon-pills {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.65rem;
     padding-top: 1rem;
-    max-width: 100%;
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+    border-top: 1.5px solid #F1F5F9;
   }
   .hero-ribbon-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 5px;
+    padding: 0.35rem 0.45rem;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: var(--radius-pill);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    min-width: 0;
   }
   .ribbon-icon {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+    flex-shrink: 0;
   }
   .ribbon-text {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
+    white-space: normal;
+    text-align: left;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .hero-visual-frame {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
   }
   .hero-main-illustration {
     border-radius: 18px;
     filter: drop-shadow(0 10px 24px rgba(37, 99, 235, 0.12));
+    width: 100%;
+    height: auto;
   }
   .hero-floating-callout {
-    top: 10px;
+    top: 8px;
     right: 8px;
+    max-width: calc(100% - 16px);
   }
   .callout-bubble-content {
     font-size: 0.72rem;
     padding: 0.35rem 0.75rem;
+    white-space: normal;
+    text-align: left;
+    gap: 4px;
   }
   .callout-curve-arrow {
     display: none;
   }
+  .worlds-adventure-section {
+    padding: 2.25rem 0 2.75rem;
+  }
   .section-header-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: 0.45rem;
+    margin-bottom: 1rem;
   }
   .section-title-bold {
-    font-size: 1.85rem;
+    font-size: clamp(1.6rem, 6vw, 2rem);
   }
   .section-subtitle-muted {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    line-height: 1.45;
   }
   .worlds-trail-map-container {
-    border-radius: 18px;
+    border-radius: 16px;
     margin-bottom: 1rem;
+    width: 100%;
+  }
+  .worlds-trail-map-img {
+    width: 100%;
+    height: auto;
   }
   .worlds-interactive-grid {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: 0.65rem;
+    width: 100%;
   }
   .world-node-card {
     flex-direction: row;
     align-items: center;
     gap: 0.85rem;
-    padding: 0.85rem 1rem;
+    padding: 0.8rem 0.95rem;
     border-radius: 16px;
+    width: 100%;
+    box-sizing: border-box;
   }
   .world-card-icon-pill {
     width: 42px;
     height: 42px;
+    min-width: 42px;
     margin-bottom: 0;
     flex-shrink: 0;
   }
   .world-card-text {
     flex: 1;
     min-width: 0;
+    text-align: left;
   }
   .world-card-name {
-    font-size: 1.05rem;
+    font-size: 1.02rem;
     margin-bottom: 2px;
   }
   .world-card-theme {
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     margin-bottom: 0;
     line-height: 1.3;
   }
   .world-card-cta {
     flex-shrink: 0;
     font-size: 0.8rem;
+    margin-left: auto;
+  }
+  .miko-spotlight-section {
+    padding: 2.5rem 0 3rem;
   }
   .miko-mascot-wrapper {
-    max-width: 320px;
+    max-width: 300px;
+    margin: 0 auto;
+    position: relative;
+    width: 100%;
   }
   .miko-mascot-img {
-    max-width: 320px;
+    max-width: 100%;
+    width: 100%;
+    height: auto;
   }
   .miko-waving-balloon {
-    top: -10px;
-    right: -4px;
+    top: 0;
+    right: 0;
     padding: 0.45rem 0.75rem;
     max-width: 170px;
+    text-align: left;
+    border-radius: 16px;
   }
   .miko-balloon-heading {
     font-size: 0.8rem;
   }
   .miko-balloon-sub {
     font-size: 0.7rem;
+    line-height: 1.3;
   }
   .miko-section-heading {
-    font-size: 1.85rem;
+    font-size: clamp(1.65rem, 6vw, 2rem);
+    margin-bottom: 0.5rem;
   }
   .miko-section-desc {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin-bottom: 1.35rem;
   }
   .btn-miko-listen-voice {
     width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
     justify-content: center;
+    min-height: 46px;
+    box-sizing: border-box;
+  }
+  .editorial-benefits-section {
+    padding: 2.25rem 0 2.75rem;
   }
   .benefits-headline {
-    font-size: 1.85rem;
+    font-size: clamp(1.65rem, 6vw, 2rem);
+    margin-bottom: 0.4rem;
   }
   .benefits-subtext {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .cta-adventure-banner-section {
+    padding: 1rem 0 2.5rem;
   }
   .cta-adventure-box {
-    padding: 2rem 1.25rem;
-    border-radius: 22px;
-    gap: 1.25rem;
+    padding: 1.85rem 1.15rem;
+    border-radius: 20px;
+    gap: 1.15rem;
+    width: 100%;
+    box-sizing: border-box;
   }
   .cta-flying-miko-col {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
     margin: 0 auto;
+    flex-shrink: 0;
   }
   .cta-banner-heading {
-    font-size: 1.65rem;
+    font-size: clamp(1.45rem, 5.5vw, 1.85rem);
+    margin-bottom: 0.4rem;
   }
   .cta-banner-subtext {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
+    line-height: 1.45;
   }
   .btn-cta-gold {
     width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
     justify-content: center;
-    padding: 0.8rem 1.5rem;
-    font-size: 1.05rem;
+    padding: 0.8rem 1.25rem;
+    font-size: 1rem;
+    min-height: 46px;
+    box-sizing: border-box;
+  }
+  .footer-content-row {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .footer-brand-side {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+  }
+  .footer-tagline-text {
+    border-left: none;
+    padding-left: 0;
+    font-size: 0.8rem;
+  }
+  .footer-nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 0.85rem;
+  }
+  .footer-meta-side {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.65rem;
+    width: 100%;
+  }
+  .footer-copyright-text {
+    white-space: normal;
+    text-align: center;
+    font-size: 0.76rem;
+    line-height: 1.4;
+    word-break: break-word;
   }
 }
 
-/* 4. Extra Small Phones (iPhone SE, 320px - 360px) */
-@media (max-width: 360px) {
+/* 4. Ultra-Narrow Phones (iPhone SE 320px - 380px) */
+@media (max-width: 380px) {
+  .header-container {
+    height: 52px;
+    padding-left: 0.35rem;
+    padding-right: 0.35rem;
+    gap: 3px;
+  }
+  .brand-logo {
+    gap: 4px;
+  }
   .brand-logo span {
-    font-size: 0.95rem;
+    font-size: 0.84rem;
+  }
+  .brand-icon {
+    width: 26px;
+    height: 26px;
+    font-size: 0.85rem;
+  }
+  .header-guest-actions {
+    gap: 3px;
+  }
+  .btn-nav-sound {
+    width: 30px;
+    height: 30px;
+    min-height: 30px;
+    font-size: 12px;
   }
   .btn-nav-auth-login {
-    padding: 0.35rem 0.65rem;
+    padding: 0 0.55rem !important;
+    min-height: 30px !important;
+    height: 30px !important;
+    font-size: 11px !important;
   }
   .btn-nav-auth-register {
-    padding: 0.35rem 0.75rem;
+    padding: 0 0.65rem !important;
+    min-height: 30px !important;
+    height: 30px !important;
+    font-size: 11px !important;
+  }
+  .btn-nav-auth-register span:first-child {
+    display: none; /* Hide 👤+ icon on ultra-narrow screens */
+  }
+  .hero-headline {
+    font-size: 1.65rem;
+  }
+  .hero-ribbon-pills {
+    grid-template-columns: 1fr !important;
+    max-width: 260px;
+  }
+  .world-node-card {
+    padding: 0.75rem 0.85rem;
+    gap: 0.65rem;
+  }
+  .world-card-icon-pill {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    font-size: 1.15rem;
+  }
+  .world-card-name {
+    font-size: 0.95rem;
+  }
+  .world-card-theme {
+    font-size: 0.7rem;
   }
 }
+
 
 
 
