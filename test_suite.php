@@ -36,13 +36,13 @@ try {
     assertTest("Database Connection", $pdo instanceof PDO, "Driver: {$driver}");
     
     $worldCount = (int)$pdo->query("SELECT COUNT(*) FROM worlds")->fetchColumn();
-    assertTest("Seeded Worlds Count", $worldCount === 3, "Found: {$worldCount}");
+    assertTest("Seeded Worlds Count", $worldCount === 4, "Found: {$worldCount}");
 
     $missionCount = (int)$pdo->query("SELECT COUNT(*) FROM missions")->fetchColumn();
-    assertTest("Seeded Missions Count", $missionCount === 9, "Found: {$missionCount}");
+    assertTest("Seeded Missions Count", $missionCount === 12, "Found: {$missionCount}");
 
     $achCount = (int)$pdo->query("SELECT COUNT(*) FROM achievements")->fetchColumn();
-    assertTest("Seeded Badges Count", $achCount === 5, "Found: {$achCount}");
+    assertTest("Seeded Badges Count", $achCount === 6, "Found: {$achCount}");
 } catch (Exception $e) {
     assertTest("Database Initial Check", false, $e->getMessage());
 }

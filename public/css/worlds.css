@@ -45,6 +45,11 @@
   background: linear-gradient(180deg, #F5F7FF 0%, #FFFFFF 60%);
 }
 
+.world-card.theme-space {
+  border-color: #DDD6FE;
+  background: linear-gradient(180deg, #F5F3FF 0%, #FFFFFF 60%);
+}
+
 .world-badge-icon {
   width: 48px;
   height: 48px;
@@ -78,6 +83,11 @@
   color: #4F46E5;
 }
 
+.theme-space .world-badge-icon {
+  background: #EDE9FE;
+  color: #7C3AED;
+}
+
 .world-title {
   font-size: var(--fs-xl);
   margin-bottom: var(--space-1);
@@ -98,6 +108,11 @@
   padding: var(--space-8);
   margin-top: var(--space-6);
   position: relative;
+}
+
+.adventure-map-shell.theme-space {
+  border-color: #C4B5FD;
+  background: linear-gradient(180deg, #FAF5FF 0%, #FFFFFF 30%);
 }
 
 .adventure-trail {

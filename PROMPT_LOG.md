@@ -170,6 +170,29 @@ Buatkan URL online langsung (Live Public HTTPS) sekarang agar bisa diakses juri/
   - Successfully published live public HTTPS URL on Cloudflare global edge: `https://kelkoo-canyon-norfolk-tables.trycloudflare.com`.
   - Verified remote live connectivity across Landing, Auth, Static CSS, and JavaScript with HTTP 200 OK responses.
 
+---
+
+### [Prompt #010] — World 4 (Space Odyssey), 3 New Missions & Interactive Spoken Guidance AI MIKO
+- **Date & Time:** 2026-10-13 09:12:00+07:00
+- **Author:** Product Owner
+- **Type:** World Map Expansion, Gameplay Simulation, Voice-Over Audio Scaffolding
+- **Raw Prompt:**
+```text
+tambahkan peta baru dan perbanyak soalnya juga lalu setiap sedang mengerjakan soal fungsi AI miko itu untuk membantu annak apa yg harus mereka lakukan di tiap tiap soal tsb
+```
+- **Outcome / Action Taken:**
+  - **Peta Dunia ke-4 (Space Odyssey):** Menambahkan dunia antariksa ungu kosmik (`#8B5CF6`) berfokus pada sains antariksa, koordinat Kartesius, dan perencanaan rute Rover.
+  - **3 Misi Interaktif Baru (Total 12 Misi):**
+    1. `roket-angkasa` (Simulation: Peluncuran Roket Antariksa dengan interaksi live tilt angle dan fuel gauge).
+    2. `rasi-bintang` (Match & Sort: Peta Koordinat Rasi Bintang dengan radar teleskop Cartesius X:4, Y:6).
+    3. `rover-mars` (Sequence & Logic: Navigasi Rover penjelajah Mars menghindari kawah meteor di [1,0] ke Stasiun Riset di [2,1]).
+  - **Fungsi AI MIKO Membantu Anak di Tiap Soal:**
+    - Menyediakan 12 audio studio vokal ramah anak (`id-ID-ArdiNeural`) di `public/audio/miko/guide_*.mp3`.
+    - Menampilkan kartu panduan MIKO di Stage 3 (`stage-challenge`): *"Apa yang harus kamu lakukan?"* lengkap dengan teks instruksi konkret dan tombol `🔊 Dengar Suara`.
+    - AI MIKO otomatis menyapa dan menjelaskan instruksi konkret tiap kali anak memasuki stage tantangan.
+  - **Medali & Gamifikasi Baru:** Menambahkan badge `space-cadet` (Astronot Bintang Cilik) dan memperbarui `mission-master` menjadi 12 misi selesai.
+  - **Verifikasi & Test Suite:** 100% PASS (Unit Tests: 49/49, Integration Endpoints: 36/36, Test Suite: 17/17, Security & Tampering: 100%).
+
 
 
 

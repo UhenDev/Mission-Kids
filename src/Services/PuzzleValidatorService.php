@@ -45,6 +45,9 @@ class PuzzleValidatorService
             'robot-pulang' => $this->validateRobotRunner($payload, $parsedConfig),
             'jalan-rahasia' => $this->validateSecretPath($payload, $parsedConfig),
             'robot-mengulang' => $this->validateRobotLoop($payload, $parsedConfig),
+            'roket-angkasa' => $this->validateRocketLaunch($payload, $parsedConfig),
+            'rasi-bintang' => $this->validateStarConstellation($payload, $parsedConfig),
+            'rover-mars' => $this->validateMarsRover($payload, $parsedConfig),
             default => [
                 'valid' => false,
                 'message' => "Tantangan misi '{$slug}' tidak dikenal oleh sistem."
@@ -461,6 +464,155 @@ class PuzzleValidatorService
         return [
             'valid' => false,
             'message' => "Atur jumlah perulangan menjadi 4x dan masukkan aksi 'Lompat' serta 'Maju'!"
+        ];
+    }
+
+    // =========================================================================
+    // 10. World 4: Peluncuran Roket Antariksa (simulation)
+    // =========================================================================
+    private function validateRocketLaunch(array $payload, array $config): array
+    {
+        $rawFuel = $payload['fuel'] ?? $payload['fuel_level'] ?? null;
+        $rawAngle = $payload['angle'] ?? $payload['launch_angle'] ?? null;
+
+        if ($rawFuel === null || $rawAngle === null) {
+            return ['valid' => false, 'message' => 'Tingkat bahan bakar dan sudut peluncuran wajib diisi.'];
+        }
+
+        if (!is_numeric($rawFuel) || !is_numeric($rawAngle)) {
+            return ['valid' => false, 'message' => 'Nilai bahan bakar dan sudut harus berupa angka.'];
+        }
+
+        $fuel = (float)$rawFuel;
+        $angle = (float)$rawAngle;
+
+        if ($fuel < 0 || $fuel > 100 || $angle < 0 || $angle > 90) {
+            return ['valid' => false, 'message' => 'Parameter roket berada di luar rentang kendali instrumen.'];
+        }
+
+        $targetFuel = $config['target_ranges']['fuel'] ?? ['min' => 70, 'max' => 85];
+        $targetAngle = $config['target_ranges']['angle'] ?? ['min' => 45, 'max' => 60];
+
+        $fuelOk = ($fuel >= (float)$targetFuel['min'] && $fuel <= (float)$targetFuel['max']);
+        $angleOk = ($angle >= (float)$targetAngle['min'] && $angle <= (float)$targetAngle['max']);
+
+        if ($fuelOk && $angleOk) {
+            return [
+                'valid' => true,
+                'message' => 'Luar biasa! Roket melesat sempurna menembus atmosfer dan berlabuh di stasiun orbit! 🚀'
+            ];
+        }
+
+        if (!$fuelOk && !$angleOk) {
+            return [
+                'valid' => false,
+                'message' => 'Bahan bakar dan sudut luncur belum pas. Sesuaikan bahan bakar (70-85%) dan sudut (45-60°).'
+            ];
+        }
+
+        if (!$fuelOk) {
+            return [
+                'valid' => false,
+                'message' => 'Bahan bakar belum pas! Pastikan tangki roket terisi antara 70% sampai 85%.'
+            ];
+        }
+
+        return [
+            'valid' => false,
+            'message' => 'Sudut luncur belum pas! Arahkan moncong roket antara 45° sampai 60°.'
+        ];
+    }
+
+    // =========================================================================
+    // 11. World 4: Peta Koordinat Rasi Bintang (match_sort)
+    // =========================================================================
+    private function validateStarConstellation(array $payload, array $config): array
+    {
+        $chosen = $payload['selected_value'] ?? $payload['choice'] ?? $payload['selected_coord'] ?? null;
+        if ($chosen === null) {
+            return ['valid' => false, 'message' => 'Pilihan koordinat bintang belum ditentukan.'];
+        }
+
+        $coord = trim((string)$chosen);
+        $correct = trim((string)($config['correct_value'] ?? '4,6'));
+
+        if ($coord === $correct) {
+            return [
+                'valid' => true,
+                'message' => 'Tepat sekali! Bintang Polaris berada pada koordinat X: 4 dan Y: 6 di radar teleskop! ✨'
+            ];
+        }
+
+        return [
+            'valid' => false,
+            'message' => 'Koordinat belum tepat. Tarik garis ke sumbu mendatar X lalu ke sumbu tegak Y!'
+        ];
+    }
+
+    // =========================================================================
+    // 12. World 4: Petualangan Rover Penjelajah Mars (sequence_logic)
+    // =========================================================================
+    private function validateMarsRover(array $payload, array $config): array
+    {
+        $queue = $payload['commands'] ?? $payload['path'] ?? $payload['command_queue'] ?? null;
+
+        if (!is_array($queue) || empty($queue)) {
+            return ['valid' => false, 'message' => 'Urutan perintah navigasi Rover Mars belum disusun.'];
+        }
+
+        if (count($queue) > 20) {
+            return ['valid' => false, 'message' => 'Jumlah langkah navigasi melebihi batas memori Rover.'];
+        }
+
+        $curX = 0;
+        $curY = 0;
+
+        $hazards = [
+            ['x' => 1, 'y' => 0] // Kawah meteor
+        ];
+
+        foreach ($queue as $cmdRaw) {
+            $cmd = is_string($cmdRaw)
+                ? strtoupper(trim($cmdRaw))
+                : (is_array($cmdRaw) ? strtoupper(trim((string)($cmdRaw['type'] ?? ''))) : '');
+
+            // Normalize command names: support DOWN/BAWAH, RIGHT/KANAN, UP/ATAS, LEFT/KIRI
+            if (in_array($cmd, ['DOWN', 'BAWAH', 'SELATAN'], true)) {
+                $curY += 1;
+            } elseif (in_array($cmd, ['RIGHT', 'KANAN', 'TIMUR'], true)) {
+                $curX += 1;
+            } elseif (in_array($cmd, ['UP', 'ATAS', 'UTARA'], true)) {
+                $curY -= 1;
+            } elseif (in_array($cmd, ['LEFT', 'KIRI', 'BARAT'], true)) {
+                $curX -= 1;
+            } else {
+                return ['valid' => false, 'message' => "Arah perintah '{$cmd}' tidak dikenal oleh sistem navigasi Rover!"];
+            }
+
+            // Boundary check: grid 3 columns (0..2), 2 rows (0..1)
+            if ($curX < 0 || $curX > 2 || $curY < 0 || $curY > 1) {
+                return ['valid' => false, 'message' => 'Rover keluar dari zona aman peta penjelajahan!'];
+            }
+
+            // Hazard check
+            foreach ($hazards as $hz) {
+                if ($curX === $hz['x'] && $curY === $hz['y']) {
+                    return ['valid' => false, 'message' => 'Awas! Rover terperosok ke dalam kawah meteor di posisi (1,0)! Pilih jalur bawah yang aman.'];
+                }
+            }
+        }
+
+        // Goal check: (2, 1)
+        if ($curX === 2 && $curY === 1) {
+            return [
+                'valid' => true,
+                'message' => 'Hebat! Rover penjelajah Mars berhasil sampai ke Stasiun Riset tanpa hambatan! 🤖'
+            ];
+        }
+
+        return [
+            'valid' => false,
+            'message' => 'Rover belum sampai di Stasiun Riset (2,1). Rencanakan rute: Bawah -> Kanan -> Kanan!'
         ];
     }
 }

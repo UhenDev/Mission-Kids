@@ -180,7 +180,51 @@ $res = $validator->validate('robot-mengulang', ['loop_count' => 4, 'actions' => 
 assertVal('Misi 9: Aksi tidak lengkap (hanya Lompat) ditolak', $res['valid'] === false);
 
 // -----------------------------------------------------------------------------
-// 10. Global Payload Integrity & Edge Cases
+// 10. Mission 10: Peluncuran Roket (roket-angkasa)
+// -----------------------------------------------------------------------------
+$cfg10 = [
+    'target_ranges' => [
+        'fuel' => ['min' => 70, 'max' => 85],
+        'angle' => ['min' => 45, 'max' => 60]
+    ]
+];
+$res = $validator->validate('roket-angkasa', ['fuel' => 75, 'angle' => 50], $cfg10);
+assertVal('Misi 10: Bahan bakar 75% & sudut 50° diterima', $res['valid'] === true);
+
+$res = $validator->validate('roket-angkasa', ['fuel' => 50, 'angle' => 50], $cfg10);
+assertVal('Misi 10: Bahan bakar kurang (50%) ditolak', $res['valid'] === false);
+
+$res = $validator->validate('roket-angkasa', ['fuel' => 75, 'angle' => 30], $cfg10);
+assertVal('Misi 10: Sudut luncur terlalu rendah (30°) ditolak', $res['valid'] === false);
+
+// -----------------------------------------------------------------------------
+// 11. Mission 11: Koordinat Rasi Bintang (rasi-bintang)
+// -----------------------------------------------------------------------------
+$cfg11 = ['correct_value' => '4,6'];
+$res = $validator->validate('rasi-bintang', ['selected_value' => '4,6'], $cfg11);
+assertVal('Misi 11: Koordinat tepat (4,6) diterima', $res['valid'] === true);
+
+$res = $validator->validate('rasi-bintang', ['selected_value' => '6,4'], $cfg11);
+assertVal('Misi 11: Koordinat terbalik (6,4) ditolak', $res['valid'] === false);
+
+// -----------------------------------------------------------------------------
+// 12. Mission 12: Rover Mars (rover-mars)
+// -----------------------------------------------------------------------------
+$cfg12 = [];
+$res = $validator->validate('rover-mars', ['commands' => ['DOWN', 'RIGHT', 'RIGHT']], $cfg12);
+assertVal('Misi 12: Rute aman [DOWN, RIGHT, RIGHT] diterima', $res['valid'] === true);
+
+$res = $validator->validate('rover-mars', ['commands' => ['BAWAH', 'KANAN', 'KANAN']], $cfg12);
+assertVal('Misi 12: Rute bahasa lokal [BAWAH, KANAN, KANAN] diterima', $res['valid'] === true);
+
+$res = $validator->validate('rover-mars', ['commands' => ['RIGHT', 'DOWN', 'RIGHT']], $cfg12);
+assertVal('Misi 12: Rute menabrak kawah meteor di (1,0) ditolak', $res['valid'] === false);
+
+$res = $validator->validate('rover-mars', ['commands' => ['DOWN', 'RIGHT']], $cfg12);
+assertVal('Misi 12: Rute belum sampai tujuan (2,1) ditolak', $res['valid'] === false);
+
+// -----------------------------------------------------------------------------
+// 13. Global Payload Integrity & Edge Cases
 // -----------------------------------------------------------------------------
 $res = $validator->validate('toko-kue', [], $cfg1);
 assertVal('Edge Case: Payload array kosong ditolak', $res['valid'] === false);
@@ -192,7 +236,7 @@ $res = $validator->validate('misi-hantu', ['any' => 'data']);
 assertVal('Edge Case: Slug misi fiktif ditolak', $res['valid'] === false);
 
 // -----------------------------------------------------------------------------
-// 11. Reflection Answer Validation
+// 14. Reflection Answer Validation
 // -----------------------------------------------------------------------------
 $refCfg = [
     'reflection' => [

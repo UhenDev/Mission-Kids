@@ -104,11 +104,12 @@ $res = makeRequest($baseUrl . '/?page=progress');
 assertTest('GET /?page=progress (HTTP 200)', $res['code'] === 200);
 assertTest('Progress page rendered', strpos($res['body'], 'Perjalanan Keterampilan Cilik') !== false);
 
-// 6. Test All 9 Mission Game Pages
+// 6. Test All 12 Mission Game Pages
 $missions = [
     'toko-kue', 'jembatan-angka', 'kota-pola',
     'tanaman-layu', 'misteri-bayangan', 'perjalanan-air',
-    'robot-pulang', 'jalan-rahasia', 'robot-mengulang'
+    'robot-pulang', 'jalan-rahasia', 'robot-mengulang',
+    'roket-angkasa', 'rasi-bintang', 'rover-mars'
 ];
 
 foreach ($missions as $mSlug) {
@@ -158,7 +159,7 @@ $badSolRes = makeRequest($baseUrl . '/?page=api&action=complete_mission', 'POST'
     'Content-Type: application/json',
     'X-CSRF-Token: ' . $regCsrf
 ]);
-assertTest('POST API complete_mission rejects invalid solution (HTTP 422)', $badSolRes['code'] === 422);
+assertTest('POST API complete_mission rejects invalid solution (HTTP 422)', $badSolRes['code'] === 422, "Code: {$badSolRes['code']}, Body: {$badSolRes['body']}");
 
 // 10b. Test API complete_mission: Valid Solution (With CSRF & Solution Payload)
 $compPayload = json_encode([

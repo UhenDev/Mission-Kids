@@ -64,7 +64,13 @@ class MissionEngine {
       const canvasEl = document.getElementById('canvas-game-area');
       const controlsEl = document.getElementById('controls-tray-area');
       this.handler.mount(canvasEl, controlsEl);
-      this.companion.say(`Selamat datang di arena tantangan! Jika butuh bantuan, klik tombol Petunjuk MIKO ya!`);
+      
+      const guide = this.companion.getMissionGuide(this.slug);
+      const guideTextEl = document.getElementById('miko-guide-text');
+      if (guideTextEl && guide) {
+        guideTextEl.textContent = guide.text;
+      }
+      this.companion.playMissionGuide(this.slug);
     } else if (stepName === 'reflection') {
       this.loadReflectionData();
     }
@@ -90,7 +96,14 @@ class MissionEngine {
   bindChallengeButtons() {
     const btnCheck = document.getElementById('btn-check-solution');
     const btnHint = document.getElementById('btn-request-hint');
+    const btnListenGuide = document.getElementById('btn-listen-miko-guide');
     const feedbackBox = document.getElementById('in-canvas-feedback');
+
+    if (btnListenGuide) {
+      btnListenGuide.addEventListener('click', () => {
+        this.companion.playMissionGuide(this.slug);
+      });
+    }
 
     if (btnHint) {
       btnHint.addEventListener('click', async () => {

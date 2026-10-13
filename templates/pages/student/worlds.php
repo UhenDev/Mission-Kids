@@ -25,12 +25,14 @@ require __DIR__ . '/../../layouts/header.php';
           'number-city' => 'theme-number',
           'discovery-lab' => 'theme-discovery',
           'thinking-lab' => 'theme-thinking',
+          'space-odyssey' => 'theme-space',
           default => 'theme-discovery'
       };
       $icon = match($w['slug']) {
           'number-city' => '🧮',
           'discovery-lab' => '🌿',
           'thinking-lab' => '🤖',
+          'space-odyssey' => '🚀',
           default => '⭐'
       };
     ?>

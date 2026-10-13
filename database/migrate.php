@@ -152,6 +152,13 @@ try {
             'theme_color' => '#6366F1',
             'sort_order' => 3,
         ],
+        [
+            'slug' => 'space-odyssey',
+            'title' => 'Space Odyssey',
+            'subtitle' => 'Petualangan Antariksa, Gravitasi & Koordinat Roket',
+            'theme_color' => '#8B5CF6',
+            'sort_order' => 4,
+        ],
     ];
 
     $stmtWorld = $pdo->prepare("INSERT " . ($driver === 'mysql' ? "IGNORE" : "OR IGNORE") . " INTO worlds (slug, title, subtitle, theme_color, sort_order) VALUES (:slug, :title, :subtitle, :theme_color, :sort_order)");
@@ -463,13 +470,113 @@ try {
                 ]
             ], JSON_UNESCAPED_UNICODE)
         ],
+
+        // WORLD 4: SPACE ODYSSEY
+        [
+            'world_id' => $worldMap['space-odyssey'],
+            'slug' => 'roket-angkasa',
+            'title' => 'Peluncuran Roket Antariksa',
+            'subtitle' => 'Atur level bahan bakar dan sudut luncur roket agar sampai ke stasiun orbit!',
+            'learning_objective' => 'Memahami hubungan proporsi bahan bakar dan sudut peluncuran roket secara interaktif.',
+            'interaction_type' => 'simulation',
+            'xp_reward' => 100,
+            'sort_order' => 1,
+            'config_json' => json_encode([
+                'scenario' => 'Roket Bintang Explorer siap meluncur menuju stasiun luar angkasa orbit! Atur bahan bakar roket antara 70% sampai 85% dan sudut elevasi antara 45 sampai 60 derajat!',
+                'initial_state' => ['fuel' => 30, 'angle' => 20],
+                'target_ranges' => [
+                    'fuel' => ['min' => 70, 'max' => 85, 'label' => 'Bahan Bakar Ideal (70% - 85%)'],
+                    'angle' => ['min' => 45, 'max' => 60, 'label' => 'Sudut Elevasi Ideal (45° - 60°)']
+                ],
+                'hints' => [
+                    ['level' => 1, 'text' => 'Geser tuas bahan bakar ke atas hingga tangki terisi cukup untuk menembus atmosfer.'],
+                    ['level' => 2, 'text' => 'Bahan bakar butuh sekitar 70-85%. Sudut moncong roket jangan terlalu mendatar, arahkan sekitar 45-60 derajat.'],
+                    ['level' => 3, 'text' => 'Atur bahan bakar menjadi 75% dan sudut ke 50 derajat, lalu klik tombol Luncurkan Roket!']
+                ],
+                'reflection' => [
+                    'question' => 'Mengapa roket membutuhkan sudut peluncuran dan bahan bakar yang tepat untuk mencapai orbit?',
+                    'options' => [
+                        'Supaya memiliki daya dorong yang cukup untuk melepaskan diri dari gravitasi bumi menuju lintasan yang tepat.',
+                        'Supaya roket bisa berenang di dalam air laut.',
+                        'Karena roket hanya bisa meluncur saat lampu jalan menyala.'
+                    ],
+                    'correct' => 0
+                ]
+            ], JSON_UNESCAPED_UNICODE)
+        ],
+        [
+            'world_id' => $worldMap['space-odyssey'],
+            'slug' => 'rasi-bintang',
+            'title' => 'Peta Koordinat Rasi Bintang',
+            'subtitle' => 'Temukan koordinat bintang terang Polaris pada grid radar teleskop!',
+            'learning_objective' => 'Mengenalkan sistem koordinat Kartesius sederhana (X, Y) untuk navigasi antariksa.',
+            'interaction_type' => 'match_sort',
+            'xp_reward' => 100,
+            'sort_order' => 2,
+            'config_json' => json_encode([
+                'scenario' => 'Teleskop luar angkasa menangkap bintang Polaris yang bersinar terang pada koordinat sumbu X mendatar dan sumbu Y tegak!',
+                'question' => 'Berapa koordinat bintang Polaris pada radar teleskop (Sumbu X mendatar, Sumbu Y tegak)?',
+                'target_coord' => ['x' => 4, 'y' => 6],
+                'correct_value' => '4,6',
+                'choices' => [
+                    ['value' => '4,6', 'label' => 'Koordinat (X: 4, Y: 6)'],
+                    ['value' => '6,4', 'label' => 'Koordinat (X: 6, Y: 4)'],
+                    ['value' => '2,5', 'label' => 'Koordinat (X: 2, Y: 5)'],
+                    ['value' => '5,3', 'label' => 'Koordinat (X: 5, Y: 3)']
+                ],
+                'hints' => [
+                    ['level' => 1, 'text' => 'Tarik garis dari bintang Polaris lurus ke bawah untuk membaca angka pada sumbu X.'],
+                    ['level' => 2, 'text' => 'Sumbu mendatar X menunjukkan angka 4, lalu tarik garis lurus ke kiri ke sumbu tegak Y.'],
+                    ['level' => 3, 'text' => 'Sumbu mendatar X = 4 dan sumbu tegak Y = 6. Pilih opsi Koordinat (X: 4, Y: 6)!']
+                ],
+                'reflection' => [
+                    'question' => 'Mengapa para astronot dan pelaut menggunakan koordinat untuk menentukan posisi?',
+                    'options' => [
+                        'Agar dapat menentukan lokasi titik secara tepat dan tidak tersesat di ruang angkasa yang luas.',
+                        'Agar bintang-bintang bisa bertukar tempat.',
+                        'Supaya roket bisa berjalan mundur tanpa kemudi.'
+                    ],
+                    'correct' => 0
+                ]
+            ], JSON_UNESCAPED_UNICODE)
+        ],
+        [
+            'world_id' => $worldMap['space-odyssey'],
+            'slug' => 'rover-mars',
+            'title' => 'Petualangan Rover Penjelajah Mars',
+            'subtitle' => 'Kirim instruksi arah agar Rover robot melewati jalur aman menghindari kawah meteor!',
+            'learning_objective' => 'Melatih perencanaan rute spasial berurutan untuk menghindari rintangan bahaya.',
+            'interaction_type' => 'sequence_logic',
+            'xp_reward' => 100,
+            'sort_order' => 3,
+            'config_json' => json_encode([
+                'scenario' => 'Rover penjelajah Mars mendarat di grid awal [0,0]. Di sebelah kanan [1,0] ada kawah meteor curam! Pandu Rover melalui rute aman ke Stasiun Riset di [2,1]!',
+                'start' => ['x' => 0, 'y' => 0],
+                'goal' => ['x' => 2, 'y' => 1],
+                'hazards' => [['x' => 1, 'y' => 0]],
+                'hints' => [
+                    ['level' => 1, 'text' => 'Jangan langsung jalan ke kanan karena ada kawah berbahaya di posisi (1,0)!'],
+                    ['level' => 2, 'text' => 'Arahkan Rover turun ke bawah dulu (Bawah), lalu melangkah ke kanan (Kanan, Kanan) menuju stasiun.'],
+                    ['level' => 3, 'text' => 'Pilih urutan rute: [Turun / Bawah] -> [Kanan] -> [Kanan] untuk mencapai stasiun riset dengan selamat!']
+                ],
+                'reflection' => [
+                    'question' => 'Mengapa robot penjelajah di planet Mars harus diprogram dengan rute penghindar rintangan?',
+                    'options' => [
+                        'Karena sinyal bumi membutuhkan waktu lama untuk sampai ke Mars, sehingga robot harus mengikuti instruksi rute aman terencana.',
+                        'Karena robot Mars suka bermain lompat tali di kawah.',
+                        'Karena di Mars tidak ada udara dan robot harus tidur siang.'
+                    ],
+                    'correct' => 0
+                ]
+            ], JSON_UNESCAPED_UNICODE)
+        ],
     ];
 
     $stmtMission = $pdo->prepare("INSERT " . ($driver === 'mysql' ? "IGNORE" : "OR IGNORE") . " INTO missions (world_id, slug, title, subtitle, learning_objective, interaction_type, xp_reward, sort_order, config_json) VALUES (:world_id, :slug, :title, :subtitle, :learning_objective, :interaction_type, :xp_reward, :sort_order, :config_json)");
     foreach ($missions as $m) {
         $stmtMission->execute($m);
     }
-    echo "9 MVP Missions seeded.\n";
+    echo "12 Missions seeded.\n";
 
     // Seed Achievements
     $achievements = [
@@ -489,7 +596,7 @@ try {
             'icon_name' => 'calculator',
             'xp_reward' => 100,
             'criteria_type' => 'world_complete',
-            'criteria_threshold' => 1
+            'criteria_threshold' => $worldMap['number-city'] ?? 1
         ],
         [
             'slug' => 'little-scientist',
@@ -498,7 +605,7 @@ try {
             'icon_name' => 'flask',
             'xp_reward' => 100,
             'criteria_type' => 'world_complete',
-            'criteria_threshold' => 2
+            'criteria_threshold' => $worldMap['discovery-lab'] ?? 2
         ],
         [
             'slug' => 'logic-commander',
@@ -507,16 +614,25 @@ try {
             'icon_name' => 'cpu',
             'xp_reward' => 100,
             'criteria_type' => 'world_complete',
-            'criteria_threshold' => 3
+            'criteria_threshold' => $worldMap['thinking-lab'] ?? 3
+        ],
+        [
+            'slug' => 'space-cadet',
+            'title' => 'Astronot Bintang Cilik',
+            'description' => 'Menyelesaikan seluruh misi penjelajahan antariksa di Space Odyssey!',
+            'icon_name' => 'satellite',
+            'xp_reward' => 100,
+            'criteria_type' => 'world_complete',
+            'criteria_threshold' => $worldMap['space-odyssey'] ?? 4
         ],
         [
             'slug' => 'mission-master',
             'title' => 'Master Penjelajah Sejati',
-            'description' => 'Luar biasa! Menyelesaikan seluruh 9 misi di MISSION KIDS!',
+            'description' => 'Luar biasa! Menyelesaikan seluruh 12 misi di MISSION KIDS!',
             'icon_name' => 'trophy',
             'xp_reward' => 250,
             'criteria_type' => 'total_missions',
-            'criteria_threshold' => 9
+            'criteria_threshold' => 12
         ]
     ];
 
@@ -524,7 +640,8 @@ try {
     foreach ($achievements as $a) {
         $stmtAch->execute($a);
     }
-    echo "5 Achievements seeded.\n";
+    $pdo->exec("UPDATE achievements SET criteria_threshold = 12, description = 'Luar biasa! Menyelesaikan seluruh 12 misi di MISSION KIDS!' WHERE slug = 'mission-master'");
+    echo "6 Achievements seeded.\n";
 
     echo "=== Migration & Seeding COMPLETED SUCCESSFULLY ===\n";
 } catch (Exception $e) {

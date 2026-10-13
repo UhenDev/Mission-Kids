@@ -37,6 +37,12 @@ class InteractionHandler {
       this.mountSecretPath(canvasEl, controlsEl);
     } else if (this.slug === 'robot-mengulang') {
       this.mountRobotLoop(canvasEl, controlsEl);
+    } else if (this.slug === 'roket-angkasa') {
+      this.mountRocketLaunch(canvasEl, controlsEl);
+    } else if (this.slug === 'rasi-bintang') {
+      this.mountStarConstellation(canvasEl, controlsEl);
+    } else if (this.slug === 'rover-mars') {
+      this.mountMarsRover(canvasEl, controlsEl);
     } else {
       canvasEl.innerHTML = `<div style="padding: 2rem;">Tantangan interaktif untuk misi ${this.data.title} siap dimainkan!</div>`;
     }
@@ -944,7 +950,357 @@ class InteractionHandler {
   }
 
   // =========================================================================
-  // Validation Logic for All 9 Missions
+  // 10. World 4: Peluncuran Roket Antariksa (Simulation)
+  // =========================================================================
+  mountRocketLaunch(canvasEl, controlsEl) {
+    this.state = {
+      fuel: 30,
+      angle: 20
+    };
+
+    canvasEl.innerHTML = `
+      <div style="width: 100%; max-width: 480px; position: relative; background: radial-gradient(circle at 50% 30%, #1e1b4b, #0f172a); border-radius: var(--radius-xl); padding: 1.5rem; box-shadow: inset 0 0 30px rgba(0,0,0,0.6); overflow: hidden; display: flex; flex-direction: column; align-items: center;">
+        <!-- Stars Background -->
+        <div style="position: absolute; inset: 0; pointer-events: none; opacity: 0.7;">
+          <div style="position: absolute; top: 15%; left: 20%; font-size: 10px; color: #fff;">✦</div>
+          <div style="position: absolute; top: 25%; right: 25%; font-size: 14px; color: #fbbf24;">★</div>
+          <div style="position: absolute; top: 40%; left: 80%; font-size: 10px; color: #a78bfa;">✦</div>
+          <div style="position: absolute; top: 10%; right: 10%; font-size: 8px; color: #fff;">✦</div>
+        </div>
+
+        <!-- Space Orbit Station Target -->
+        <div style="width: 100%; display: flex; justify-content: flex-end; padding-right: 0.5rem; z-index: 2;">
+          <div id="orbit-target" style="background: rgba(139, 92, 246, 0.25); border: 2px dashed #a78bfa; border-radius: 999px; padding: 6px 14px; font-size: 12px; font-weight: 700; color: #e0e7ff; display: flex; align-items: center; gap: 6px;">
+            🛰️ Stasiun Orbit (45°-60° | 70-85% Bahan Bakar)
+          </div>
+        </div>
+
+        <!-- Canvas Launch Stage -->
+        <div style="position: relative; width: 100%; height: 210px; display: flex; align-items: flex-end; justify-content: center; margin-top: 10px;">
+          <!-- Launch Platform / Ground -->
+          <div style="position: absolute; bottom: 0; width: 100%; height: 24px; background: #334155; border-radius: 6px; border-top: 3px solid #64748b; display: flex; justify-content: center; align-items: center;">
+            <div style="font-size: 11px; font-weight: 800; color: #94a3b8; letter-spacing: 2px;">LAUNCH PAD 04</div>
+          </div>
+
+          <!-- Rocket SVG Container (Rotates by angle) -->
+          <div id="rocket-holder" style="position: relative; width: 80px; height: 160px; transform-origin: 50% 90%; transform: rotate(-20deg); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
+            <svg viewBox="0 0 80 160" width="80" height="160" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Booster flames (conditional) -->
+              <g id="rocket-flames" style="opacity: 0.6; transition: opacity 0.3s ease;">
+                <path d="M30 135 Q40 160 40 155 Q40 160 50 135 Z" fill="#f97316" />
+                <path d="M35 135 Q40 152 40 148 Q40 152 45 135 Z" fill="#facc15" />
+              </g>
+              <!-- Rocket Body -->
+              <path d="M40 15 C28 45 25 90 25 130 L55 130 C55 90 52 45 40 15 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+              <!-- Nosecone -->
+              <path d="M40 15 C33 35 30 50 30 55 L50 55 C50 50 47 35 40 15 Z" fill="#ef4444" />
+              <!-- Cockpit Window -->
+              <circle cx="40" cy="70" r="9" fill="#38bdf8" stroke="#0284c7" stroke-width="2.5"/>
+              <circle cx="38" cy="67" r="3" fill="#ffffff" opacity="0.8"/>
+              <!-- Wings / Fins -->
+              <path d="M25 105 L10 132 L25 130 Z" fill="#8b5cf6" />
+              <path d="M55 105 L70 132 L55 130 Z" fill="#8b5cf6" />
+              <!-- Engine Nozzle -->
+              <rect x="33" y="130" width="14" height="6" rx="2" fill="#475569" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Live Metrics Readout -->
+        <div style="display: flex; gap: 12px; width: 100%; justify-content: space-around; margin-top: 14px; background: rgba(15,23,42,0.8); border: 1px solid rgba(148,163,184,0.2); border-radius: var(--radius-lg); padding: 8px 12px;">
+          <div style="text-align: center;">
+            <div style="font-size: 11px; color: #94a3b8; font-weight: 700;">⛽ BAHAN BAKAR</div>
+            <div id="readout-fuel" style="font-size: 16px; font-weight: 800; color: #facc15;">30%</div>
+          </div>
+          <div style="border-right: 1px solid rgba(148,163,184,0.3);"></div>
+          <div style="text-align: center;">
+            <div style="font-size: 11px; color: #94a3b8; font-weight: 700;">📐 SUDUT ELEVASI</div>
+            <div id="readout-angle" style="font-size: 16px; font-weight: 800; color: #a78bfa;">20°</div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    controlsEl.innerHTML = `
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <!-- Slider 1: Fuel -->
+        <div>
+          <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 14px; margin-bottom: 6px;">
+            <span>⛽ Level Bahan Bakar Tangki</span>
+            <span id="slider-fuel-val" style="color: #d97706;">30% (Kurang)</span>
+          </div>
+          <input type="range" id="input-fuel" min="0" max="100" value="30" style="width: 100%; accent-color: #f59e0b; cursor: pointer;">
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Target aman: 70% s/d 85% untuk menembus atmosfer</div>
+        </div>
+
+        <!-- Slider 2: Angle -->
+        <div>
+          <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 14px; margin-bottom: 6px;">
+            <span>📐 Sudut Elevasi Luncur</span>
+            <span id="slider-angle-val" style="color: #7c3aed;">20° (Terlalu Rendah)</span>
+          </div>
+          <input type="range" id="input-angle" min="0" max="90" value="20" style="width: 100%; accent-color: #8b5cf6; cursor: pointer;">
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Target lintasan orbit: 45° s/d 60°</div>
+        </div>
+      </div>
+    `;
+
+    const rocketHolder = document.getElementById('rocket-holder');
+    const rocketFlames = document.getElementById('rocket-flames');
+    const readoutFuel = document.getElementById('readout-fuel');
+    const readoutAngle = document.getElementById('readout-angle');
+    const sliderFuelVal = document.getElementById('slider-fuel-val');
+    const sliderAngleVal = document.getElementById('slider-angle-val');
+    const inputFuel = document.getElementById('input-fuel');
+    const inputAngle = document.getElementById('input-angle');
+
+    const updateControls = () => {
+      const f = parseInt(inputFuel.value, 10);
+      const a = parseInt(inputAngle.value, 10);
+      this.state.fuel = f;
+      this.state.angle = a;
+
+      readoutFuel.textContent = `${f}%`;
+      readoutAngle.textContent = `${a}°`;
+
+      const fuelOk = (f >= 70 && f <= 85);
+      const angleOk = (a >= 45 && a <= 60);
+
+      sliderFuelVal.textContent = `${f}% ${fuelOk ? '✅ (Ideal)' : (f < 70 ? '⚠️ (Kurang)' : '⚠️ (Berlebih)')}`;
+      sliderFuelVal.style.color = fuelOk ? '#16a34a' : '#d97706';
+
+      sliderAngleVal.textContent = `${a}° ${angleOk ? '✅ (Ideal)' : (a < 45 ? '⚠️ (Terlalu Rendah)' : '⚠️ (Terlalu Tegak)')}`;
+      sliderAngleVal.style.color = angleOk ? '#16a34a' : '#7c3aed';
+
+      if (rocketHolder) {
+        rocketHolder.style.transform = `rotate(-${a}deg)`;
+      }
+      if (rocketFlames) {
+        rocketFlames.style.opacity = f > 20 ? '1' : '0.2';
+      }
+    };
+
+    inputFuel.addEventListener('input', updateControls);
+    inputAngle.addEventListener('input', updateControls);
+    updateControls();
+  }
+
+  // =========================================================================
+  // 11. World 4: Peta Koordinat Rasi Bintang (Match & Sort)
+  // =========================================================================
+  mountStarConstellation(canvasEl, controlsEl) {
+    this.state = {
+      selectedValue: null
+    };
+
+    canvasEl.innerHTML = `
+      <div style="width: 100%; max-width: 480px; background: #090d16; border-radius: var(--radius-xl); padding: 1.25rem; box-shadow: 0 10px 25px rgba(0,0,0,0.4); display: flex; flex-direction: column; align-items: center; border: 2px solid #1e293b;">
+        <div style="font-weight: 800; font-size: 14px; color: #94a3b8; letter-spacing: 1px; margin-bottom: 8px;">
+          🔭 RADAR TELESKOP ANTARIKSA (GRID X - Y)
+        </div>
+
+        <svg viewBox="0 0 320 280" width="100%" height="250" style="background: radial-gradient(circle, #131d33, #090d16); border-radius: var(--radius-lg);">
+          <defs>
+            <pattern id="radar-grid" width="35" height="30" patternUnits="userSpaceOnUse">
+              <path d="M 35 0 L 0 0 0 30" fill="none" stroke="#1e293b" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect x="35" y="10" width="280" height="240" fill="url(#radar-grid)" />
+
+          <line x1="35" y1="250" x2="315" y2="250" stroke="#38bdf8" stroke-width="2"/>
+          <line x1="35" y1="250" x2="35" y2="10" stroke="#38bdf8" stroke-width="2"/>
+
+          ${[0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => `
+            <text x="${35 + i * 35}" y="268" font-size="11" fill="${i === 4 ? '#f59e0b' : '#64748b'}" font-weight="${i === 4 ? 'bold' : 'normal'}" text-anchor="middle">${i}</text>
+          `).join('')}
+
+          ${[0, 1, 2, 3, 4, 5, 6, 7, 8].map(j => `
+            <text x="24" y="${254 - j * 30}" font-size="11" fill="${j === 6 ? '#f59e0b' : '#64748b'}" font-weight="${j === 6 ? 'bold' : 'normal'}" text-anchor="middle">${j}</text>
+          `).join('')}
+
+          <line x1="175" y1="70" x2="175" y2="250" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.85"/>
+          <line x1="175" y1="70" x2="35" y2="70" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.85"/>
+
+          <g id="star-polaris" transform="translate(175, 70)">
+            <circle cx="0" cy="0" r="14" fill="#fbbf24" opacity="0.3" style="animation: pulseGold 2s infinite;"/>
+            <circle cx="0" cy="0" r="6" fill="#fef08a" stroke="#d97706" stroke-width="1.5"/>
+            <text x="14" y="4" font-size="12" font-weight="800" fill="#fef08a">🌟 Polaris</text>
+          </g>
+
+          <circle cx="105" cy="130" r="3" fill="#94a3b8" opacity="0.6"/>
+          <circle cx="245" cy="190" r="3" fill="#94a3b8" opacity="0.6"/>
+          <circle cx="70" cy="40" r="2.5" fill="#94a3b8" opacity="0.5"/>
+        </svg>
+
+        <div style="font-size: 13px; color: #cbd5e1; margin-top: 8px; text-align: center;">
+          Garis putus-putus emas mengarah dari <strong>Polaris</strong> ke Sumbu X mendatar dan Sumbu Y tegak.
+        </div>
+      </div>
+    `;
+
+    const choices = [
+      { val: '4,6', label: 'Koordinat (X: 4, Y: 6)' },
+      { val: '6,4', label: 'Koordinat (X: 6, Y: 4)' },
+      { val: '2,5', label: 'Koordinat (X: 2, Y: 5)' },
+      { val: '5,3', label: 'Koordinat (X: 5, Y: 3)' }
+    ];
+
+    controlsEl.innerHTML = `
+      <div>
+        <label style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 10px;">
+          Pilih Koordinat Titik Bintang Polaris:
+        </label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;" id="star-choices-grid">
+          ${choices.map(c => `
+            <button type="button" class="btn-kid btn-kid-ghost star-choice-btn" data-val="${c.val}" style="padding: 0.8rem 0.6rem; font-size: 13px; font-weight: 700; text-align: center; border-radius: var(--radius-lg);">
+              ${c.label}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    const btns = controlsEl.querySelectorAll('.star-choice-btn');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => {
+          b.classList.remove('btn-kid-primary');
+          b.classList.add('btn-kid-ghost');
+        });
+        btn.classList.remove('btn-kid-ghost');
+        btn.classList.add('btn-kid-primary');
+        this.state.selectedValue = btn.dataset.val;
+      });
+    });
+  }
+
+  // =========================================================================
+  // 12. World 4: Petualangan Rover Penjelajah Mars (Sequence & Logic)
+  // =========================================================================
+  mountMarsRover(canvasEl, controlsEl) {
+    this.state = {
+      commands: [],
+      rover: { x: 0, y: 0 }
+    };
+
+    const renderMarsGrid = () => {
+      canvasEl.innerHTML = `
+        <div style="width: 100%; max-width: 480px; background: #451a03; border: 3px solid #78350f; border-radius: var(--radius-xl); padding: 1.25rem; box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: flex; flex-direction: column; align-items: center;">
+          <div style="font-weight: 800; font-size: 14px; color: #fdba74; letter-spacing: 1px; margin-bottom: 10px;">
+            🪐 PERMUKAAN MARS (GRID 3 x 2)
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(3, 110px); grid-template-rows: repeat(2, 95px); gap: 10px; background: #7c2d12; padding: 10px; border-radius: var(--radius-lg);">
+            <!-- Cell [0,0] -->
+            <div id="mars-cell-0-0" style="background: #9a3412; border: 2px solid #ea580c; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+              <span style="font-size: 10px; color: #fed7aa; position: absolute; top: 4px; left: 6px;">[0, 0]</span>
+              ${this.state.rover.x === 0 && this.state.rover.y === 0 ? '<div style="font-size: 2.2rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));">🤖</div><span style="font-size: 10px; font-weight: 800; color: #fff;">ROVER</span>' : '<span style="font-size: 11px; color: #fed7aa;">Mulai</span>'}
+            </div>
+
+            <!-- Cell [1,0]: Hazard Meteor Crater! -->
+            <div id="mars-cell-1-0" style="background: #450a0a; border: 2px dashed #ef4444; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+              <span style="font-size: 10px; color: #fca5a5; position: absolute; top: 4px; left: 6px;">[1, 0]</span>
+              ${this.state.rover.x === 1 && this.state.rover.y === 0 ? '<div style="font-size: 2.2rem;">💥</div>' : '<div style="font-size: 1.8rem;">🌋</div><span style="font-size: 10px; font-weight: 800; color: #f87171;">KAWAH BAHAYA</span>'}
+            </div>
+
+            <!-- Cell [2,0] -->
+            <div id="mars-cell-2-0" style="background: #9a3412; border: 2px solid #c2410c; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+              <span style="font-size: 10px; color: #fed7aa; position: absolute; top: 4px; left: 6px;">[2, 0]</span>
+              ${this.state.rover.x === 2 && this.state.rover.y === 0 ? '<div style="font-size: 2.2rem;">🤖</div>' : '<span style="font-size: 11px; color: #fdba74;">Batu Pasir</span>'}
+            </div>
+
+            <!-- Cell [0,1] -->
+            <div id="mars-cell-0-1" style="background: #9a3412; border: 2px solid #ea580c; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+              <span style="font-size: 10px; color: #fed7aa; position: absolute; top: 4px; left: 6px;">[0, 1]</span>
+              ${this.state.rover.x === 0 && this.state.rover.y === 1 ? '<div style="font-size: 2.2rem;">🤖</div>' : '<span style="font-size: 11px; color: #fed7aa;">Jalur Aman</span>'}
+            </div>
+
+            <!-- Cell [1,1] -->
+            <div id="mars-cell-1-1" style="background: #9a3412; border: 2px solid #ea580c; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+              <span style="font-size: 10px; color: #fed7aa; position: absolute; top: 4px; left: 6px;">[1, 1]</span>
+              ${this.state.rover.x === 1 && this.state.rover.y === 1 ? '<div style="font-size: 2.2rem;">🤖</div>' : '<span style="font-size: 11px; color: #fed7aa;">Jalur Aman</span>'}
+            </div>
+
+            <!-- Cell [2,1]: Target Research Base! -->
+            <div id="mars-cell-2-1" style="background: #064e3b; border: 2px solid #10b981; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+              <span style="font-size: 10px; color: #a7f3d0; position: absolute; top: 4px; left: 6px;">[2, 1]</span>
+              ${this.state.rover.x === 2 && this.state.rover.y === 1 ? '<div style="font-size: 2.2rem;">🎉🤖</div><span style="font-size: 10px; font-weight: 800; color: #6ee7b7;">SAMPAI!</span>' : '<div style="font-size: 1.8rem;">🏛️</div><span style="font-size: 10px; font-weight: 800; color: #34d399;">STASIUN RISET</span>'}
+            </div>
+          </div>
+        </div>
+      `;
+    };
+
+    const updateControlsUI = () => {
+      const queueList = document.getElementById('rover-cmd-queue');
+      if (queueList) {
+        if (this.state.commands.length === 0) {
+          queueList.innerHTML = '<span style="color: var(--text-muted); font-size: 13px;">Belum ada instruksi. Klik tombol arah di bawah!</span>';
+        } else {
+          queueList.innerHTML = this.state.commands.map((cmd, idx) => `
+            <span class="badge-pill badge-pill-primary" style="font-size: 12px; padding: 4px 8px;">
+              ${idx + 1}. ${cmd === 'DOWN' ? '⬇️ Bawah' : cmd === 'RIGHT' ? '➡️ Kanan' : cmd === 'UP' ? '⬆️ Atas' : '⬅️ Kiri'}
+            </span>
+          `).join(' ');
+        }
+      }
+    };
+
+    this.renderMarsGrid = renderMarsGrid;
+    renderMarsGrid();
+
+    controlsEl.innerHTML = `
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div>
+          <label style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px;">
+            Antrean Instruksi Navigasi Rover:
+          </label>
+          <div id="rover-cmd-queue" style="min-height: 44px; background: #fff; border: 2px dashed var(--border-subtle); border-radius: var(--radius-lg); padding: 8px 12px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+          <button type="button" class="btn-kid btn-kid-ghost rover-btn-action" data-dir="DOWN" style="font-weight: 700; font-size: 14px; padding: 0.7rem;">
+            ⬇️ Turun ke Bawah
+          </button>
+          <button type="button" class="btn-kid btn-kid-ghost rover-btn-action" data-dir="RIGHT" style="font-weight: 700; font-size: 14px; padding: 0.7rem;">
+            ➡️ Belok ke Kanan
+          </button>
+          <button type="button" class="btn-kid btn-kid-ghost rover-btn-action" data-dir="UP" style="font-weight: 700; font-size: 14px; padding: 0.7rem;">
+            ⬆️ Naik ke Atas
+          </button>
+          <button type="button" class="btn-kid btn-kid-ghost rover-btn-action" data-dir="LEFT" style="font-weight: 700; font-size: 14px; padding: 0.7rem;">
+            ⬅️ Geser ke Kiri
+          </button>
+        </div>
+
+        <button type="button" class="btn-kid btn-kid-ghost" id="btn-rover-reset" style="font-size: 13px; color: #dc2626; border-color: #fca5a5;">
+          🔄 Hapus / Ulangi Langkah
+        </button>
+      </div>
+    `;
+
+    controlsEl.querySelectorAll('.rover-btn-action').forEach(b => {
+      b.addEventListener('click', () => {
+        if (this.state.commands.length < 8) {
+          this.state.commands.push(b.dataset.dir);
+          updateControlsUI();
+        }
+      });
+    });
+
+    document.getElementById('btn-rover-reset').addEventListener('click', () => {
+      this.state.commands = [];
+      this.state.rover = { x: 0, y: 0 };
+      renderMarsGrid();
+      updateControlsUI();
+    });
+
+    updateControlsUI();
+  }
+
+  // =========================================================================
+  // Validation Logic for All Missions
   // =========================================================================
   async validateSolution() {
     if (this.slug === 'tanaman-layu') {
@@ -1071,6 +1427,58 @@ class InteractionHandler {
       };
     }
 
+    if (this.slug === 'roket-angkasa') {
+      const fuelOk = (this.state.fuel >= 70 && this.state.fuel <= 85);
+      const angleOk = (this.state.angle >= 45 && this.state.angle <= 60);
+      const isCorrect = (fuelOk && angleOk);
+      return {
+        success: isCorrect,
+        message: isCorrect
+          ? "Luar biasa! Roket melesat sempurna menembus atmosfer dan berlabuh di stasiun orbit! 🚀"
+          : (!fuelOk && !angleOk 
+              ? "Bahan bakar dan sudut luncur belum pas. Sesuaikan bahan bakar (70-85%) dan sudut (45-60°)."
+              : (!fuelOk ? "Bahan bakar belum pas! Pastikan tangki roket terisi antara 70% sampai 85%." : "Sudut luncur belum pas! Arahkan moncong roket antara 45° sampai 60°."))
+      };
+    }
+
+    if (this.slug === 'rasi-bintang') {
+      const isCorrect = (this.state.selectedValue === '4,6');
+      return {
+        success: isCorrect,
+        message: isCorrect
+          ? "Tepat sekali! Bintang Polaris berada pada koordinat X: 4 dan Y: 6 di radar teleskop! ✨"
+          : "Koordinat belum tepat. Tarik garis ke sumbu mendatar X lalu ke sumbu tegak Y!"
+      };
+    }
+
+    if (this.slug === 'rover-mars') {
+      let curX = 0, curY = 0;
+      for (const cmd of this.state.commands) {
+        if (cmd === 'DOWN') curY++;
+        else if (cmd === 'RIGHT') curX++;
+        else if (cmd === 'UP') curY--;
+        else if (cmd === 'LEFT') curX--;
+
+        if (curX === 1 && curY === 0) {
+          this.state.rover = { x: 1, y: 0 };
+          if (this.renderMarsGrid) this.renderMarsGrid();
+          return { success: false, message: "Awas! Rover terperosok ke dalam kawah meteor di posisi (1,0)! Pilih jalur bawah yang aman." };
+        }
+        if (curX < 0 || curX > 2 || curY < 0 || curY > 1) {
+          return { success: false, message: "Rover keluar dari zona aman peta penjelajahan!" };
+        }
+      }
+      this.state.rover = { x: curX, y: curY };
+      if (this.renderMarsGrid) this.renderMarsGrid();
+      const reached = (curX === 2 && curY === 1);
+      return {
+        success: reached,
+        message: reached
+          ? "Hebat! Rover penjelajah Mars berhasil sampai ke Stasiun Riset tanpa hambatan! 🤖"
+          : "Rover belum sampai di Stasiun Riset (2,1). Rencanakan rute: Bawah -> Kanan -> Kanan!"
+      };
+    }
+
     return { success: true, message: "Tantangan selesai!" };
   }
 
@@ -1123,6 +1531,22 @@ class InteractionHandler {
       return {
         loop_count: this.state.loopCount ?? 1,
         actions: Array.isArray(this.state.actions) ? this.state.actions : []
+      };
+    }
+    if (this.slug === 'roket-angkasa') {
+      return {
+        fuel: this.state.fuel ?? 0,
+        angle: this.state.angle ?? 0
+      };
+    }
+    if (this.slug === 'rasi-bintang') {
+      return {
+        selected_value: this.state.selectedValue ?? null
+      };
+    }
+    if (this.slug === 'rover-mars') {
+      return {
+        commands: Array.isArray(this.state.commands) ? this.state.commands : []
       };
     }
     return {};

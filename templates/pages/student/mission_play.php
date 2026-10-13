@@ -98,6 +98,27 @@ require __DIR__ . '/../../layouts/header.php';
 
     <!-- STAGE 3: INTERACTIVE CHALLENGE -->
     <div class="stage-panel" id="stage-challenge">
+      <!-- MIKO Interactive Spoken Guide Banner -->
+      <div class="miko-mission-guide-banner" id="miko-mission-guide-banner" style="background: linear-gradient(135deg, #EFF6FF, #F0FDF4); border: 2px solid #93C5FD; border-radius: var(--radius-xl); padding: 14px 18px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 14px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);">
+        <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+          <div style="width: 44px; height: 44px; min-width: 44px; border-radius: 50%; background: #38BDF8; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 2px 6px rgba(14, 165, 233, 0.4);">
+            🤖
+          </div>
+          <div>
+            <div style="font-size: 13px; font-weight: 800; color: #1E40AF; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+              <span>Panduan AI MIKO</span>
+              <span class="badge-pill badge-pill-accent" style="font-size: 10px; padding: 2px 6px;">Apa yang harus kamu lakukan?</span>
+            </div>
+            <div id="miko-guide-text" style="font-size: 14px; font-weight: 600; color: #1E293B; margin-top: 2px; line-height: 1.4;">
+              Memuat petunjuk MIKO...
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn-kid btn-kid-ghost" id="btn-listen-miko-guide" style="min-width: 130px; font-size: 13px; padding: 0.5rem 0.9rem; border-color: #3B82F6; color: #1D4ED8; font-weight: 800; background: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 6px;" title="Dengarkan penjelasan suara MIKO untuk soal ini">
+          🔊 Dengar Suara
+        </button>
+      </div>
+
       <div class="challenge-layout">
         <!-- Interactive Viewport Canvas -->
         <div class="interactive-viewport" id="interactive-viewport">
