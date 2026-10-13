@@ -1120,9 +1120,9 @@
 
 .hero-adventure-grid {
   display: grid;
-  grid-template-columns: 1fr 1.25fr;
+  grid-template-columns: 1fr 1.15fr;
   align-items: center;
-  gap: 3.5rem;
+  gap: clamp(1.5rem, 3.5vw, 3.5rem);
 }
 
 .hero-left-column {
@@ -1282,34 +1282,37 @@
 .hero-visual-frame {
   position: relative;
   width: 100%;
-  max-width: 680px;
+  max-width: 580px;
+  border-radius: 28px;
+  box-shadow: 0 16px 44px -8px rgba(37, 99, 235, 0.16);
+  background: transparent;
+  overflow: visible;
 }
 
 .hero-main-illustration {
   width: 100%;
   height: auto;
-  border: none; /* NO WHITE CARD BORDER! */
+  border: none;
   border-radius: 28px;
   display: block;
-  transition: transform 0.4s var(--transition-bounce);
-  filter: drop-shadow(0 20px 42px rgba(37, 99, 235, 0.16));
-  mask-image: radial-gradient(ellipse 95% 92% at 50% 50%, black 78%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 95% 92% at 50% 50%, black 78%, transparent 100%);
+  object-fit: cover;
+  transition: transform 0.35s ease;
 }
 
 .hero-visual-frame:hover .hero-main-illustration {
-  transform: translateY(-4px) scale(1.015);
+  transform: translateY(-3px);
 }
 
 .hero-floating-callout {
   position: absolute;
-  top: 16px;
-  right: 12px;
+  top: 14px;
+  right: 14px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   animation: floatGentle 4s ease-in-out infinite;
   z-index: 10;
+  max-width: calc(100% - 28px);
 }
 
 .callout-bubble-content {
@@ -1397,8 +1400,8 @@
   width: 100%;
   border-radius: 28px;
   overflow: hidden;
-  border: none; /* NO BORDER! */
-  box-shadow: none; /* NO HARD CARD SHADOW! */
+  border: none;
+  box-shadow: 0 16px 40px -10px rgba(37, 99, 235, 0.12);
   margin-bottom: 2rem;
   background: transparent;
 }
@@ -1407,14 +1410,12 @@
   width: 100%;
   height: auto;
   display: block;
-  transition: transform 0.5s ease;
-  filter: drop-shadow(0 14px 32px rgba(37, 99, 235, 0.1));
-  mask-image: radial-gradient(ellipse 98% 94% at 50% 50%, black 82%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 98% 94% at 50% 50%, black 82%, transparent 100%);
+  border-radius: 28px;
+  transition: transform 0.4s ease;
 }
 
 .worlds-trail-map-container:hover .worlds-trail-map-img {
-  transform: scale(1.015);
+  transform: scale(1.01);
 }
 
 /* 4 Worlds Node Cards: Lighter, Airy, Placard Anchors under Islands */
@@ -1526,20 +1527,17 @@
 
 .miko-mascot-img {
   width: 100%;
-  max-width: 480px; /* significantly larger! */
+  max-width: 440px;
   height: auto;
-  border-radius: 0;
-  border: none; /* NO BORDER! NO CARD! */
-  box-shadow: none; /* NO HARD CARD SHADOW! */
+  border-radius: 28px;
+  border: none;
+  box-shadow: 0 16px 40px -12px rgba(37, 99, 235, 0.15);
   display: block;
-  filter: drop-shadow(0 18px 40px rgba(37, 99, 235, 0.15));
-  mask-image: radial-gradient(circle at 50% 48%, black 65%, transparent 98%);
-  -webkit-mask-image: radial-gradient(circle at 50% 48%, black 65%, transparent 98%);
-  transition: transform 0.4s var(--transition-bounce);
+  transition: transform 0.35s ease;
 }
 
 .miko-mascot-wrapper:hover .miko-mascot-img {
-  transform: translateY(-4px) scale(1.02);
+  transform: translateY(-3px);
 }
 
 .miko-waving-balloon {
@@ -1730,25 +1728,23 @@
 
 .cta-flying-miko-col {
   flex-shrink: 0;
-  width: 160px;
-  height: 160px;
-  border-radius: 0;
-  overflow: visible;
-  border: none; /* NO BORDER FRAME! */
-  box-shadow: none;
+  width: 140px;
+  height: 140px;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .cta-flying-miko-img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
-  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.3));
-  mask-image: radial-gradient(circle at 50% 50%, black 65%, transparent 100%);
-  -webkit-mask-image: radial-gradient(circle at 50% 50%, black 65%, transparent 100%);
+  border-radius: 22px;
 }
 
 .cta-box-center-content {
@@ -2114,12 +2110,53 @@
    Comprehensive Responsive System for Landing Page (Desktop, Tablet, Mobile)
    ========================================================================== */
 
+/* Hide floating gameplay MIKO dock on the guest landing page */
+body.landing-guest-page .miko-dock {
+  display: none !important;
+}
+
 .landing-redesign-container {
   overflow-x: clip;
   width: 100%;
 }
 
-/* 1. Large Tablet / Laptop (max-width: 960px) */
+/* 1. Intermediate Laptop & Tablet Footer Alignment (max-width: 1080px) */
+@media (max-width: 1080px) {
+  .footer-content-row {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .footer-brand-side {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+  }
+  .footer-tagline-text {
+    border-left: none;
+    padding-left: 0;
+  }
+  .footer-nav-links {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+  .footer-meta-side {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+    width: 100%;
+  }
+  .footer-copyright-text {
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+/* 2. Large Tablet / Laptop (max-width: 960px) */
 @media (max-width: 960px) {
   .hero-adventure-grid {
     grid-template-columns: 1fr;
@@ -2149,7 +2186,7 @@
   }
   .hero-visual-frame {
     margin: 0 auto;
-    max-width: 440px;
+    max-width: 520px;
   }
   .worlds-interactive-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -2241,10 +2278,11 @@
     word-break: break-word;
   }
   .hero-visual-frame {
-    max-width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
   }
   .hero-main-illustration {
-    border-radius: 20px;
+    border-radius: 24px;
   }
   .miko-spotlight-section {
     padding: 3rem 0 3.5rem;
