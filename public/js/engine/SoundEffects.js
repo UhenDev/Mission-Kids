@@ -231,6 +231,82 @@ class SoundEffects {
     } catch (e) {}
   }
 
+  // 5b. Metallic Coin Clink (Crisp ping)
+  playCoin() {
+    if (this.muted) return;
+    try {
+      this.initCtx();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      [1760, 2637].forEach((f, i) => {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        const t = now + i * 0.04;
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(f, t);
+        gain.gain.setValueAtTime(0.18, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.18);
+      });
+    } catch (e) {}
+  }
+
+  // 5c. Soft Donut Squish / Plop
+  playDonut() {
+    if (this.muted) return;
+    try {
+      this.initCtx();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(380, now);
+      osc.frequency.exponentialRampToValueAtTime(140, now + 0.12);
+      gain.gain.setValueAtTime(0.24, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.12);
+    } catch (e) {}
+  }
+
+  // 5d. Cash Register Bell Ding (Cha-ching!)
+  playCashRegister() {
+    if (this.muted) return;
+    try {
+      this.initCtx();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      const osc1 = this.ctx.createOscillator();
+      const gain1 = this.ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(1318.51, now);
+      gain1.gain.setValueAtTime(0.22, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      osc1.connect(gain1);
+      gain1.connect(this.ctx.destination);
+      osc1.start(now);
+      osc1.stop(now + 0.3);
+
+      const osc2 = this.ctx.createOscillator();
+      const gain2 = this.ctx.createGain();
+      const t2 = now + 0.08;
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(2093.00, t2);
+      gain2.gain.setValueAtTime(0.25, t2);
+      gain2.gain.exponentialRampToValueAtTime(0.001, t2 + 0.45);
+      osc2.connect(gain2);
+      gain2.connect(this.ctx.destination);
+      osc2.start(t2);
+      osc2.stop(t2 + 0.45);
+    } catch (e) {}
+  }
+
   // 6. Mission Playful Procedural BGM (Background Music)
   startBgm() {
     if (this.muted || this.bgmRunning) return;

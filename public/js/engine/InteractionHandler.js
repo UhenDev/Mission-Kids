@@ -440,157 +440,299 @@ class InteractionHandler {
     this.state = { donutsInTray: 0, coinsInTray: 0 };
     const coinHistory = [];
 
+    // 1. Interactive Bakery Storefront Canvas
     canvasEl.innerHTML = `
-      <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-        <div style="background: #FEF3C7; border: 2px solid #FCD34D; border-radius: var(--radius-xl); padding: var(--space-4); margin-bottom: var(--space-4); width: 100%; text-align: center;">
-          <div style="font-size: var(--fs-sm); font-weight: 700; color: #92400E;">
-            Pesanan: 2 Donat (Rp 2.000 / donat) • Pembeli bayar: Rp 5.000
-          </div>
-          <div style="font-size: var(--fs-xs); color: #B45309; margin-top: 4px;">
-            Letakkan 2 Donat dan Uang Kembalian yang tepat di nampan!
+      <div style="width: 100%; max-width: 480px; position: relative; background: linear-gradient(180deg, #FFF7ED 0%, #FED7AA 100%); border: 3px solid #F97316; border-radius: var(--radius-2xl); box-shadow: 0 10px 25px rgba(249, 115, 22, 0.15); overflow: hidden; display: flex; flex-direction: column; align-items: center;">
+        
+        <!-- Bakery Awning Canopy -->
+        <div style="width: 100%; height: 26px; background: repeating-linear-gradient(90deg, #EF4444, #EF4444 24px, #FFFFFF 24px, #FFFFFF 48px); border-bottom: 3px solid #B91C1C; box-shadow: 0 4px 6px rgba(0,0,0,0.06); position: relative;">
+          <div style="position: absolute; bottom: -8px; left: 0; width: 100%; height: 8px; background: repeating-linear-gradient(90deg, #DC2626, #DC2626 24px, #F1F5F9 24px, #F1F5F9 48px); border-radius: 0 0 8px 8px;"></div>
+        </div>
+
+        <!-- Store Header & Customer Bella -->
+        <div style="width: 100%; padding: 12px 16px 6px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+          <!-- Bella Character SVG -->
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div id="bella-avatar" style="width: 60px; height: 60px; min-width: 60px; background: #FEF08A; border: 3px solid #CA8A04; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.08); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
+              <svg viewBox="0 0 60 60" width="50" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Chef Hat -->
+                <path d="M22 14 C18 6 32 6 30 14 C38 6 44 14 38 18 L22 18 Z" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+                <!-- Bunny Ears -->
+                <ellipse cx="20" cy="18" rx="4" ry="12" fill="#FFFFFF" stroke="#CA8A04" stroke-width="1.5" transform="rotate(-15 20 18)"/>
+                <ellipse cx="20" cy="18" rx="2" ry="8" fill="#F472B6"/>
+                <ellipse cx="40" cy="18" rx="4" ry="12" fill="#FFFFFF" stroke="#CA8A04" stroke-width="1.5" transform="rotate(15 40 18)"/>
+                <ellipse cx="40" cy="18" rx="2" ry="8" fill="#F472B6"/>
+                <!-- Bunny Face -->
+                <circle cx="30" cy="35" r="16" fill="#FFFFFF" stroke="#CA8A04" stroke-width="2"/>
+                <!-- Cheeks -->
+                <ellipse cx="20" cy="38" rx="3" ry="1.8" fill="#F472B6" opacity="0.6"/>
+                <ellipse cx="40" cy="38" rx="3" ry="1.8" fill="#F472B6" opacity="0.6"/>
+                <!-- Eyes & Mouth -->
+                <circle cx="24" cy="32" r="2.2" fill="#1E293B"/>
+                <circle cx="36" cy="32" r="2.2" fill="#1E293B"/>
+                <path d="M28 36 Q30 38 32 36" stroke="#CA8A04" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <!-- Money Note in Paw -->
+              <div style="position: absolute; bottom: -2px; right: -4px; background: #22C55E; color: #FFFFFF; font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 4px; border: 1.5px solid #15803D; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">
+                💵 5.000
+              </div>
+            </div>
+
+            <!-- Dynamic Customer Speech Bubble -->
+            <div id="bella-bubble" style="background: #FFFFFF; border: 2px solid #F59E0B; border-radius: 14px; padding: 8px 12px; font-size: 13px; font-weight: 700; color: #78350F; position: relative; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15); line-height: 1.35; max-width: 250px;">
+              "Halo Kak Kasir! 🐰 Aku mau beli 2 donat ya. Ini uang Rp 5.000!"
+              <div style="position: absolute; left: -8px; top: 20px; width: 0; height: 0; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-right: 8px solid #F59E0B;"></div>
+            </div>
           </div>
         </div>
 
-        <!-- Order Tray -->
-        <div class="tray-drop-zone" id="bakery-tray" style="border-color: #F59E0B; background: #FFFBEB;">
-          <span id="tray-empty-hint" style="color: var(--text-muted); font-size: var(--fs-sm);">
-            Nampan masih kosong. Ketuk donat dan koin kembalian di sebelah kanan!
-          </span>
+        <!-- Live Cash Register POS Display -->
+        <div style="width: calc(100% - 24px); margin: 6px 12px 10px; background: #0F172A; border: 2px solid #334155; border-radius: var(--radius-lg); padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);">
+          <div>
+            <div style="font-size: 10px; font-weight: 800; color: #94A3B8; letter-spacing: 0.5px;">MESIN KASIR DIGITAL</div>
+            <div style="font-size: 13px; font-weight: 700; color: #F8FAFC;">
+              Total: <span id="reg-total-price" style="color: #FBBF24;">0 Donat (Rp 0)</span>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 10px; font-weight: 800; color: #94A3B8;">KEMBALIAN DI NAMPAN</div>
+            <div style="display: flex; align-items: center; gap: 6px; justify-content: flex-end;">
+              <span id="reg-change-status" style="width: 8px; height: 8px; border-radius: 50%; background: #EF4444; display: inline-block;"></span>
+              <span id="reg-change-display" style="font-size: 14px; font-weight: 800; color: #38BDF8;">Rp 0</span>
+            </div>
+          </div>
         </div>
-        <div style="font-size: var(--fs-xs); color: var(--text-muted); margin-top: var(--space-2); text-align: center;">
-          💡 <em>Tips: Ketuk langsung donat atau koin di nampan untuk membatalkan/mengambilnya kembali.</em>
+
+        <!-- Serving Plate & Counter Tray -->
+        <div style="width: calc(100% - 24px); min-height: 140px; margin-bottom: 14px; background: #FFFFFF; border: 3px dashed #F59E0B; border-radius: var(--radius-xl); padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);">
+          
+          <div id="tray-empty-hint" style="color: #94A3B8; font-size: 13px; font-weight: 600; text-align: center;">
+            🍽️ Nampan Saji Kosong<br>
+            <span style="font-size: 11px; color: #64748B;">Ketuk Donat & Koin di bawah untuk menaruhnya ke nampan!</span>
+          </div>
+
+          <!-- Items in Tray -->
+          <div id="bakery-tray-items" style="width: 100%; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center;"></div>
+
+          <div style="position: absolute; bottom: 4px; font-size: 10px; color: #94A3B8; font-weight: 600;">
+            💡 Ketuk donat atau koin di nampan untuk mengambilnya kembali
+          </div>
         </div>
       </div>
     `;
 
+    // 2. Interactive Action Controls (Bakery Shelf & Cash Drawer)
     controlsEl.innerHTML = `
-      <div style="font-weight: 700; font-size: var(--fs-sm); margin-bottom: var(--space-2);">
-        Pilih barang dan koin:
-      </div>
-      <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
-        <button type="button" class="btn-command-card" id="btn-add-donut">
-          🍩 +1 Donat (Rp 2.000)
-        </button>
-        <button type="button" class="btn-command-card" id="btn-add-coin-500">
-          🪙 +Rp 500
-        </button>
-        <button type="button" class="btn-command-card" id="btn-add-coin-1000">
-          🪙 +Rp 1.000
-        </button>
-        <button type="button" class="btn-command-card" id="btn-add-coin-2000">
-          🪙 +Rp 2.000
-        </button>
-      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        
+        <!-- Section 1: Fresh Donut Shelf -->
+        <div>
+          <div style="font-weight: 800; font-size: 13px; color: #92400E; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            <span>🍩 RAK ETALASE DONAT SEGAR</span>
+            <span class="badge-pill badge-pill-accent" style="font-size: 10px; padding: 1px 6px;">Rp 2.000 / Donat</span>
+          </div>
+          
+          <button type="button" id="btn-add-donut" class="btn-kid btn-kid-primary" style="width: 100%; padding: 0.8rem 1rem; font-size: 15px; font-weight: 800; background: linear-gradient(135deg, #F97316, #EA580C); border: none; box-shadow: 0 4px 10px rgba(234, 88, 12, 0.3); display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span style="font-size: 20px;">🍩</span>
+            <span>+ Ambil 1 Donat Cokelat Meses</span>
+          </button>
+        </div>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-4); font-size: var(--fs-sm); font-weight: 700; flex-wrap: wrap; gap: var(--space-2);">
-        <span>Donat di Nampan: <strong id="count-donuts" style="color: #D97706;">0</strong></span>
-        <span>Kembalian: <strong id="count-coins" style="color: #2563EB;">Rp 0</strong></span>
-      </div>
+        <!-- Section 2: Cash Register Coin Drawer -->
+        <div>
+          <div style="font-weight: 800; font-size: 13px; color: #1E40AF; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            <span>🪙 LACI UANG KOIN KEMBALIAN</span>
+            <span class="badge-pill badge-pill-primary" style="font-size: 10px; padding: 1px 6px;">Uang Bayar: Rp 5.000</span>
+          </div>
 
-      <!-- Dedicated Subtraction / Undo Controls -->
-      <div style="display: flex; gap: var(--space-2); margin-top: var(--space-3); flex-wrap: wrap;">
-        <button type="button" class="btn-undo-step" id="btn-sub-donut" disabled aria-label="Ambil satu donat dari nampan">
-          − Ambil 1 Donat
-        </button>
-        <button type="button" class="btn-undo-step" id="btn-sub-coin" disabled aria-label="Batalkan koin terakhir dari nampan">
-          − Batalkan Koin Terakhir
-        </button>
-      </div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+            <button type="button" id="btn-add-coin-500" class="btn-kid btn-kid-ghost" style="padding: 0.7rem 0.4rem; font-weight: 800; font-size: 13px; border-color: #CBD5E1; color: #334155; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+              <span style="font-size: 18px;">🪙</span>
+              <span>+ Rp 500</span>
+            </button>
+            <button type="button" id="btn-add-coin-1000" class="btn-kid btn-kid-ghost" style="padding: 0.7rem 0.4rem; font-weight: 800; font-size: 13px; border-color: #38BDF8; color: #0284C7; background: #F0F9FF; display: flex; flex-direction: column; align-items: center; gap: 2px;" title="Koin kembalian Rp 1.000">
+              <span style="font-size: 18px;">🪙</span>
+              <span>+ Rp 1.000 ⭐</span>
+            </button>
+            <button type="button" id="btn-add-coin-2000" class="btn-kid btn-kid-ghost" style="padding: 0.7rem 0.4rem; font-weight: 800; font-size: 13px; border-color: #CBD5E1; color: #334155; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+              <span style="font-size: 18px;">🪙</span>
+              <span>+ Rp 2.000</span>
+            </button>
+          </div>
+        </div>
 
-      <button type="button" class="btn-kid btn-kid-ghost" id="btn-clear-tray" style="margin-top: var(--space-3); padding: 0.45rem 1rem; font-size: var(--fs-xs);">
-        Bersihkan Seluruh Nampan 🔄
-      </button>
+        <!-- Section 3: Undo & Reset Actions -->
+        <div style="display: flex; gap: 8px; margin-top: 4px;">
+          <button type="button" class="btn-kid btn-kid-ghost" id="btn-sub-donut" disabled style="flex: 1; font-size: 12px; padding: 0.5rem; color: #DC2626; border-color: #FECACA;">
+            − Ambil Donat
+          </button>
+          <button type="button" class="btn-kid btn-kid-ghost" id="btn-sub-coin" disabled style="flex: 1; font-size: 12px; padding: 0.5rem; color: #DC2626; border-color: #FECACA;">
+            − Batalkan Koin
+          </button>
+          <button type="button" class="btn-kid btn-kid-ghost" id="btn-clear-tray" style="flex: 1; font-size: 12px; padding: 0.5rem; color: #64748B;">
+            🔄 Bersihkan
+          </button>
+        </div>
+      </div>
     `;
 
-    const tray = document.getElementById('bakery-tray');
+    const trayItems = document.getElementById('bakery-tray-items');
     const emptyHint = document.getElementById('tray-empty-hint');
-    const countD = document.getElementById('count-donuts');
-    const countC = document.getElementById('count-coins');
+    const bellaBubble = document.getElementById('bella-bubble');
+    const bellaAvatar = document.getElementById('bella-avatar');
+    const regTotalPrice = document.getElementById('reg-total-price');
+    const regChangeDisplay = document.getElementById('reg-change-display');
+    const regChangeStatus = document.getElementById('reg-change-status');
     const btnSubDonut = document.getElementById('btn-sub-donut');
     const btnSubCoin = document.getElementById('btn-sub-coin');
 
-    const updateTrayDisplay = () => {
-      const isEmpty = (this.state.donutsInTray === 0 && this.state.coinsInTray === 0);
+    const updateDisplay = () => {
+      const donuts = this.state.donutsInTray;
+      const change = this.state.coinsInTray;
+      const isEmpty = (donuts === 0 && change === 0);
+
       emptyHint.style.display = isEmpty ? 'block' : 'none';
-      countD.textContent = this.state.donutsInTray;
-      countC.textContent = `Rp ${this.state.coinsInTray.toLocaleString('id-ID')}`;
-      btnSubDonut.disabled = (this.state.donutsInTray <= 0);
-      btnSubCoin.disabled = (this.state.coinsInTray <= 0 || coinHistory.length === 0);
+      btnSubDonut.disabled = (donuts <= 0);
+      btnSubCoin.disabled = (change <= 0 || coinHistory.length === 0);
+
+      // Update Cash Register Display
+      const totalPrice = donuts * 2000;
+      regTotalPrice.textContent = `${donuts} Donat (Rp ${totalPrice.toLocaleString('id-ID')})`;
+      regChangeDisplay.textContent = `Rp ${change.toLocaleString('id-ID')}`;
+
+      // Register LED indicator
+      const isTargetChange = (change === 1000);
+      if (isTargetChange) {
+        regChangeStatus.style.background = '#22C55E'; // Green
+        regChangeDisplay.style.color = '#4ADE80';
+      } else if (change > 1000) {
+        regChangeStatus.style.background = '#EF4444'; // Red
+        regChangeDisplay.style.color = '#F87171';
+      } else {
+        regChangeStatus.style.background = '#F59E0B'; // Yellow
+        regChangeDisplay.style.color = '#FBBF24';
+      }
+
+      // Dynamic Character Speech Reaction
+      if (donuts === 0 && change === 0) {
+        bellaBubble.innerHTML = '"Halo Kak Kasir! 🐰 Aku mau beli 2 donat ya. Ini uang Rp 5.000!"';
+      } else if (donuts === 1) {
+        bellaBubble.innerHTML = '"Waaah donatnya wangi! 🍩 Satu donat lagi yaa!"';
+      } else if (donuts === 2 && change === 0) {
+        bellaBubble.innerHTML = '"Donatnya pas 2! Sekarang berapa kembalian uangku? (Uang Rp 5.000, donat Rp 4.000) 🪙"';
+      } else if (donuts === 2 && change === 1000) {
+        bellaBubble.innerHTML = '"Horeee! Donat 2 dan kembalian Rp 1.000 pas banget! Siap dibungkus! 🛍️✨"';
+        if (bellaAvatar) {
+          bellaAvatar.style.transform = 'scale(1.15) rotate(5deg)';
+          setTimeout(() => { if (bellaAvatar) bellaAvatar.style.transform = 'scale(1)'; }, 350);
+        }
+      } else if (donuts === 2 && change > 1000) {
+        bellaBubble.innerHTML = '"Wah uang kembaliannya kebanyakan, Kak! Hitung lagi yaa hehe 🪙"';
+      } else if (donuts === 2 && change < 1000) {
+        bellaBubble.innerHTML = '"Donat pas 2, tapi kembaliannya masih kurang nih! 🪙"';
+      } else if (donuts > 2) {
+        bellaBubble.innerHTML = '"Wah kebanyakan donatnya! Aku cuma pesan 2 donat kok hehe 🍩"';
+      }
     };
 
+    // Action: Add Donut with Playful Physics & Sound
     document.getElementById('btn-add-donut').addEventListener('click', () => {
       this.state.donutsInTray++;
+      
+      if (window.SoundFX && typeof window.SoundFX.playDonut === 'function') {
+        window.SoundFX.playDonut();
+      }
+
       const item = document.createElement('button');
       item.type = 'button';
       item.className = 'tray-item-clickable';
       item.dataset.type = 'donut';
       item.title = 'Ketuk donat ini untuk mengambilnya kembali';
-      item.setAttribute('aria-label', 'Donat di nampan. Ketuk untuk membatalkan.');
-      item.innerHTML = '🍩<span class="remove-badge" aria-hidden="true">&times;</span>';
+      item.style.cssText = 'background: #FEF3C7; border: 2px solid #F59E0B; border-radius: 999px; padding: 6px 12px; font-size: 14px; font-weight: 800; color: #92400E; display: flex; align-items: center; gap: 6px; cursor: pointer; animation: popBounce 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);';
+      item.innerHTML = '🍩 Donat Cokelat <span style="color: #EF4444; font-size: 16px;">&times;</span>';
+      
       item.addEventListener('click', () => {
         this.state.donutsInTray = Math.max(0, this.state.donutsInTray - 1);
         item.remove();
-        updateTrayDisplay();
+        if (window.SoundFX) window.SoundFX.playTap();
+        updateDisplay();
       });
-      tray.appendChild(item);
-      updateTrayDisplay();
+
+      trayItems.appendChild(item);
+      updateDisplay();
     });
 
+    // Action: Add Coin with Metallic Chime & Sound
     const addCoin = (val) => {
       this.state.coinsInTray += val;
+
+      if (window.SoundFX && typeof window.SoundFX.playCoin === 'function') {
+        window.SoundFX.playCoin();
+      }
+
       const item = document.createElement('button');
       item.type = 'button';
-      item.className = 'tray-item-clickable tray-coin-clickable';
+      item.className = 'tray-item-clickable';
       item.dataset.type = 'coin';
       item.dataset.val = String(val);
       item.title = `Ketuk koin Rp ${val.toLocaleString('id-ID')} ini untuk mengambilnya kembali`;
-      item.setAttribute('aria-label', `Koin Rp ${val}. Ketuk untuk membatalkan.`);
-      item.innerHTML = `🪙 ${val}<span class="remove-badge" aria-hidden="true">&times;</span>`;
+      item.style.cssText = 'background: #FEF9C3; border: 2px solid #EAB308; border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 800; color: #854D0E; display: flex; align-items: center; gap: 6px; cursor: pointer; animation: popBounce 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 2px 6px rgba(234, 179, 8, 0.2);';
+      item.innerHTML = `🪙 Rp ${val.toLocaleString('id-ID')} <span style="color: #EF4444; font-size: 16px;">&times;</span>`;
+
       item.addEventListener('click', () => {
         this.state.coinsInTray = Math.max(0, this.state.coinsInTray - val);
         const idx = coinHistory.lastIndexOf(item);
         if (idx !== -1) coinHistory.splice(idx, 1);
         item.remove();
-        updateTrayDisplay();
+        if (window.SoundFX) window.SoundFX.playTap();
+        updateDisplay();
       });
-      tray.appendChild(item);
+
+      trayItems.appendChild(item);
       coinHistory.push(item);
-      updateTrayDisplay();
+      updateDisplay();
     };
 
     document.getElementById('btn-add-coin-500').addEventListener('click', () => addCoin(500));
     document.getElementById('btn-add-coin-1000').addEventListener('click', () => addCoin(1000));
     document.getElementById('btn-add-coin-2000').addEventListener('click', () => addCoin(2000));
 
+    // Action: Undo Donut
     btnSubDonut.addEventListener('click', () => {
       if (this.state.donutsInTray > 0) {
-        const donuts = tray.querySelectorAll('[data-type="donut"]');
+        const donuts = trayItems.querySelectorAll('[data-type="donut"]');
         if (donuts.length > 0) {
           donuts[donuts.length - 1].remove();
         }
         this.state.donutsInTray = Math.max(0, this.state.donutsInTray - 1);
-        updateTrayDisplay();
+        if (window.SoundFX) window.SoundFX.playTap();
+        updateDisplay();
       }
     });
 
+    // Action: Undo Coin
     btnSubCoin.addEventListener('click', () => {
       if (coinHistory.length > 0) {
         const lastCoin = coinHistory.pop();
-        const val = parseInt(lastCoin.dataset.val || '0');
+        const val = parseInt(lastCoin.dataset.val || '0', 10);
         this.state.coinsInTray = Math.max(0, this.state.coinsInTray - val);
         lastCoin.remove();
-        updateTrayDisplay();
+        if (window.SoundFX) window.SoundFX.playTap();
+        updateDisplay();
       }
     });
 
+    // Action: Clear Tray
     document.getElementById('btn-clear-tray').addEventListener('click', () => {
       this.state.donutsInTray = 0;
       this.state.coinsInTray = 0;
       coinHistory.length = 0;
-      tray.innerHTML = '';
-      tray.appendChild(emptyHint);
-      updateTrayDisplay();
+      trayItems.innerHTML = '';
+      if (window.SoundFX) window.SoundFX.playWobble();
+      updateDisplay();
     });
+
+    updateDisplay();
   }
 
   // =========================================================================
@@ -1335,6 +1477,15 @@ class InteractionHandler {
 
     if (this.slug === 'toko-kue') {
       const isCorrect = (this.state.donutsInTray === 2 && this.state.coinsInTray === 1000);
+      if (isCorrect) {
+        if (window.SoundFX && typeof window.SoundFX.playCashRegister === 'function') {
+          window.SoundFX.playCashRegister();
+        }
+        const bellaBubble = document.getElementById('bella-bubble');
+        if (bellaBubble) {
+          bellaBubble.innerHTML = "🎁 <strong>TERIMA KASIH KAK KASIR!</strong><br>Donatnya dibungkus rapi dan kembaliannya pas! 💖";
+        }
+      }
       return {
         success: isCorrect,
         message: isCorrect
