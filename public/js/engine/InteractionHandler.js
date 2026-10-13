@@ -736,101 +736,624 @@ class InteractionHandler {
   }
 
   // =========================================================================
-  // 5. Jembatan Angka (Number City)
+  // 5. Jembatan Angka (Number City) — Mini-Game: Petualangan Lembah Angka Botty
   // =========================================================================
   mountNumberBridge(canvasEl, controlsEl) {
     this.state = { selectedValue: null };
 
+    // 1. Interactive Adventure Gorge Canvas
     canvasEl.innerHTML = `
-      <div style="width: 100%; text-align: center;">
-        <h4 style="margin-bottom: var(--space-4);">Pola Balok Jembatan:</h4>
-        <div style="display: flex; align-items: center; justify-content: center; gap: var(--space-3); flex-wrap: wrap;">
-          <div class="node-number-circle" style="background: #F59E0B; color: #FFF;">3</div>
-          <span style="font-size: 1.5rem; color: var(--text-light);">&rarr;</span>
-          <div class="node-number-circle" style="background: #F59E0B; color: #FFF;">7</div>
-          <span style="font-size: 1.5rem; color: var(--text-light);">&rarr;</span>
-          <div class="node-number-circle" style="background: #F59E0B; color: #FFF;">11</div>
-          <span style="font-size: 1.5rem; color: var(--text-light);">&rarr;</span>
-          <div class="node-number-circle" id="bridge-missing-slot" style="background: #FFFFFF; border: 3px dashed #F59E0B; color: #F59E0B; width: 56px; height: 56px;">?</div>
-          <span style="font-size: 1.5rem; color: var(--text-light);">&rarr;</span>
-          <div class="node-number-circle" style="background: #F59E0B; color: #FFF;">19</div>
+      <div style="width: 100%; max-width: 520px; position: relative; background: linear-gradient(180deg, #E0F2FE 0%, #BAE6FD 55%, #7DD3FC 100%); border: 3px solid #D97706; border-radius: var(--radius-2xl); box-shadow: 0 10px 25px rgba(217, 119, 6, 0.18); overflow: hidden; display: flex; flex-direction: column; align-items: center; user-select: none;">
+        
+        <!-- Sky & Mountain Background with Moving Clouds -->
+        <div style="position: absolute; top: 8px; left: 16px; font-size: 20px; opacity: 0.8; animation: floatGentle 4s ease-in-out infinite;">☁️</div>
+        <div style="position: absolute; top: 18px; right: 28px; font-size: 16px; opacity: 0.7; animation: floatGentle 5s ease-in-out infinite 1s;">☁️</div>
+
+        <!-- Top Header & Botty Character Dialog -->
+        <div style="width: 100%; padding: 12px 14px 4px; display: flex; align-items: center; justify-content: space-between; z-index: 2;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div id="bridge-bot-badge" style="width: 50px; height: 50px; min-width: 50px; background: #FEF3C7; border: 2.5px solid #D97706; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-size: 26px;">
+              🤖
+            </div>
+            <div id="bridge-bot-bubble" style="background: #FFFFFF; border: 2px solid #F59E0B; border-radius: 12px; padding: 7px 11px; font-size: 12px; font-weight: 700; color: #78350F; line-height: 1.35; max-width: 280px; box-shadow: 0 2px 6px rgba(245, 158, 11, 0.15); position: relative;">
+              "Halo Penjelajah Cilik! 🎒 Jembatannya putus 1 balok. Pasangkan balok yang pas agar aku bisa menyeberang ke peti harta!"
+              <div style="position: absolute; left: -7px; top: 16px; width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-right: 7px solid #F59E0B;"></div>
+            </div>
+          </div>
+          <button type="button" id="btn-hint-bridge" class="btn-kid btn-kid-ghost" style="padding: 4px 8px; font-size: 11px; font-weight: 800; border-color: #F59E0B; color: #B45309; background: #FFFBEB;" title="Tampilkan petunjuk pola lompatan angka">
+            💡 Petunjuk Pola
+          </button>
+        </div>
+
+        <!-- Main Bridge Adventure Scene -->
+        <div style="width: 100%; height: 210px; position: relative; margin-top: 6px; overflow: hidden; display: flex; align-items: flex-end;">
+          
+          <!-- Animated River Water at Gorge Bottom -->
+          <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 48px; background: linear-gradient(180deg, #0284C7 0%, #0369A1 100%); overflow: hidden; border-top: 2px solid #38BDF8;">
+            <svg viewBox="0 0 500 48" preserveAspectRatio="none" style="width: 100%; height: 100%; opacity: 0.5;">
+              <path d="M0,20 C125,5 175,35 250,20 C325,5 375,35 500,20 L500,48 L0,48 Z" fill="#38BDF8" style="animation: floatReverse 3s infinite alternate ease-in-out;"></path>
+            </svg>
+            <div style="position: absolute; bottom: 6px; left: 24%; font-size: 12px; opacity: 0.6;">🌊 🪨</div>
+            <div style="position: absolute; bottom: 6px; right: 28%; font-size: 12px; opacity: 0.6;">🪨 🌊</div>
+          </div>
+
+          <!-- Left Cliff (Start Cliff) -->
+          <div style="position: absolute; left: 0; bottom: 36px; width: 64px; height: 110px; background: linear-gradient(180deg, #78350F 0%, #451A03 100%); border-radius: 0 16px 0 0; border-top: 4px solid #15803D; box-shadow: 2px 0 8px rgba(0,0,0,0.2); z-index: 2;">
+            <div style="position: absolute; top: -14px; left: 10px; font-size: 14px;">🚩 Mulai</div>
+          </div>
+
+          <!-- Right Cliff (Goal Cliff with Star Castle & Treasure Chest) -->
+          <div style="position: absolute; right: 0; bottom: 36px; width: 72px; height: 110px; background: linear-gradient(180deg, #78350F 0%, #451A03 100%); border-radius: 16px 0 0 0; border-top: 4px solid #15803D; box-shadow: -2px 0 8px rgba(0,0,0,0.2); z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">
+            <div id="bridge-treasure" style="font-size: 26px; margin-top: -18px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+              🎁
+            </div>
+            <div style="font-size: 10px; font-weight: 800; color: #FEF08A; margin-top: 4px;">Kastil Angka</div>
+          </div>
+
+          <!-- Suspension Bridge Wooden Planks Container -->
+          <div style="position: absolute; bottom: 56px; left: 54px; right: 62px; height: 80px; display: flex; align-items: flex-end; justify-content: space-between; z-index: 3;">
+            
+            <!-- Suspension Rope Cable (SVG Arc) -->
+            <svg viewBox="0 0 380 60" style="position: absolute; top: 0; left: 0; width: 100%; height: 60px; pointer-events: none; z-index: 1;">
+              <path d="M 10,10 Q 190,48 370,10" fill="none" stroke="#92400E" stroke-width="3" stroke-dasharray="6,3"/>
+              <!-- Vertical Suspension Ropes -->
+              <line x1="40" y1="20" x2="40" y2="48" stroke="#B45309" stroke-width="2"/>
+              <line x1="110" y1="36" x2="110" y2="48" stroke="#B45309" stroke-width="2"/>
+              <line x1="185" y1="45" x2="185" y2="48" stroke="#B45309" stroke-width="2"/>
+              <line x1="260" y1="36" x2="260" y2="48" stroke="#B45309" stroke-width="2"/>
+              <line x1="335" y1="20" x2="335" y2="48" stroke="#B45309" stroke-width="2"/>
+            </svg>
+
+            <!-- Plank 1: [ 3 ] -->
+            <div class="bridge-plank-node" id="plank-0" style="position: relative; width: 56px; height: 46px; background: linear-gradient(180deg, #D97706 0%, #B45309 100%); border: 2.5px solid #78350F; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.25); z-index: 2;">
+              <span class="bridge-jump-tag" style="position: absolute; top: -18px; font-size: 10px; font-weight: 800; color: #15803D; background: #DCFCE7; padding: 1px 5px; border-radius: 6px; border: 1px solid #86EFAC; display: none;">+4 ↗</span>
+              <span style="font-size: 17px; font-weight: 900; color: #FFF; text-shadow: 0 1px 2px rgba(0,0,0,0.4);">3</span>
+              <div style="width: 80%; height: 3px; background: #92400E; border-radius: 2px;"></div>
+            </div>
+
+            <!-- Plank 2: [ 7 ] -->
+            <div class="bridge-plank-node" id="plank-1" style="position: relative; width: 56px; height: 46px; background: linear-gradient(180deg, #D97706 0%, #B45309 100%); border: 2.5px solid #78350F; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.25); z-index: 2;">
+              <span class="bridge-jump-tag" style="position: absolute; top: -18px; font-size: 10px; font-weight: 800; color: #15803D; background: #DCFCE7; padding: 1px 5px; border-radius: 6px; border: 1px solid #86EFAC; display: none;">+4 ↗</span>
+              <span style="font-size: 17px; font-weight: 900; color: #FFF; text-shadow: 0 1px 2px rgba(0,0,0,0.4);">7</span>
+              <div style="width: 80%; height: 3px; background: #92400E; border-radius: 2px;"></div>
+            </div>
+
+            <!-- Plank 3: [ 11 ] (Botty Stands Here Initially) -->
+            <div class="bridge-plank-node" id="plank-2" style="position: relative; width: 56px; height: 46px; background: linear-gradient(180deg, #D97706 0%, #B45309 100%); border: 2.5px solid #78350F; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.25); z-index: 2;">
+              <span class="bridge-jump-tag" style="position: absolute; top: -18px; font-size: 10px; font-weight: 800; color: #15803D; background: #DCFCE7; padding: 1px 5px; border-radius: 6px; border: 1px solid #86EFAC; display: none;">+4 ↗</span>
+              <span style="font-size: 17px; font-weight: 900; color: #FFF; text-shadow: 0 1px 2px rgba(0,0,0,0.4);">11</span>
+              <div style="width: 80%; height: 3px; background: #92400E; border-radius: 2px;"></div>
+            </div>
+
+            <!-- Plank 4: MISSING GAP SLOT [ ? ] -->
+            <div class="bridge-plank-node" id="bridge-gap-slot" style="position: relative; width: 58px; height: 46px; background: rgba(255, 255, 255, 0.45); border: 2.5px dashed #F59E0B; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(245, 158, 11, 0.2); z-index: 2; transition: all 0.3s ease;">
+              <span class="bridge-jump-tag" style="position: absolute; top: -18px; font-size: 10px; font-weight: 800; color: #15803D; background: #DCFCE7; padding: 1px 5px; border-radius: 6px; border: 1px solid #86EFAC; display: none;">+4 ↗</span>
+              <span id="bridge-gap-label" style="font-size: 20px; font-weight: 900; color: #D97706; animation: pulseGlow 1.8s infinite;">❓</span>
+            </div>
+
+            <!-- Plank 5: [ 19 ] -->
+            <div class="bridge-plank-node" id="plank-4" style="position: relative; width: 56px; height: 46px; background: linear-gradient(180deg, #D97706 0%, #B45309 100%); border: 2.5px solid #78350F; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.25); z-index: 2;">
+              <span style="font-size: 17px; font-weight: 900; color: #FFF; text-shadow: 0 1px 2px rgba(0,0,0,0.4);">19</span>
+              <div style="width: 80%; height: 3px; background: #92400E; border-radius: 2px;"></div>
+            </div>
+
+          </div>
+
+          <!-- Dynamic Walking / Jumping Botty Sprite -->
+          <div id="botty-walker" style="position: absolute; bottom: 98px; left: 198px; width: 44px; height: 44px; z-index: 10; display: flex; align-items: center; justify-content: center; transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));">
+            <svg viewBox="0 0 44 44" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Explorer Hat -->
+              <ellipse cx="22" cy="12" rx="14" ry="4" fill="#92400E"/>
+              <path d="M14 12 C14 6 30 6 30 12 Z" fill="#B45309"/>
+              <!-- Robot Head -->
+              <rect x="12" y="14" width="20" height="18" rx="6" fill="#38BDF8" stroke="#0284C7" stroke-width="2"/>
+              <!-- Goggles -->
+              <rect x="14" y="18" width="7" height="6" rx="2" fill="#FEF08A" stroke="#CA8A04" stroke-width="1.5"/>
+              <rect x="23" y="18" width="7" height="6" rx="2" fill="#FEF08A" stroke="#CA8A04" stroke-width="1.5"/>
+              <line x1="21" y1="21" x2="23" y2="21" stroke="#CA8A04" stroke-width="1.5"/>
+              <!-- Smile -->
+              <path d="M18 27 Q22 30 26 27" stroke="#0F172A" stroke-width="1.5" stroke-linecap="round"/>
+              <!-- Backpack -->
+              <rect x="7" y="20" width="5" height="12" rx="2" fill="#F97316"/>
+              <!-- Feet -->
+              <ellipse cx="17" cy="34" rx="4" ry="2" fill="#0369A1"/>
+              <ellipse cx="27" cy="34" rx="4" ry="2" fill="#0369A1"/>
+            </svg>
+          </div>
+
+        </div>
+
+        <!-- Status Footer -->
+        <div style="width: 100%; background: #FFFBEB; border-top: 2px solid #FDE68A; padding: 6px 14px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; font-weight: 700; color: #92400E;">
+          <span>Pola Deret Lompatan: <strong id="bridge-formula-tag" style="color: #15803D;">+4 setiap langkah</strong></span>
+          <span id="bridge-status-text" style="color: #D97706;">Pilih balok di bawah untuk menyambung jembatan</span>
         </div>
       </div>
     `;
 
+    // 2. Interactive Tactile Controls (Wood Workshop)
     controlsEl.innerHTML = `
-      <div style="font-weight: 700; font-size: var(--fs-sm); margin-bottom: var(--space-3);">
-        Pilih balok angka yang tepat untuk slot [ ? ]:
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-3);">
-        <button type="button" class="btn-command-card bridge-choice-btn" data-val="13">Balok 13</button>
-        <button type="button" class="btn-command-card bridge-choice-btn" data-val="14">Balok 14</button>
-        <button type="button" class="btn-command-card bridge-choice-btn" data-val="15">Balok 15</button>
-        <button type="button" class="btn-command-card bridge-choice-btn" data-val="16">Balok 16</button>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-weight: 800; font-size: 13px; color: #92400E; display: flex; align-items: center; justify-content: space-between;">
+          <span style="display: flex; align-items: center; gap: 6px;">
+            <span>🪵 WORKSHOP BALOK PEMBANGUN</span>
+            <span class="badge-pill badge-pill-accent" style="font-size: 10px; padding: 1px 6px;">Celah Jembatan</span>
+          </span>
+          <span style="font-size: 11px; color: #64748B;">Ketuk balok untuk memasangnya</span>
+        </div>
+
+        <!-- 4 Tactile 3D Wooden Blocks -->
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+          <button type="button" class="bridge-choice-btn btn-kid" data-val="13" style="padding: 0.85rem 0.6rem; background: linear-gradient(180deg, #FFFBEB 0%, #FEF3C7 100%); border: 2.5px solid #D97706; border-radius: var(--radius-lg); box-shadow: 0 4px 8px rgba(217, 119, 6, 0.15); display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 18px;">🪵</span>
+              <strong style="font-size: 16px; color: #78350F;">Balok 13</strong>
+            </div>
+            <span style="font-size: 11px; color: #92400E; font-weight: 600;">(11 + 2)</span>
+          </button>
+
+          <button type="button" class="bridge-choice-btn btn-kid" data-val="14" style="padding: 0.85rem 0.6rem; background: linear-gradient(180deg, #FFFBEB 0%, #FEF3C7 100%); border: 2.5px solid #D97706; border-radius: var(--radius-lg); box-shadow: 0 4px 8px rgba(217, 119, 6, 0.15); display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 18px;">🪵</span>
+              <strong style="font-size: 16px; color: #78350F;">Balok 14</strong>
+            </div>
+            <span style="font-size: 11px; color: #92400E; font-weight: 600;">(11 + 3)</span>
+          </button>
+
+          <button type="button" class="bridge-choice-btn btn-kid" data-val="15" style="padding: 0.85rem 0.6rem; background: linear-gradient(180deg, #FFFBEB 0%, #FEF3C7 100%); border: 2.5px solid #D97706; border-radius: var(--radius-lg); box-shadow: 0 4px 8px rgba(217, 119, 6, 0.15); display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 18px;">🪵</span>
+              <strong style="font-size: 16px; color: #78350F;">Balok 15 ⭐</strong>
+            </div>
+            <span style="font-size: 11px; color: #92400E; font-weight: 600;">(11 + 4)</span>
+          </button>
+
+          <button type="button" class="bridge-choice-btn btn-kid" data-val="16" style="padding: 0.85rem 0.6rem; background: linear-gradient(180deg, #FFFBEB 0%, #FEF3C7 100%); border: 2.5px solid #D97706; border-radius: var(--radius-lg); box-shadow: 0 4px 8px rgba(217, 119, 6, 0.15); display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 18px;">🪵</span>
+              <strong style="font-size: 16px; color: #78350F;">Balok 16</strong>
+            </div>
+            <span style="font-size: 11px; color: #92400E; font-weight: 600;">(11 + 5)</span>
+          </button>
+        </div>
+
+        <!-- Action / Reset Bar -->
+        <div style="display: flex; gap: 8px; margin-top: 2px;">
+          <button type="button" id="btn-reset-bridge" class="btn-kid btn-kid-ghost" style="flex: 1; padding: 0.5rem; font-size: 12px; color: #64748B;">
+            🔄 Ulangi Posisi Botty
+          </button>
+        </div>
       </div>
     `;
 
-    const btns = controlsEl.querySelectorAll('.bridge-choice-btn');
-    btns.forEach(btn => {
+    // Elements & State Handlers
+    const gapSlot = document.getElementById('bridge-gap-slot');
+    const gapLabel = document.getElementById('bridge-gap-label');
+    const botty = document.getElementById('botty-walker');
+    const botBubble = document.getElementById('bridge-bot-bubble');
+    const statusText = document.getElementById('bridge-status-text');
+    const treasure = document.getElementById('bridge-treasure');
+    const jumpTags = canvasEl.querySelectorAll('.bridge-jump-tag');
+    const choiceBtns = controlsEl.querySelectorAll('.bridge-choice-btn');
+
+    let hintVisible = false;
+    document.getElementById('btn-hint-bridge').addEventListener('click', () => {
+      hintVisible = !hintVisible;
+      jumpTags.forEach(tag => tag.style.display = hintVisible ? 'block' : 'none');
+      if (window.SoundFX) window.SoundFX.playTap();
+      if (hintVisible) {
+        botBubble.innerHTML = `"Perhatikan lompatannya: dari 3 ke 7 tambah 4, dari 7 ke 11 tambah 4! Polanya selalu bertambah 4! 💡"`;
+      }
+    });
+
+    const resetBotty = () => {
+      this.state.selectedValue = null;
+      gapSlot.style.background = 'rgba(255, 255, 255, 0.45)';
+      gapSlot.style.borderColor = '#F59E0B';
+      gapSlot.style.borderStyle = 'dashed';
+      gapSlot.style.boxShadow = 'none';
+      gapLabel.textContent = '❓';
+      gapLabel.style.color = '#D97706';
+      botty.style.left = '198px';
+      botty.style.bottom = '98px';
+      treasure.innerHTML = '🎁';
+      treasure.style.transform = 'scale(1)';
+      statusText.textContent = 'Pilih balok di bawah untuk menyambung jembatan';
+      statusText.style.color = '#D97706';
+      choiceBtns.forEach(btn => {
+        btn.style.borderColor = '#D97706';
+        btn.style.background = 'linear-gradient(180deg, #FFFBEB 0%, #FEF3C7 100%)';
+      });
+      botBubble.innerHTML = `"Halo Penjelajah Cilik! 🎒 Jembatannya putus 1 balok. Pasangkan balok yang pas agar aku bisa menyeberang!"`;
+      if (window.SoundFX) window.SoundFX.playTap();
+    };
+
+    document.getElementById('btn-reset-bridge').addEventListener('click', resetBotty);
+
+    choiceBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        btns.forEach(b => b.style.borderColor = 'var(--border-interactive)');
-        btn.style.borderColor = 'var(--color-primary)';
-        this.state.selectedValue = parseInt(btn.dataset.val);
-        const slot = document.getElementById('bridge-missing-slot');
-        slot.textContent = this.state.selectedValue;
-        slot.style.background = '#FEF3C7';
+        const val = parseInt(btn.dataset.val, 10);
+        this.state.selectedValue = val;
+
+        choiceBtns.forEach(b => {
+          b.style.borderColor = '#D97706';
+          b.style.background = 'linear-gradient(180deg, #FFFBEB 0%, #FEF3C7 100%)';
+        });
+        btn.style.borderColor = '#2563EB';
+        btn.style.background = '#EFF6FF';
+
+        // Play Wood Thud Block Drop
+        if (window.SoundFX && typeof window.SoundFX.playWoodThud === 'function') {
+          window.SoundFX.playWoodThud();
+        }
+
+        // Mount block into gap
+        gapSlot.style.borderStyle = 'solid';
+        gapLabel.textContent = String(val);
+
+        if (val === 15) {
+          // CORRECT ANSWER (15)
+          gapSlot.style.background = 'linear-gradient(180deg, #F59E0B 0%, #D97706 100%)';
+          gapSlot.style.borderColor = '#78350F';
+          gapSlot.style.boxShadow = '0 0 16px rgba(245, 158, 11, 0.6)';
+          gapLabel.style.color = '#FFFFFF';
+          statusText.textContent = '🎉 Jembatan tersambung kokoh! Botty siap menyeberang!';
+          statusText.style.color = '#15803D';
+          botBubble.innerHTML = `"Horeee! 11 + 4 = 15! Jembatan sudah utuh! Ayo menyeberang ke peti harta! 🌟"`;
+
+          // Botty Crosses the Bridge Adventure (Multi-hop Animation)
+          setTimeout(() => {
+            if (window.SoundFX && typeof window.SoundFX.playJumpBoing === 'function') {
+              window.SoundFX.playJumpBoing();
+            }
+            // Step 1: Hop onto block 15
+            botty.style.left = '264px';
+            botty.style.bottom = '106px';
+
+            setTimeout(() => {
+              if (window.SoundFX && typeof window.SoundFX.playJumpBoing === 'function') {
+                window.SoundFX.playJumpBoing();
+              }
+              // Step 2: Hop onto block 19
+              botty.style.left = '332px';
+              botty.style.bottom = '112px';
+
+              setTimeout(() => {
+                if (window.SoundFX && typeof window.SoundFX.playJumpBoing === 'function') {
+                  window.SoundFX.playJumpBoing();
+                }
+                // Step 3: Land safely at Goal Castle Cliff & Open Treasure!
+                botty.style.left = '388px';
+                botty.style.bottom = '126px';
+                treasure.innerHTML = '✨ 👑 💎';
+                treasure.style.transform = 'scale(1.25) rotate(-5deg)';
+                botBubble.innerHTML = `"YAAAY! Kita sampai di Kastil Angka dan membuka peti harta karun! Kamu hebat sekali! 🏆"`;
+                if (window.SoundFX && typeof window.SoundFX.playCelebration === 'function') {
+                  window.SoundFX.playCelebration();
+                }
+              }, 400);
+            }, 380);
+          }, 300);
+
+        } else {
+          // INCORRECT BLOCK
+          gapSlot.style.background = '#FEE2E2';
+          gapSlot.style.borderColor = '#EF4444';
+          gapSlot.style.boxShadow = 'none';
+          gapLabel.style.color = '#DC2626';
+          statusText.textContent = `Balok ${val} belum pas. Amati selisih lompatan 11 + 4!`;
+          statusText.style.color = '#DC2626';
+          botBubble.innerHTML = `"Aduh, balok ${val} belum seimbang! Dari 11 kita harus melompat 4 langkah (+4). Berapa 11 + 4 ya? 🤔"`;
+          if (window.SoundFX && typeof window.SoundFX.playWobble === 'function') {
+            window.SoundFX.playWobble();
+          }
+          // Shake gap slot
+          gapSlot.style.animation = 'wiggleJoy 0.4s ease';
+          setTimeout(() => gapSlot.style.animation = '', 450);
+        }
       });
     });
   }
 
   // =========================================================================
-  // 6. Kota Pola (Number City)
+  // 6. Kota Pola (Number City) — Mini-Game: Taman Musik Kristal Bercahaya
   // =========================================================================
   mountCrystalPattern(canvasEl, controlsEl) {
     this.state = { selectedColor: null };
 
+    // 1. Interactive Musical Crystal Garden Canvas
     canvasEl.innerHTML = `
-      <div style="width: 100%; text-align: center;">
-        <h4 style="margin-bottom: var(--space-4);">Deret Kristal Lampu Taman:</h4>
-        <div style="display: flex; align-items: center; justify-content: center; gap: var(--space-2); flex-wrap: wrap;">
-          <span style="font-size: 2.2rem;">🔴</span>
-          <span style="font-size: 2.2rem;">🟡</span>
-          <span style="font-size: 2.2rem;">🔵</span>
-          <span style="font-size: 2.2rem;">🔴</span>
-          <span style="font-size: 2.2rem;">🟡</span>
-          <div id="crystal-slot" style="width: 50px; height: 50px; border: 3px dashed #CBD5E1; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-            ?
+      <div style="width: 100%; max-width: 520px; position: relative; background: linear-gradient(180deg, #0F172A 0%, #1E1B4B 55%, #311042 100%); border: 3px solid #8B5CF6; border-radius: var(--radius-2xl); box-shadow: 0 10px 28px rgba(139, 92, 246, 0.22); overflow: hidden; display: flex; flex-direction: column; align-items: center; user-select: none;">
+        
+        <!-- Night Sky Twinkling Stars & Aurora -->
+        <div style="position: absolute; top: 10px; left: 20px; font-size: 14px; opacity: 0.85; animation: sparkleTwinkle 2s infinite;">✨</div>
+        <div style="position: absolute; top: 24px; left: 45%; font-size: 12px; opacity: 0.75; animation: sparkleTwinkle 2.5s infinite 0.6s;">⭐</div>
+        <div style="position: absolute; top: 12px; right: 26px; font-size: 15px; opacity: 0.9; animation: sparkleTwinkle 1.8s infinite 1.2s;">✨</div>
+
+        <!-- Header & Miko Companion Bubble -->
+        <div style="width: 100%; padding: 12px 14px 6px; display: flex; align-items: center; justify-content: space-between; z-index: 2;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div id="miko-crystal-avatar" style="width: 50px; height: 50px; min-width: 50px; background: #EDE9FE; border: 2.5px solid #8B5CF6; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3); font-size: 26px;">
+              🔮
+            </div>
+            <div id="miko-crystal-bubble" style="background: #FFFFFF; border: 2px solid #8B5CF6; border-radius: 12px; padding: 7px 11px; font-size: 12px; font-weight: 700; color: #4C1D95; line-height: 1.35; max-width: 280px; box-shadow: 0 2px 6px rgba(139, 92, 246, 0.2); position: relative;">
+              "Dengarkan irama warna kristal ini! 🎶 Polanya berulang dengan melodi merdu. Kristal warna apa yang menyala berikutnya?"
+              <div style="position: absolute; left: -7px; top: 16px; width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-right: 7px solid #8B5CF6;"></div>
+            </div>
           </div>
+          <button type="button" id="btn-play-garden-melody" class="btn-kid btn-kid-accent" style="padding: 6px 10px; font-size: 11px; font-weight: 800; background: linear-gradient(135deg, #A855F7, #7C3AED); border: none; box-shadow: 0 4px 10px rgba(124, 58, 237, 0.35); display: flex; align-items: center; gap: 4px;" title="Putar irama kristal berurutan">
+            <span>🎵 Putar Melodi</span>
+          </button>
+        </div>
+
+        <!-- Crystal Garden Sanctuary Scene -->
+        <div style="width: 100%; padding: 18px 12px 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+          
+          <!-- Crystal Pedestals Row -->
+          <div style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: nowrap; padding: 10px 4px; background: rgba(15, 23, 42, 0.6); border: 2px solid #4338CA; border-radius: 18px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.4);">
+            
+            <!-- Crystal 1: RED (Ruby - Note C4) -->
+            <button type="button" class="crystal-pedestal-btn" data-color="red" data-freq="261.63" style="flex: 1; min-width: 48px; max-width: 68px; background: transparent; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
+              <div id="c-lamp-0" class="crystal-gem-orb" style="width: 46px; height: 46px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #F87171, #DC2626 70%, #991B1B); border: 2.5px solid #FCA5A5; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 14px rgba(239, 68, 68, 0.6); font-size: 20px;">
+                🔴
+              </div>
+              <span style="font-size: 10px; font-weight: 800; color: #FCA5A5;">Merah</span>
+            </button>
+
+            <!-- Crystal 2: YELLOW (Topaz - Note E4) -->
+            <button type="button" class="crystal-pedestal-btn" data-color="yellow" data-freq="329.63" style="flex: 1; min-width: 48px; max-width: 68px; background: transparent; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
+              <div id="c-lamp-1" class="crystal-gem-orb" style="width: 46px; height: 46px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #FDE047, #EAB308 70%, #A16207); border: 2.5px solid #FEF08A; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 14px rgba(234, 179, 8, 0.6); font-size: 20px;">
+                🟡
+              </div>
+              <span style="font-size: 10px; font-weight: 800; color: #FEF08A;">Kuning</span>
+            </button>
+
+            <!-- Crystal 3: BLUE (Sapphire - Note G4) -->
+            <button type="button" class="crystal-pedestal-btn" data-color="blue" data-freq="392.00" style="flex: 1; min-width: 48px; max-width: 68px; background: transparent; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
+              <div id="c-lamp-2" class="crystal-gem-orb" style="width: 46px; height: 46px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #60A5FA, #2563EB 70%, #1E40AF); border: 2.5px solid #93C5FD; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 14px rgba(37, 99, 235, 0.6); font-size: 20px;">
+                🔵
+              </div>
+              <span style="font-size: 10px; font-weight: 800; color: #93C5FD;">Biru</span>
+            </button>
+
+            <!-- Crystal 4: RED (Ruby - Note C4) -->
+            <button type="button" class="crystal-pedestal-btn" data-color="red" data-freq="261.63" style="flex: 1; min-width: 48px; max-width: 68px; background: transparent; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
+              <div id="c-lamp-3" class="crystal-gem-orb" style="width: 46px; height: 46px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #F87171, #DC2626 70%, #991B1B); border: 2.5px solid #FCA5A5; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 14px rgba(239, 68, 68, 0.6); font-size: 20px;">
+                🔴
+              </div>
+              <span style="font-size: 10px; font-weight: 800; color: #FCA5A5;">Merah</span>
+            </button>
+
+            <!-- Crystal 5: YELLOW (Topaz - Note E4) -->
+            <button type="button" class="crystal-pedestal-btn" data-color="yellow" data-freq="329.63" style="flex: 1; min-width: 48px; max-width: 68px; background: transparent; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
+              <div id="c-lamp-4" class="crystal-gem-orb" style="width: 46px; height: 46px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #FDE047, #EAB308 70%, #A16207); border: 2.5px solid #FEF08A; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 14px rgba(234, 179, 8, 0.6); font-size: 20px;">
+                🟡
+              </div>
+              <span style="font-size: 10px; font-weight: 800; color: #FEF08A;">Kuning</span>
+            </button>
+
+            <!-- Slot 6: MYSTERIOUS PEDESTAL GAP [ ? ] -->
+            <div id="c-slot-container" style="flex: 1; min-width: 48px; max-width: 68px; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px;">
+              <div id="crystal-slot-pedestal" style="width: 46px; height: 46px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); border: 2.5px dashed #C084FC; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 12px rgba(192, 132, 252, 0.3); font-size: 22px; transition: all 0.3s ease;">
+                <span id="crystal-slot-icon" style="animation: pulseGlow 1.8s infinite;">❓</span>
+              </div>
+              <span id="crystal-slot-tag" style="font-size: 10px; font-weight: 800; color: #C084FC;">Lampu ?</span>
+            </div>
+
+          </div>
+
+          <!-- Interactive Garden Flora (Glowing Flowers at Night) -->
+          <div id="crystal-garden-flowers" style="display: flex; gap: 16px; margin-top: 12px; font-size: 16px; opacity: 0.8; transition: all 0.5s ease;">
+            <span>🌸</span>
+            <span>🌿</span>
+            <span style="font-size: 11px; color: #C4B5FD; font-weight: 700; display: flex; align-items: center;">💡 Ketuk lentera mana saja di atas untuk mendengar nadanya</span>
+            <span>🌿</span>
+            <span>🌸</span>
+          </div>
+
+        </div>
+
+        <!-- Status Footer -->
+        <div style="width: 100%; background: #1E1B4B; border-top: 2px solid #4338CA; padding: 6px 14px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; font-weight: 700; color: #C7D2FE;">
+          <span>Pola Irama Warna: <strong id="crystal-pattern-status" style="color: #FDE047;">Merah ➔ Kuning ➔ Biru</strong></span>
+          <span id="crystal-guide-hint" style="color: #A5B4FC;">Pilih kristal di bawah</span>
         </div>
       </div>
     `;
 
+    // 2. Interactive Tactile Controls (Magic Crystal Vault)
     controlsEl.innerHTML = `
-      <div style="font-weight: 700; font-size: var(--fs-sm); margin-bottom: var(--space-3);">
-        Pilih kristal warna berikutnya:
-      </div>
-      <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
-        <button type="button" class="btn-command-card crystal-choice-btn" data-color="blue">
-          🔵 Kristal Biru
-        </button>
-        <button type="button" class="btn-command-card crystal-choice-btn" data-color="green">
-          🟢 Kristal Hijau
-        </button>
-        <button type="button" class="btn-command-card crystal-choice-btn" data-color="purple">
-          🟣 Kristal Ungu
-        </button>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-weight: 800; font-size: 13px; color: #4C1D95; display: flex; align-items: center; justify-content: space-between;">
+          <span style="display: flex; align-items: center; gap: 6px;">
+            <span>💎 KOTAK KRISTAL AJAIB</span>
+            <span class="badge-pill badge-pill-primary" style="font-size: 10px; padding: 1px 6px;">Pilihan Lentera</span>
+          </span>
+          <span style="font-size: 11px; color: #64748B;">Pilih kristal yang pas</span>
+        </div>
+
+        <!-- 3 Rich 3D Glowing Crystals -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+          
+          <!-- Blue Sapphire -->
+          <button type="button" class="crystal-choice-btn btn-kid" data-color="blue" data-freq="392.00" style="padding: 0.9rem 0.5rem; background: linear-gradient(180deg, #EFF6FF 0%, #DBEAFE 100%); border: 2.5px solid #2563EB; border-radius: var(--radius-lg); box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2); display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
+            <div style="width: 36px; height: 36px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #60A5FA, #2563EB 70%, #1E40AF); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(37, 99, 235, 0.5); font-size: 16px;">
+              🔵
+            </div>
+            <strong style="font-size: 13px; color: #1E40AF;">Safir Biru ⭐</strong>
+            <span style="font-size: 10px; color: #3B82F6; font-weight: 700;">Nada Sol</span>
+          </button>
+
+          <!-- Green Emerald -->
+          <button type="button" class="crystal-choice-btn btn-kid" data-color="green" data-freq="440.00" style="padding: 0.9rem 0.5rem; background: linear-gradient(180deg, #F0FDF4 0%, #DCFCE7 100%); border: 2.5px solid #16A34A; border-radius: var(--radius-lg); box-shadow: 0 4px 8px rgba(22, 163, 74, 0.2); display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
+            <div style="width: 36px; height: 36px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #4ADE80, #16A34A 70%, #166534); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(22, 163, 74, 0.5); font-size: 16px;">
+              🟢
+            </div>
+            <strong style="font-size: 13px; color: #166534;">Zamrud Hijau</strong>
+            <span style="font-size: 10px; color: #22C55E; font-weight: 700;">Nada La</span>
+          </button>
+
+          <!-- Purple Amethyst -->
+          <button type="button" class="crystal-choice-btn btn-kid" data-color="purple" data-freq="493.88" style="padding: 0.9rem 0.5rem; background: linear-gradient(180deg, #FAF5FF 0%, #F3E8FF 100%); border: 2.5px solid #9333EA; border-radius: var(--radius-lg); box-shadow: 0 4px 8px rgba(147, 51, 234, 0.2); display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
+            <div style="width: 36px; height: 36px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #C084FC, #9333EA 70%, #6B21A8); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(147, 51, 234, 0.5); font-size: 16px;">
+              🟣
+            </div>
+            <strong style="font-size: 13px; color: #6B21A8;">Ametis Ungu</strong>
+            <span style="font-size: 10px; color: #A855F7; font-weight: 700;">Nada Si</span>
+          </button>
+
+        </div>
+
+        <!-- Action / Reset Bar -->
+        <div style="display: flex; gap: 8px; margin-top: 2px;">
+          <button type="button" id="btn-reset-crystal" class="btn-kid btn-kid-ghost" style="flex: 1; padding: 0.5rem; font-size: 12px; color: #64748B;">
+            🔄 Kosongkan Pedestal
+          </button>
+        </div>
       </div>
     `;
 
-    const btns = controlsEl.querySelectorAll('.crystal-choice-btn');
-    btns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        btns.forEach(b => b.style.borderColor = 'var(--border-interactive)');
-        btn.style.borderColor = 'var(--color-primary)';
-        this.state.selectedColor = btn.dataset.color;
+    // Elements & Handlers
+    const slotPedestal = document.getElementById('crystal-slot-pedestal');
+    const slotIcon = document.getElementById('crystal-slot-icon');
+    const slotTag = document.getElementById('crystal-slot-tag');
+    const mikoBubble = document.getElementById('miko-crystal-bubble');
+    const guideHint = document.getElementById('crystal-guide-hint');
+    const flowers = document.getElementById('crystal-garden-flowers');
+    const choiceBtns = controlsEl.querySelectorAll('.crystal-choice-btn');
+    const lampBtns = canvasEl.querySelectorAll('.crystal-pedestal-btn');
 
-        const slot = document.getElementById('crystal-slot');
-        slot.textContent = btn.dataset.color === 'blue' ? '🔵' : (btn.dataset.color === 'green' ? '🟢' : '🟣');
+    // Tap to hear individual crystal sound
+    lampBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const freq = parseFloat(btn.dataset.freq);
+        if (window.SoundFX && typeof window.SoundFX.playCrystalChime === 'function') {
+          window.SoundFX.playCrystalChime(freq);
+        }
+        btn.style.transform = 'scale(1.22)';
+        setTimeout(() => btn.style.transform = 'scale(1)', 200);
+      });
+    });
+
+    // Musical Melody Playback
+    document.getElementById('btn-play-garden-melody').addEventListener('click', () => {
+      mikoBubble.innerHTML = `"Dengarkan melodinya ya: Merah (Do), Kuning (Mi), Biru (Sol)... Merah (Do), Kuning (Mi)... 🎶"`;
+      if (window.SoundFX && typeof window.SoundFX.playCrystalGardenSequence === 'function') {
+        window.SoundFX.playCrystalGardenSequence(
+          (stepIdx, colorName) => {
+            const lamp = document.getElementById(`c-lamp-${stepIdx}`);
+            if (lamp) {
+              lamp.style.transform = 'scale(1.25)';
+              lamp.style.boxShadow = '0 0 24px rgba(255, 255, 255, 0.9)';
+              setTimeout(() => {
+                lamp.style.transform = 'scale(1)';
+                lamp.style.boxShadow = '';
+              }, 350);
+            }
+          },
+          () => {
+            slotPedestal.style.animation = 'wiggleJoy 0.6s ease';
+            setTimeout(() => slotPedestal.style.animation = '', 650);
+            mikoBubble.innerHTML = `"Nah! Setelah Kuning yang kedua, warna apa yang harus menyala agar melodinya lengkap? ✨"`;
+          }
+        );
+      }
+    });
+
+    // Reset Handler
+    document.getElementById('btn-reset-crystal').addEventListener('click', () => {
+      this.state.selectedColor = null;
+      slotPedestal.style.background = 'rgba(255, 255, 255, 0.08)';
+      slotPedestal.style.borderColor = '#C084FC';
+      slotPedestal.style.borderStyle = 'dashed';
+      slotPedestal.style.boxShadow = '0 0 12px rgba(192, 132, 252, 0.3)';
+      slotIcon.textContent = '❓';
+      slotIcon.style.animation = 'pulseGlow 1.8s infinite';
+      slotTag.textContent = 'Lampu ?';
+      slotTag.style.color = '#C084FC';
+      guideHint.textContent = 'Pilih kristal di bawah';
+      guideHint.style.color = '#A5B4FC';
+      flowers.style.transform = 'scale(1)';
+      choiceBtns.forEach(b => {
+        b.style.borderColor = b.dataset.color === 'blue' ? '#2563EB' : (b.dataset.color === 'green' ? '#16A34A' : '#9333EA');
+      });
+      mikoBubble.innerHTML = `"Dengarkan irama warna kristal ini! 🎶 Polanya berulang dengan melodi merdu. Kristal warna apa yang menyala berikutnya?"`;
+      if (window.SoundFX) window.SoundFX.playTap();
+    });
+
+    // Choice Selection Handlers
+    choiceBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const color = btn.dataset.color;
+        const freq = parseFloat(btn.dataset.freq);
+        this.state.selectedColor = color;
+
+        choiceBtns.forEach(b => b.style.transform = 'scale(1)');
+        btn.style.transform = 'scale(1.05)';
+
+        // Play Crystal Chime Sound
+        if (window.SoundFX && typeof window.SoundFX.playCrystalChime === 'function') {
+          window.SoundFX.playCrystalChime(freq);
+        }
+
+        slotPedestal.style.borderStyle = 'solid';
+
+        if (color === 'blue') {
+          // CORRECT (BLUE SAPPHIRE)
+          slotPedestal.style.background = 'radial-gradient(circle at 35% 35%, #60A5FA, #2563EB 70%, #1E40AF)';
+          slotPedestal.style.borderColor = '#93C5FD';
+          slotPedestal.style.boxShadow = '0 0 24px rgba(37, 99, 235, 0.85)';
+          slotIcon.textContent = '🔵';
+          slotIcon.style.animation = 'popInBouncy 0.4s ease';
+          slotTag.textContent = 'Safir Biru ✨';
+          slotTag.style.color = '#93C5FD';
+          guideHint.textContent = '🎉 Pola sempurna: Merah - Kuning - Biru!';
+          guideHint.style.color = '#38BDF8';
+          flowers.style.transform = 'scale(1.15)';
+          mikoBubble.innerHTML = `"WAH LUAR BIASA! 🌟 Pola lengkap: Merah - Kuning - Biru! Seluruh taman kristal bernyanyi harmonis!"`;
+
+          setTimeout(() => {
+            if (window.SoundFX && typeof window.SoundFX.playCelebration === 'function') {
+              window.SoundFX.playCelebration();
+            }
+          }, 350);
+
+        } else if (color === 'green') {
+          // GREEN
+          slotPedestal.style.background = 'radial-gradient(circle at 35% 35%, #4ADE80, #16A34A 70%, #166534)';
+          slotPedestal.style.borderColor = '#86EFAC';
+          slotPedestal.style.boxShadow = '0 0 16px rgba(22, 163, 74, 0.5)';
+          slotIcon.textContent = '🟢';
+          slotIcon.style.animation = '';
+          slotTag.textContent = 'Zamrud Hijau';
+          slotTag.style.color = '#86EFAC';
+          guideHint.textContent = 'Belum sesuai urutan deret (Merah, Kuning, ...)';
+          guideHint.style.color = '#F87171';
+          mikoBubble.innerHTML = `"Kristal hijau ini indah, tapi nadanya belum selaras dengan irama sebelumnya (Merah, Kuning, lalu apa ya?). Putar melodi untuk mengecek! 🎵"`;
+          if (window.SoundFX && typeof window.SoundFX.playWobble === 'function') {
+            window.SoundFX.playWobble();
+          }
+          slotPedestal.style.animation = 'wiggleJoy 0.4s ease';
+          setTimeout(() => slotPedestal.style.animation = '', 450);
+
+        } else {
+          // PURPLE
+          slotPedestal.style.background = 'radial-gradient(circle at 35% 35%, #C084FC, #9333EA 70%, #6B21A8)';
+          slotPedestal.style.borderColor = '#D8B4FE';
+          slotPedestal.style.boxShadow = '0 0 16px rgba(147, 51, 234, 0.5)';
+          slotIcon.textContent = '🟣';
+          slotIcon.style.animation = '';
+          slotTag.textContent = 'Ametis Ungu';
+          slotTag.style.color = '#D8B4FE';
+          guideHint.textContent = 'Belum sesuai urutan deret (Merah, Kuning, ...)';
+          guideHint.style.color = '#F87171';
+          mikoBubble.innerHTML = `"Kristal ungu ini berkilau cantik, tapi deretnya berulang dari awal: Merah, Kuning, lalu biru! Coba dengarkan melodinya lagi ya! 🎶"`;
+          if (window.SoundFX && typeof window.SoundFX.playWobble === 'function') {
+            window.SoundFX.playWobble();
+          }
+          slotPedestal.style.animation = 'wiggleJoy 0.4s ease';
+          setTimeout(() => slotPedestal.style.animation = '', 450);
+        }
       });
     });
   }

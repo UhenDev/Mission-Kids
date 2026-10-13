@@ -307,6 +307,124 @@ class SoundEffects {
     } catch (e) {}
   }
 
+  // 5e. Heavy Wood / Stone Plank Thud (Bridge Block Drop)
+  playWoodThud() {
+    if (this.muted) return;
+    try {
+      this.initCtx();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      
+      // Low body thud
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(160, now);
+      osc.frequency.exponentialRampToValueAtTime(45, now + 0.14);
+      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.14);
+
+      // Snap click transient
+      const click = this.ctx.createOscillator();
+      const clickGain = this.ctx.createGain();
+      click.type = 'sine';
+      click.frequency.setValueAtTime(420, now);
+      click.frequency.exponentialRampToValueAtTime(80, now + 0.04);
+      clickGain.gain.setValueAtTime(0.25, now);
+      clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      click.connect(clickGain);
+      clickGain.connect(this.ctx.destination);
+      click.start(now);
+      click.stop(now + 0.04);
+    } catch (e) {}
+  }
+
+  // 5f. Cheerful Jump Boing (Botty Jump Crossing)
+  playJumpBoing() {
+    if (this.muted) return;
+    try {
+      this.initCtx();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(240, now);
+      osc.frequency.exponentialRampToValueAtTime(580, now + 0.18);
+      gain.gain.setValueAtTime(0.28, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.18);
+    } catch (e) {}
+  }
+
+  // 5g. Magical Crystal Chime (Luminescent bell resonating)
+  playCrystalChime(freq = 523.25) {
+    if (this.muted) return;
+    try {
+      this.initCtx();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+
+      // Pure fundamental bell
+      const osc1 = this.ctx.createOscillator();
+      const gain1 = this.ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, now);
+      gain1.gain.setValueAtTime(0.28, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+      osc1.connect(gain1);
+      gain1.connect(this.ctx.destination);
+      osc1.start(now);
+      osc1.stop(now + 0.6);
+
+      // Shimmering crystalline harmonic overtone
+      const osc2 = this.ctx.createOscillator();
+      const gain2 = this.ctx.createGain();
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(freq * 2.02, now);
+      gain2.gain.setValueAtTime(0.12, now);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+      osc2.connect(gain2);
+      gain2.connect(this.ctx.destination);
+      osc2.start(now);
+      osc2.stop(now + 0.45);
+    } catch (e) {}
+  }
+
+  // 5h. Garden Melody Arpeggio Sequence
+  playCrystalGardenSequence(onStep, onComplete) {
+    if (this.muted) {
+      if (typeof onComplete === 'function') onComplete();
+      return;
+    }
+    const notes = [
+      { name: 'red', freq: 261.63, delay: 0 },       // C4
+      { name: 'yellow', freq: 329.63, delay: 420 },   // E4
+      { name: 'blue', freq: 392.00, delay: 840 },     // G4
+      { name: 'red', freq: 261.63, delay: 1260 },    // C4
+      { name: 'yellow', freq: 329.63, delay: 1680 }   // E4
+    ];
+
+    notes.forEach((item, idx) => {
+      setTimeout(() => {
+        this.playCrystalChime(item.freq);
+        if (typeof onStep === 'function') onStep(idx, item.name);
+        if (idx === notes.length - 1) {
+          setTimeout(() => {
+            if (typeof onComplete === 'function') onComplete();
+          }, 450);
+        }
+      }, item.delay);
+    });
+  }
+
   // 6. Mission Playful Procedural BGM (Background Music)
   startBgm() {
     if (this.muted || this.bgmRunning) return;

@@ -25,9 +25,8 @@ function makeRequest(string $url, string $method = 'GET', $data = null, array $h
         }
     }
 
-    if (!empty($headers)) {
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    }
+    $mergedHeaders = array_merge(['Connection: close'], $headers);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $mergedHeaders);
 
     $body = curl_exec($ch);
     $info = curl_getinfo($ch);
@@ -114,7 +113,8 @@ $missions = [
 
 foreach ($missions as $mSlug) {
     $res = makeRequest($baseUrl . '/?page=mission&slug=' . $mSlug);
-    assertTest("GET /?page=mission&slug={$mSlug}", $res['code'] === 200 && strpos($res['body'], 'CURRENT_MISSION') !== false);
+    $ok = ($res['code'] === 200 && strpos($res['body'], 'CURRENT_MISSION') !== false);
+    assertTest("GET /?page=mission&slug={$mSlug}", $ok, "Code: {$res['code']}, URL: {$res['url']}, Err: {$res['error']}");
 }
 
 // 7. Test API get_hint
