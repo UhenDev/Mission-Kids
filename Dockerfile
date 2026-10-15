@@ -21,6 +21,9 @@ RUN mkdir -p database public/audio/miko/cache && chmod -R 777 database public/au
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
+# Declare database as volume for persistence across container deployments
+VOLUME ["/app/database"]
+
 ENV PHP_CLI_SERVER_WORKERS=4
 EXPOSE 80
 

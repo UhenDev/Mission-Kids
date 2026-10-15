@@ -25,6 +25,7 @@ class AuthService
         }
         $username = strtolower(trim($username));
         $nickname = trim($nickname);
+        $password = trim($password);
 
         if (strlen($username) < 3) {
             return ['success' => false, 'error' => 'Nama pengguna minimal 3 karakter ya!'];
@@ -90,6 +91,7 @@ class AuthService
     public function login(string $username, string $password): array
     {
         $username = strtolower(trim($username));
+        $password = trim($password);
 
         $stmt = $this->db->prepare("SELECT u.id, u.username, u.password_hash, p.nickname, p.avatar_id, p.current_level, p.total_xp FROM users u LEFT JOIN profiles p ON u.id = p.user_id WHERE u.username = :username LIMIT 1");
         $stmt->execute([':username' => $username]);
