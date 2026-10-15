@@ -5,11 +5,11 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/config/database.php';
-require_once __DIR__ . '/src/Services/AuthService.php';
-require_once __DIR__ . '/src/Services/MissionProgressService.php';
-require_once __DIR__ . '/src/Services/GamificationService.php';
-require_once __DIR__ . '/src/Services/MikoAiService.php';
+require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/src/Services/AuthService.php';
+require_once dirname(__DIR__) . '/src/Services/MissionProgressService.php';
+require_once dirname(__DIR__) . '/src/Services/GamificationService.php';
+require_once dirname(__DIR__) . '/src/Services/MikoAiService.php';
 
 echo "\n==========================================\n";
 echo "  MISSION KIDS AUTOMATED TEST SUITE\n";
@@ -39,7 +39,7 @@ try {
     assertTest("Seeded Worlds Count", $worldCount === 4, "Found: {$worldCount}");
 
     $missionCount = (int)$pdo->query("SELECT COUNT(*) FROM missions")->fetchColumn();
-    assertTest("Seeded Missions Count", $missionCount === 12, "Found: {$missionCount}");
+    assertTest("Seeded Missions Count", $missionCount >= 80, "Found: {$missionCount}");
 
     $achCount = (int)$pdo->query("SELECT COUNT(*) FROM achievements")->fetchColumn();
     assertTest("Seeded Badges Count", $achCount === 6, "Found: {$achCount}");

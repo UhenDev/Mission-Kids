@@ -16,27 +16,27 @@ require __DIR__ . '/../../layouts/header.php';
     <div class="dash-profile-card-mockup">
       <div style="display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-4);">
         <?php $heroChar = Avatar::get($profile['avatar_id'] ?? Avatar::DEFAULT_AVATAR); ?>
-        <div class="welcome-avatar-disc" id="hero-avatar-disc" style="width: 64px; height: 64px; min-width: 64px; border-radius: 50%; overflow: hidden; padding: 0; border: 2.5px solid #3B82F6; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.18);" title="Karakter: <?= e($heroChar['title']) ?>">
+        <div class="welcome-avatar-disc" id="hero-avatar-disc" style="width: 68px; height: 68px; min-width: 68px; border-radius: 50%; overflow: hidden; padding: 0; border: 2.5px solid var(--color-dark-outline); box-shadow: 0 4px 0 var(--color-dark-outline);" title="Karakter: <?= e($heroChar['title']) ?>">
           <img src="<?= e($heroChar['thumb']) ?>" alt="<?= e($heroChar['name']) ?>" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.outerHTML='<?= $heroChar['fallback_icon'] ?>';">
         </div>
         <div>
-          <h1 style="font-family: var(--font-heading); font-size: var(--fs-xl); color: #0F172A; margin-bottom: 2px;">
+          <h1 style="font-family: var(--font-heading); font-size: var(--fs-xl); font-weight: 800; color: var(--color-heading-navy); margin-bottom: 2px;">
             Halo, <?= e($profile['nickname']) ?>! 👋
           </h1>
-          <p style="font-size: var(--fs-xs); color: var(--text-muted); margin: 0;">
-            Karakter: <strong style="color: #1D4ED8;"><?= e($heroChar['title']) ?></strong> • Siap berpetualang?
+          <p style="font-size: var(--fs-xs); color: var(--text-muted); margin: 0; font-weight: 600;">
+            Karakter: <strong style="color: var(--color-primary);"><?= e($heroChar['title']) ?></strong> • Siap berpetualang?
           </p>
         </div>
       </div>
 
       <!-- Level & XP Progress Meter -->
       <div>
-        <div style="display: flex; align-items: center; justify-content: space-between; font-size: var(--fs-xs); font-weight: 700; color: #1E3A8A; margin-bottom: 6px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; font-size: var(--fs-xs); font-family: var(--font-heading); font-weight: 700; color: #312E81; margin-bottom: 6px;">
           <span>Level <?= (int)$levelInfo['level'] ?> • <?= e($levelInfo['name']) ?></span>
           <span style="color: var(--text-muted);"><?= (int)$levelInfo['total_xp'] ?> / <?= (int)$levelInfo['next_min_xp'] ?> XP</span>
         </div>
-        <div class="progress-bar-kid" style="height: 12px;">
-          <div class="progress-fill-kid" style="width: <?= (int)$levelInfo['progress_percent'] ?>%; background: linear-gradient(90deg, #3B82F6, #1D4ED8);"></div>
+        <div class="progress-bar-kid" style="height: 14px;">
+          <div class="progress-fill-kid" style="width: <?= (int)$levelInfo['progress_percent'] ?>%;"></div>
         </div>
       </div>
     </div>
@@ -51,13 +51,13 @@ require __DIR__ . '/../../layouts/header.php';
           <h2 style="font-family: var(--font-heading); font-size: var(--fs-lg); font-weight: 800; color: #78350F; margin-bottom: 4px;">
             <?= e($recommendedMission['title']) ?>
           </h2>
-          <p style="font-size: var(--fs-xs); color: #92400E; margin: 0; line-height: 1.4;">
+          <p style="font-size: var(--fs-xs); color: #92400E; margin: 0; line-height: 1.4; font-weight: 600;">
             <?= e($recommendedMission['subtitle']) ?>
           </p>
         </div>
 
         <div>
-          <a href="?page=mission&slug=<?= urlencode($recommendedMission['slug']) ?>" class="hero-cta-btn-pill shine-effect" id="btn-play-today" style="background: linear-gradient(135deg, #F59E0B, #D97706); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35); padding: 0.8rem 1.6rem; font-size: var(--fs-sm); white-space: nowrap;">
+          <a href="?page=mission&slug=<?= urlencode($recommendedMission['slug']) ?>" class="btn-kid btn-kid-secondary" id="btn-play-today" style="padding: 0.75rem 1.6rem; font-size: var(--fs-sm); white-space: nowrap;">
             <span>Mulai Misi</span>
             <span>➔</span>
           </a>
@@ -121,8 +121,8 @@ require __DIR__ . '/../../layouts/header.php';
         </a>
       </div>
 
-      <div style="background: #FFFFFF; border: 2px solid #E2E8F0; border-radius: 20px; padding: var(--space-5); box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);">
-        <div style="font-size: var(--fs-xs); color: var(--text-light); margin-bottom: var(--space-3); font-weight: 600;">
+      <div style="background: #FFFFFF; border: 2.5px solid var(--color-dark-outline); border-radius: 22px; padding: var(--space-5); box-shadow: 0 6px 0 var(--color-dark-outline);">
+        <div style="font-size: var(--fs-xs); color: var(--text-muted); margin-bottom: var(--space-3); font-weight: 700; font-family: var(--font-heading);">
           Jejak Keterampilan Belajar kamu terus berkembang:
         </div>
         <div style="display: flex; flex-direction: column; gap: var(--space-4);">
@@ -130,13 +130,13 @@ require __DIR__ . '/../../layouts/header.php';
             <div>
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <span style="font-size: 1.2rem;"><?= $sk['icon'] ?></span>
-                  <strong style="font-size: var(--fs-xs); color: #1E293B;"><?= e($sk['title']) ?></strong>
+                  <span style="font-size: 1.25rem;"><?= $sk['icon'] ?></span>
+                  <strong style="font-size: var(--fs-xs); font-family: var(--font-heading); color: #1E1B4B;"><?= e($sk['title']) ?></strong>
                 </div>
-                <span style="font-size: var(--fs-xs); font-weight: 800; color: #2563EB;"><?= (int)$sk['percent'] ?>%</span>
+                <span style="font-size: var(--fs-xs); font-family: var(--font-heading); font-weight: 800; color: var(--color-primary);"><?= (int)$sk['percent'] ?>%</span>
               </div>
-              <div class="progress-bar-kid" style="height: 8px;">
-                <div class="progress-fill-kid" style="width: <?= (int)$sk['percent'] ?>%; background: linear-gradient(90deg, #38BDF8, #2563EB);"></div>
+              <div class="progress-bar-kid" style="height: 10px;">
+                <div class="progress-fill-kid" style="width: <?= (int)$sk['percent'] ?>%;"></div>
               </div>
             </div>
           <?php endforeach; ?>

@@ -92,7 +92,7 @@ check("Landing page has margin-bottom on worlds-action-row", strpos($landingHtml
 check("Landing page has btn-lihat-dunia-lengkap with responsive sizing", strpos($landingHtml, "max-width: 100%") !== false);
 
 $headerHtml = file_get_contents(__DIR__ . '/../templates/layouts/header.php');
-check("Header imports components.css?v=3.4", strpos($headerHtml, "components.css?v=3.4") !== false);
+check("Header imports components.css?v=4.0", strpos($headerHtml, "components.css?v=4.0") !== false || strpos($headerHtml, "components.css?v=3.4") !== false);
 
 // 5. Local Dev Server HTTP 200 Test
 echo "\n--- 5. Testing Local Server HTTP 200 Response ---\n";

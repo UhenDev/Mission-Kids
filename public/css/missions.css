@@ -4,10 +4,10 @@
 
 .mission-shell {
   background: var(--bg-surface);
-  border: 3px solid var(--border-subtle);
-  border-radius: var(--radius-2xl);
+  border: 3px solid var(--color-dark-outline);
+  border-radius: 28px;
   overflow: hidden;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 9px 0 var(--color-dark-outline), 0 20px 36px rgba(124, 58, 237, 0.12);
   margin-top: var(--space-4);
   margin-bottom: var(--space-8);
 }
@@ -18,23 +18,24 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-4) var(--space-6);
-  background: var(--bg-surface-elevated);
-  border-bottom: 2px solid var(--border-subtle);
+  background: #FAF8FF;
+  border-bottom: 2.5px solid var(--color-dark-outline);
 }
 
 .mission-breadcrumbs {
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  font-family: var(--font-heading);
   font-size: var(--fs-sm);
   font-weight: 700;
-  color: var(--text-muted);
+  color: var(--color-dark-outline);
 }
 
 .mission-steps-stepper {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
 .step-node {
@@ -43,21 +44,25 @@
   gap: var(--space-1);
   font-family: var(--font-heading);
   font-size: var(--fs-xs);
-  font-weight: 700;
-  color: var(--text-light);
-  padding: 0.3rem 0.6rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  padding: 0.35rem 0.75rem;
   border-radius: var(--radius-pill);
+  border: 1.5px solid transparent;
   transition: all var(--transition-fast);
 }
 
 .step-node.active {
-  background-color: var(--color-primary);
+  background: linear-gradient(135deg, #7C3AED, #6366F1);
   color: #FFFFFF;
+  border-color: var(--color-dark-outline);
+  box-shadow: 0 2.5px 0 var(--color-dark-outline);
 }
 
 .step-node.done {
-  background-color: var(--color-accent-light);
-  color: var(--color-accent-hover);
+  background-color: #D1FAE5;
+  color: #065F46;
+  border-color: var(--color-dark-outline);
 }
 
 /* Mission Stages Display */

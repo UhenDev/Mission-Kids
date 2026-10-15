@@ -1,15 +1,21 @@
 /* ==========================================================================
    MISSION KIDS — Design System Tokens & Base Styles
-   Playful Precision Philosophy
+   Modern Playful Gamified UI + Neo-Brutalist Cards
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Nunito:wght@600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Nunito:wght@600;700;800;900&display=swap');
 
 :root {
-  /* Brand Core Palette */
-  --color-primary: #2563EB;
-  --color-primary-hover: #1D4ED8;
-  --color-primary-light: #EFF6FF;
+  /* Brand Core Palette: Playful Purple & Indigo */
+  --color-primary: #7C3AED;
+  --color-primary-hover: #6D28D9;
+  --color-primary-dark: #4C1D95;
+  --color-primary-light: #EDE9FE;
+  --color-primary-ultra-light: #F5F3FF;
+  --color-primary-gradient: linear-gradient(135deg, #8B5CF6 0%, #6366F1 50%, #4F46E5 100%);
+  --color-primary-candy: linear-gradient(135deg, #A855F7 0%, #6366F1 100%);
+
+  /* Vivid Game Accents */
   --color-secondary: #F59E0B;
   --color-secondary-hover: #D97706;
   --color-secondary-light: #FEF3C7;
@@ -18,28 +24,37 @@
   --color-accent-light: #D1FAE5;
   --color-coral: #EF4444;
   --color-coral-light: #FEE2E2;
+  --color-pink: #EC4899;
+  --color-pink-hover: #DB2777;
+  --color-pink-light: #FCE7F3;
+  --color-cyan: #06B6D4;
+  --color-cyan-hover: #0891B2;
+  --color-cyan-light: #CFFAFE;
+  --color-yellow: #FBBF24;
+  --color-yellow-light: #FEF9C3;
   --color-purple: #8B5CF6;
   --color-purple-light: #EDE9FE;
 
-  /* Reference Precision Palette */
-  --color-primary-blue: #1264F5;
-  --color-deep-blue: #1646A0;
-  --color-heading-navy: #173F86;
-  --color-body-text: #58779F;
-  --color-login-bg: #F3F8FF;
+  /* Reference Precision & Gamified Outline */
+  --color-dark-outline: #1E1B4B;
+  --color-dark-outline-subtle: #312E81;
+  --color-primary-blue: #3B82F6;
+  --color-deep-blue: #1E3A8A;
+  --color-heading-navy: #1E1B4B;
+  --color-body-text: #475569;
   --color-surface-white: #FFFFFF;
-  --color-border-blue: #D6E6FF;
-  --color-soft-blue: #EAF3FF;
-  --color-success-green: #20B879;
-  --color-error-red: #E5484D;
+  --color-border-blue: #C7D2FE;
+  --color-soft-blue: #EEF2FF;
+  --color-success-green: #10B981;
+  --color-error-red: #EF4444;
 
   /* Neutrals & Surfaces */
-  --bg-app: #F8FAFC;
+  --bg-app: #F6F4FE;
   --bg-surface: #FFFFFF;
-  --bg-surface-elevated: #F1F5F9;
+  --bg-surface-elevated: #FAF8FF;
   --border-subtle: #E2E8F0;
   --border-interactive: #CBD5E1;
-  --border-focus: #93C5FD;
+  --border-focus: #A78BFA;
   --text-main: #0F172A;
   --text-muted: #64748B;
   --text-light: #94A3B8;
@@ -55,6 +70,9 @@
   --world-thinking: #6366F1;
   --world-thinking-bg: #EEF2FF;
   --world-thinking-dark: #4338CA;
+  --world-space: #8B5CF6;
+  --world-space-bg: #F5F3FF;
+  --world-space-dark: #6D28D9;
 
   /* Typography */
   --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
@@ -84,25 +102,32 @@
   --space-16: 4rem;
 
   /* Radii */
-  --radius-sm: 0.5rem;
-  --radius-md: 0.875rem;
-  --radius-lg: 1.25rem;
-  --radius-xl: 1.75rem;
-  --radius-2xl: 2.25rem;
+  --radius-sm: 0.6rem;
+  --radius-md: 0.95rem;
+  --radius-lg: 1.35rem;
+  --radius-xl: 1.85rem;
+  --radius-2xl: 2.35rem;
   --radius-pill: 9999px;
 
-  /* Tactile Physical Shadows */
-  --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04);
-  --shadow-md: 0 6px 16px rgba(15, 23, 42, 0.08);
-  --shadow-lg: 0 12px 30px -4px rgba(15, 23, 42, 0.12);
-  --shadow-card: 0 8px 24px rgba(37, 99, 235, 0.06);
+  /* Neo-Brutalist Tactile Physical Shadows */
+  --shadow-hard-xs: 0 3px 0 var(--color-dark-outline);
+  --shadow-hard-sm: 0 4px 0 var(--color-dark-outline);
+  --shadow-hard-md: 0 6px 0 var(--color-dark-outline);
+  --shadow-hard-lg: 0 8px 0 var(--color-dark-outline);
+  --shadow-hard-xl: 0 12px 0 var(--color-dark-outline);
+
+  --shadow-sm: 0 2px 0 var(--color-dark-outline);
+  --shadow-md: 0 5px 0 var(--color-dark-outline);
+  --shadow-lg: 0 8px 0 var(--color-dark-outline), 0 16px 28px rgba(99, 102, 241, 0.12);
+  --shadow-card: 0 7px 0 var(--color-dark-outline), 0 14px 24px rgba(99, 102, 241, 0.1);
 
   /* Tactile Button Depths */
-  --btn-depth-primary: 0 5px 0 #1D4ED8;
-  --btn-depth-secondary: 0 5px 0 #D97706;
-  --btn-depth-accent: 0 5px 0 #047857;
-  --btn-depth-coral: 0 5px 0 #DC2626;
-  --btn-depth-purple: 0 5px 0 #6D28D9;
+  --btn-depth-primary: 0 5px 0 #312E81;
+  --btn-depth-secondary: 0 5px 0 #92400E;
+  --btn-depth-accent: 0 5px 0 #065F46;
+  --btn-depth-coral: 0 5px 0 #991B1B;
+  --btn-depth-purple: 0 5px 0 #4C1D95;
+  --btn-depth-pink: 0 5px 0 #9D174D;
   --btn-depth-active: 0 1px 0 transparent;
 
   /* Transitions */
@@ -124,12 +149,18 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Playful Whimsical Backdrop Canvas */
 body {
   font-family: var(--font-body);
   font-size: var(--fs-base);
   line-height: 1.6;
   color: var(--text-main);
   background-color: var(--bg-app);
+  background-image: 
+    radial-gradient(#E0E7FF 1.5px, transparent 1.5px),
+    radial-gradient(#DDD6FE 1.5px, #F6F4FE 1.5px);
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   display: flex;
@@ -143,8 +174,9 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   line-height: 1.25;
-  color: var(--text-main);
+  color: var(--color-heading-navy);
   font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 p {
@@ -158,7 +190,8 @@ a {
 
 :focus-visible {
   outline: 3px solid var(--color-primary);
-  outline-offset: 2px;
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
 }
 
 /* Layout Utilities */
@@ -174,15 +207,15 @@ a {
 
 @media (max-width: 640px) {
   .container {
-    padding-left: 0.85rem;
-    padding-right: 0.85rem;
+    padding-left: 0.95rem;
+    padding-right: 0.95rem;
   }
 }
 
 @media (max-width: 360px) {
   .container {
-    padding-left: 0.6rem;
-    padding-right: 0.6rem;
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
   }
 }
 
@@ -197,7 +230,9 @@ body.landing-guest-page .main-content {
   padding-bottom: 0;
 }
 
-/* Tactile 3D Buttons */
+/* ==========================================================================
+   Tactile 3D Gamified Buttons (Neo-Brutalist Interactive Physics)
+   ========================================================================== */
 .btn-kid {
   display: inline-flex;
   align-items: center;
@@ -206,18 +241,24 @@ body.landing-guest-page .main-content {
   padding: 0.8rem 1.6rem;
   font-family: var(--font-heading);
   font-size: var(--fs-md);
-  font-weight: 600;
+  font-weight: 700;
   border-radius: var(--radius-pill);
-  border: none;
+  border: 2.5px solid var(--color-dark-outline);
   cursor: pointer;
   text-decoration: none;
   user-select: none;
   touch-action: manipulation;
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
   min-height: 48px;
+  position: relative;
+  letter-spacing: 0.02em;
 }
 
-.btn-kid:active {
+.btn-kid:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.btn-kid:active:not(:disabled) {
   transform: translateY(4px);
 }
 
@@ -229,95 +270,222 @@ body.landing-guest-page .main-content {
 }
 
 .btn-kid-primary {
-  background-color: var(--color-primary);
-  color: var(--text-inverse);
-  box-shadow: var(--btn-depth-primary);
+  background: linear-gradient(135deg, #7C3AED 0%, #6366F1 100%);
+  color: #FFFFFF;
+  box-shadow: 0 5px 0 #312E81;
 }
 .btn-kid-primary:hover:not(:disabled) {
-  background-color: var(--color-primary-hover);
+  background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+  box-shadow: 0 7px 0 #312E81;
 }
 .btn-kid-primary:active:not(:disabled) {
-  box-shadow: var(--btn-depth-active);
+  box-shadow: 0 1px 0 #312E81;
 }
 
 .btn-kid-secondary {
-  background-color: var(--color-secondary);
-  color: var(--text-inverse);
-  box-shadow: var(--btn-depth-secondary);
+  background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+  color: #1E1B4B;
+  box-shadow: 0 5px 0 #92400E;
 }
 .btn-kid-secondary:hover:not(:disabled) {
-  background-color: var(--color-secondary-hover);
+  background: linear-gradient(135deg, #FDE047 0%, #F59E0B 100%);
+  box-shadow: 0 7px 0 #92400E;
 }
 .btn-kid-secondary:active:not(:disabled) {
-  box-shadow: var(--btn-depth-active);
+  box-shadow: 0 1px 0 #92400E;
 }
 
 .btn-kid-accent {
-  background-color: var(--color-accent);
-  color: var(--text-inverse);
-  box-shadow: var(--btn-depth-accent);
+  background: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+  color: #FFFFFF;
+  box-shadow: 0 5px 0 #065F46;
 }
 .btn-kid-accent:hover:not(:disabled) {
-  background-color: var(--color-accent-hover);
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  box-shadow: 0 7px 0 #065F46;
 }
 .btn-kid-accent:active:not(:disabled) {
-  box-shadow: var(--btn-depth-active);
+  box-shadow: 0 1px 0 #065F46;
 }
 
 .btn-kid-purple {
-  background-color: var(--color-purple);
-  color: var(--text-inverse);
-  box-shadow: var(--btn-depth-purple);
+  background: linear-gradient(135deg, #A855F7 0%, #7C3AED 100%);
+  color: #FFFFFF;
+  box-shadow: 0 5px 0 #4C1D95;
 }
 .btn-kid-purple:hover:not(:disabled) {
-  background-color: #7C3AED;
+  background: linear-gradient(135deg, #C084FC 0%, #9333EA 100%);
+  box-shadow: 0 7px 0 #4C1D95;
 }
 .btn-kid-purple:active:not(:disabled) {
-  box-shadow: var(--btn-depth-active);
+  box-shadow: 0 1px 0 #4C1D95;
+}
+
+.btn-kid-pink {
+  background: linear-gradient(135deg, #F472B6 0%, #EC4899 100%);
+  color: #FFFFFF;
+  box-shadow: 0 5px 0 #9D174D;
+}
+.btn-kid-pink:hover:not(:disabled) {
+  background: linear-gradient(135deg, #FB7185 0%, #DB2777 100%);
+  box-shadow: 0 7px 0 #9D174D;
+}
+.btn-kid-pink:active:not(:disabled) {
+  box-shadow: 0 1px 0 #9D174D;
 }
 
 .btn-kid-ghost {
-  background-color: var(--bg-surface);
-  color: var(--text-main);
-  border: 2px solid var(--border-interactive);
-  box-shadow: 0 4px 0 var(--border-interactive);
+  background-color: #FFFFFF;
+  color: var(--color-dark-outline);
+  border: 2.5px solid var(--color-dark-outline);
+  box-shadow: 0 5px 0 var(--color-dark-outline);
 }
 .btn-kid-ghost:hover:not(:disabled) {
-  background-color: var(--bg-surface-elevated);
+  background-color: #F5F3FF;
+  box-shadow: 0 7px 0 var(--color-dark-outline);
 }
 .btn-kid-ghost:active:not(:disabled) {
-  box-shadow: var(--btn-depth-active);
+  box-shadow: 0 1px 0 var(--color-dark-outline);
 }
 
-/* Pills & Tags */
+/* ==========================================================================
+   Neo-Brutalist Badges & Pills
+   ========================================================================== */
 .badge-pill {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
-  padding: 0.3rem 0.8rem;
+  gap: 6px;
+  padding: 0.35rem 0.9rem;
   border-radius: var(--radius-pill);
+  font-family: var(--font-heading);
   font-size: var(--fs-xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  border: 2px solid var(--color-dark-outline);
+  box-shadow: 0 2.5px 0 var(--color-dark-outline);
+  white-space: nowrap;
 }
 
 .badge-pill-primary {
-  background-color: var(--color-primary-light);
-  color: var(--color-primary);
+  background-color: #EDE9FE;
+  color: #5B21B6;
 }
 
 .badge-pill-secondary {
-  background-color: var(--color-secondary-light);
-  color: var(--color-secondary-hover);
+  background-color: #FEF3C7;
+  color: #92400E;
 }
 
 .badge-pill-accent {
-  background-color: var(--color-accent-light);
-  color: var(--color-accent-hover);
+  background-color: #D1FAE5;
+  color: #065F46;
 }
 
 .badge-pill-purple {
-  background-color: var(--color-purple-light);
-  color: var(--color-purple);
+  background-color: #F5F3FF;
+  color: #6D28D9;
+}
+
+.badge-pill-pink {
+  background-color: #FCE7F3;
+  color: #9D174D;
+}
+
+.badge-pill-cyan {
+  background-color: #CFFAFE;
+  color: #155E75;
+}
+
+/* ==========================================================================
+   Neo-Brutalist Cards
+   ========================================================================== */
+.card-kid {
+  background-color: #FFFFFF;
+  border: 2.5px solid var(--color-dark-outline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  box-shadow: 0 7px 0 var(--color-dark-outline), 0 14px 24px rgba(99, 102, 241, 0.08);
+  transition: transform var(--transition-bounce), box-shadow var(--transition-bounce), border-color var(--transition-fast);
+  position: relative;
+}
+
+.card-kid-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 0 var(--color-dark-outline), 0 20px 32px rgba(99, 102, 241, 0.16);
+}
+
+/* ==========================================================================
+   Candy-Striped Progress Bars
+   ========================================================================== */
+.progress-bar-kid {
+  width: 100%;
+  height: 16px;
+  background-color: #E0E7FF;
+  border: 2px solid var(--color-dark-outline);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-fill-kid {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(135deg, #7C3AED, #6366F1);
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  background-size: 20px 20px;
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.25) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.25) 75%,
+    transparent 75%,
+    transparent
+  );
+  animation: candyStripe 2s linear infinite;
+}
+
+.progress-fill-accent {
+  background-color: #10B981;
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.25) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.25) 75%,
+    transparent 75%,
+    transparent
+  );
+}
+
+.progress-fill-secondary {
+  background-color: #F59E0B;
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.25) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.25) 75%,
+    transparent 75%,
+    transparent
+  );
+}
+
+@keyframes candyStripe {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
