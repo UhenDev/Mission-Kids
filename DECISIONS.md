@@ -41,3 +41,25 @@
 - **Decision:** Implement a sticky bottom navigation bar (`.mobile-bottom-nav`) on screens `<= 768px` for primary student navigation, with MIKO floating safely above it (`bottom: 78px; right: 12px;`), and fluid clamp-based sizing on interactive game viewports.
 - **Context:** Children aged 7–12 frequently operate mobile phones and compact tablets using one or two thumbs. Top navigation links on small screens are cumbersome to reach, and fixed-pixel grids cause horizontal scrolling.
 - **Consequences:** Guarantees zero horizontal overflow, seamless one-thumb access to core screens, and fluid scaling of all 9 interactive mission canvases.
+
+---
+
+### ADR 007: Curriculum Expansion to 4 Worlds & 80 Missions
+- **Decision:** Expand the world architecture from 3 worlds to 4 worlds (*Number City*, *Discovery Lab*, *Thinking Lab*, and *Space Odyssey*) with 80 total missions (20 missions per world).
+- **Context:** Provides a comprehensive curriculum trajectory spanning basic numeracy to advanced space science and Cartesian rover navigation.
+- **Consequences:** Standardizes world mission distribution and enables long-term learning progression with consistent XP progression rules.
+
+---
+
+### ADR 008: Playful Neo-Brutalist Soft UI & 8 3D Human Avatars
+- **Decision:** Adopt a playful Neo-Brutalist design language (2.5px solid borders, 24px-28px rounded corners, hard 0 6px 0 shadow, 3D pushable buttons) and replace generic icons with 8 diverse 3D human kid characters (*Kian, Sera, Raka, Nara, Dika, Bayu, Fajar, Luna*) backed by an interactive podium preview stage.
+- **Context:** Children are energized by game-like, tactile visual feedback and relate more strongly to human peer characters with diverse interests than abstract animal icons.
+- **Consequences:** Creates an immersive gamified experience (*Logic Block Lab inspired*) with zero external bloated CSS libraries.
+
+---
+
+### ADR 009: Dokploy Container Volume Persistence & Dedicated Auth Footer
+- **Decision:** Mount SQLite database storage inside `/app/database` via persistent Docker volume on Dokploy/VPS, and implement a dedicated minimal footer for Login and Register pages.
+- **Context:** Multi-device login failed previously when ephemeral containers created isolated in-memory or unpersisted local SQLite databases on redeploy. Furthermore, copying navbar links into auth footers caused confusing duplicate navigation.
+- **Consequences:** Account registrations and mission progress persist permanently across deployments and devices. Auth pages maintain a clean, distraction-free aesthetic with official creator attribution *"Website ini dibuat oleh Hendrik Wildansyah."*
+

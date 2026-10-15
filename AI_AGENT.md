@@ -2,10 +2,14 @@
 *The Single Source of Truth for Autonomous AI Coding Agents*
 
 ## 1. Project Mission & Identity
-MISSION KIDS is an interactive, mission-based educational web platform for elementary school students (SD, ages 7–12).
-- **Core Mantra:** *Learn. Explore. Solve.*
-- **Learning Companion:** **MIKO** — Contextual socio-cognitive AI tutor delivering 3-tier scaffolding hints.
-- **Tech Stack:** Semantic HTML5, Vanilla CSS3 (Custom Design System), Modern Vanilla JavaScript (ES6+), PHP 8.2+ Native (MVC architecture), MySQL / MariaDB (PDO Prepared Statements) with automatic SQLite dev fallback.
+MISSION KIDS is an interactive, mission-based educational web platform for elementary school students (SD, ages 7–12), created by **Hendrik Wildansyah**.
+> *"Website ini dibuat oleh Hendrik Wildansyah."*
+- **Core Mantra:** *Learn. Explore. Solve. (Belajar • Bermain • Jadi Hebat)*
+- **Curriculum:** 4 Adventure Worlds (*Number City*, *Discovery Lab*, *Thinking Lab*, *Space Odyssey*) with 80 total missions (20 per world).
+- **Characters:** 8 3D Human Kid Avatars (*Kian, Sera, Raka, Nara, Dika, Bayu, Fajar, Luna*) with an interactive 3D preview podium stage.
+- **Learning Companion:** **MIKO** — Contextual socio-cognitive AI tutor delivering 3-tier scaffolding hints and spoken Indonesian voice TTS (pitch: 1.25, rate: 1.05).
+- **Tech Stack:** Semantic HTML5, Vanilla CSS3 (Neo-Brutalist Soft UI), Modern Vanilla JavaScript (ES6+), PHP 8.2+ Native (MVC architecture), SQLite 3 with automatic MySQL / MariaDB support, Docker persistent volume `/app/database`.
+
 
 ---
 

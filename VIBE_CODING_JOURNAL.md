@@ -1,7 +1,10 @@
 # JURNAL VIBE CODING — MISSION KIDS
 ## 5 Prompt Paling Representatif & Refleksi Pengembangan Berkelanjutan
+### Disusun oleh: Hendrik Wildansyah (Lead Developer & UI/UX Designer)
+> *"Website ini dibuat oleh Hendrik Wildansyah."*
 
-Dokumen ini mendokumentasikan 5 prompt terbaik yang merepresentasikan evolusi pembangunan platform **MISSION KIDS**, mulai dari formulasi ide & arsitektur, implementasi sistem misi, penanganan bug & audit teknis, hingga penghalusan antarmuka responsif ramah anak (*playful precision*).
+Dokumen ini mendokumentasikan evolusi pembangunan platform **MISSION KIDS**, mulai dari formulasi ide & arsitektur, implementasi sistem misi, penanganan bug & audit teknis, penghalusan antarmuka responsif ramah anak (*playful precision*), hingga ekspansi skala penuh menjadi 4 Dunia, 80 Misi, dan 8 Karakter Avatar 3D Anak Manusia.
+
 
 ---
 

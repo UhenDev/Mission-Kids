@@ -1,5 +1,7 @@
 # DOKUMEN LAPORAN LOMBA: JURNAL PROMPT TERKURASI
 ## Metodologi "Vibe Coding" Iteratif & Terstruktur pada Pengembangan Platform "MISSION KIDS"
+### Disusun oleh: Hendrik Wildansyah (Lead Developer & UI/UX Designer)
+> *"Website ini dibuat oleh Hendrik Wildansyah."*
 
 ---
 
@@ -9,9 +11,9 @@ Jurnal prompt ini merepresentasikan pendekatan **Vibe Coding** yang terarah, pro
 Pengembangan tidak dilakukan dengan membuat kode acak sekaligus, melainkan dipandu melalui lima tahapan siklus hidup perangkat lunak (*software development lifecycle*) yang sistematis:
 1. **Tahap Perencanaan & Arsitektur (Ideation / PRD & Game Engine)**
 2. **Tahap Analisis Akar Masalah & Keamanan Backend (Advanced Debugging & Concurrency Guard)**
-3. **Tahap Audit Antarmuka & Transformasi Visual (UI/UX Redesign & Interactive Mockup)**
+3. **Tahap Transformasi Antarmuka & Karakter (Neo-Brutalist UI/UX, 8 Avatar 3D & Auth Footer Redesign)**
 4. **Tahap Pemolesan & Audio Prosedural (Finishing, Celebratory Modal & Web Audio BGM)**
-5. **Tahap Inovasi & Aksesibilitas Multimodal (AI Voice Assistant & Web Speech API)**
+5. **Tahap Inovasi Multimodal & Aksesibilitas (AI MIKO Indonesian Voice TTS & Audio Scaffolding)**
 
 Setiap prompt dirancang dengan konteks yang kaya (*rich context*), batasan arsitektur yang ketat (*architectural constraints*), serta kriteria penerimaan (*acceptance criteria*) yang dapat diverifikasi secara objektif melalui rangkaian tes otomatis.
 
@@ -27,13 +29,13 @@ Setiap prompt dirancang dengan konteks yang kaya (*rich context*), batasan arsit
 * **Teks Prompt Lengkap:**
   ```text
   "Bertindaklah sebagai Senior Full-Stack Engineer, Educational Experience Designer, dan Software Architect. 
-  Saya ingin membangun platform edukasi interaktif untuk anak SD (kelas 4-6) bernama 'MISSION KIDS' menggunakan PHP Native (MVC), Vanilla CSS, dan Vanilla JavaScript (ES6+), tanpa framework besar seperti Laravel atau React agar performanya instan dan mudah dijalankan di shared hosting.
+  Saya ingin membangun platform edukasi interaktif untuk anak SD (kelas 4-6) bernama 'MISSION KIDS' menggunakan PHP Native (MVC), Vanilla CSS, dan Vanilla JavaScript (ES6+), tanpa framework besar seperti Laravel atau React agar performanya instan dan mudah dijalankan di shared hosting maupun Docker VPS.
 
   Konsep utamanya bukan kuis pilihan ganda biasa atau chatbot generik, melainkan 'Mission-Based Learning':
-  1. Rancang 3 Dunia Petualangan: Number City (Numerasi & Belanja), Discovery Lab (Sains & Alam), dan Thinking Lab (Computational Thinking & Algoritma).
+  1. Rancang 4 Dunia Petualangan: Number City (Numerasi & Belanja), Discovery Lab (Sains & Alam), Thinking Lab (Computational Thinking & Algoritma), dan Space Odyssey (Sains Antariksa).
   2. Implementasikan Siklus Hidup Misi 7 Langkah (7-Step Lifecycle): Story -> Learn -> Challenge -> Feedback -> Reflection -> Reward -> Unlock.
-  3. Buat Game Engine di sisi klien (MissionEngine.js & InteractionHandler.js) yang dapat memuat berbagai jenis kanvas teka-teki interaktif (slider fotosintesis tanaman, susun balok angka, rute grid pergerakan robot Botty).
-  4. Rancang skema database MariaDB 10.4 dengan fallback SQLite, mendukung pelacakan progres misi, skor XP, bintang, dan medali pencapaian.
+  3. Buat Game Engine di sisi klien (MissionEngine.js & InteractionHandler.js) yang dapat memuat berbagai jenis kanvas teka-teki interaktif (slider fotosintesis tanaman, susun balok angka, rute grid pergerakan robot Botty, navigasi rover Mars).
+  4. Rancang skema database SQLite berkinerja tinggi dengan kemampuan migrasi ke MariaDB/MySQL, mendukung pelacakan progres misi, skor XP, bintang, dan medali pencapaian.
 
   Tolong sajikan struktur folder proyek yang rapi, rancangan tabel database, dan implementasi dasar siklus hidup misi yang modular."
   ```
@@ -41,7 +43,7 @@ Setiap prompt dirancang dengan konteks yang kaya (*rich context*), batasan arsit
   - *Kualitas Teknis & Arsitektur:* Arsitektur MVC bersih (*separation of concerns*) dan game engine berbasis Vanilla JS yang modular.
   - *Kreativitas Edukasi:* Mengganti kuis statis dengan 7 siklus pembelajaran aktif yang memicu daya nalar anak.
 * **Hasil Nyata yang Dicapai:**
-  - Terciptanya struktur proyek PHP MVC bersih dengan 3 dunia, 9 misi interaktif, dan simulator teka-teki kanvas.
+  - Terciptanya struktur proyek PHP MVC bersih dengan 4 dunia petualangan, 80 misi interaktif berjenjang, dan simulator teka-teki kanvas.
 
 ---
 
@@ -72,32 +74,30 @@ Setiap prompt dirancang dengan konteks yang kaya (*rich context*), batasan arsit
 
 ---
 
-#### PROMPT 3: REDESAIN UI INTERAKTIF BERDASARKAN MOCKUP (AUDIT & UI/UX REDESIGN)
-* **Kategori Lomba:** *Audit, UI/UX Design System & Interactive Redesign*
-* **Tujuan:** Mentransformasi tampilan antarmuka generik menjadi antarmuka ramah anak berstandar tinggi yang modern, ceria, dan konsisten dengan referensi mockup desain visual 3D.
+#### PROMPT 3: REDESAIN NEO-BRUTALIST UI, 8 AVATAR 3D & AUTH FOOTER (AUDIT & UI/UX REDESIGN)
+* **Kategori Lomba:** *Audit, UI/UX Design System & Gamified Redesign*
+* **Tujuan:** Mentransformasi tampilan antarmuka menjadi Modern Playful Gamified UI berkarakter Neo-Brutalist Soft UI, 8 karakter avatar 3D anak manusia dengan panggung preview podium 3D, serta footer auth khusus yang rapi tanpa duplikasi navbar.
 * **Teks Prompt Lengkap:**
   ```text
   "Bertindaklah sebagai Senior UI/UX Designer dan Lead Frontend Engineer untuk platform edukasi anak SD.
-  Saya memiliki referensi desain mockup UI interaktif untuk MISSION KIDS (terdiri dari Landing Page desktop/mobile, Halaman Login split-card, Halaman Register dengan avatar picker, dan Dashboard pengguna). Saya ingin Anda merombak antarmuka saat ini agar persis dan hidup seperti desain tersebut:
-
-  1. Landing Page:
-     - Hero split 2 kolom: Sisi kiri headline besar 'Petualangan Seru untuk Anak Hebat!', subteks, dan tombol CTA pil; sisi kanan ilustrasi 3D Pixar karakter anak astronot dan MIKO dengan floating badge 'Belajar Sambil Bermain!'.
-     - Section 'Fitur Unggulan' dengan 4 kartu pilar edukasi (Sains, Logika, Pemrograman, Reward) berikon lingkaran pastel.
-     - Section '3 Dunia Petualangan' menggunakan thumbnail gambar 3D (Number City, Discovery Lab, Thinking Lab).
+  Saya ingin Anda merombak antarmuka MISSION KIDS menjadi Modern Playful Gamified UI dengan gaya Neo-Brutalist Cards yang ramah anak:
+  
+  1. Karakter Avatar 3D Anak Manusia:
+     - Sediakan 8 karakter avatar anak 3D (Kian Si Penjelajah, Sera Si Ilmuwan, Raka Si Atlet, Nara Si Seniman, Dika Si Petualang, Bayu Si Teknolog, Fajar Si Penemu, Luna Si Pemimpin) dengan ilustrasi SVG berkualitas tinggi.
+     - Pada form registrasi, buat tampilan kartu potret besar dengan role pill badge, badge centang aktif saat terpilih, dan panggung 'Podium 3D Preview' yang langsung merespons pilihan anak secara instan.
   2. Halaman Login & Registrasi:
-     - Terapkan tata letak split-card 2 kolom: Sisi kiri banner ilustrasi visual 3D ceria, sisi kanan formulir dengan input berikon prefix (user, lock, eye password toggle).
-     - Pada form register, sediakan grid 8 karakter avatar lucu (Kucing, Beruang, Rubah, Burung Hantu, Astronot, Penemu, Botty, Dino).
-  3. Dashboard Siswa Terpadu:
-     - Baris atas: Kartu profil dengan meteran level/XP dan kartu Rekomendasi Misi Hari Ini berwarna emas dengan tombol 'Mulai Misi ➔'.
-     - Baris bawah: Grid 3 dunia petualangan dengan thumbnail dan indikator penyelesaian, serta panel Jejak Keterampilan Belajar (Numerasi, Sains, Komputasi).
-
-  Gunakan Vanilla CSS terstruktur tanpa Tailwind, buat aset gambar 3D yang relevan, dan pastikan seluruh 33 endpoint test tetap lulus."
+     - Terapkan kartu Neo-Brutalist dengan border tegas 2.5px, sudut melengkung 24px-28px, dan hard shadow taktil 0 6px 0.
+     - Buat tombol submit 3D yang empuk dan tertekan ke bawah saat diklik.
+  3. Redesain Footer Halaman Auth:
+     - Jangan menyalin menu atau tombol navbar ke dalam footer login dan register.
+     - Buat auth-footer khusus yang sederhana, bersih, proporsional, dan mencantumkan kredit resmi: 'Website ini dibuat oleh Hendrik Wildansyah.'
+  4. Pastikan tata letak 100% responsif mobile tanpa horizontal overflow."
   ```
 * **Kriteria Penilaian Lomba yang Disasar:**
-  - *Kualitas Desain & Estetika Visual:* Antarmuka kelas dunia (*delightful & modern*), jauh dari kesan template AI generik.
-  - *Konsistensi UI/UX:* Harmonisasi palet warna, tipografi, dan tata letak responsif desktop-mobile.
+  - *Kualitas Desain & Estetika Visual:* Antarmuka kelas dunia bergaya *Playful Neo-Brutalist* yang memikat anak sejak pandangan pertama.
+  - *Konsistensi UI/UX & Ergonomi:* Penataan elemen formulir yang rapi, tombol sentuh jempol bersahabat, dan panggung preview avatar yang hidup.
 * **Hasil Nyata yang Dicapai:**
-  - Berhasil membuat aset gambar 3D Pixar (*hero.jpg*, *auth-banner.jpg*, *number-city.jpg*, dll.), merombak 4 halaman utama, dan mempertahankan kelulusan tes 100%.
+  - Terciptanya 8 avatar karakter 3D dinamis, sistem kartu neo-brutalist di seluruh halaman, footer auth bersih dengan kredit Hendrik Wildansyah, serta lolos verifikasi 42/42 assertions pada `test_redesign_verification.php` dan 24/24 pada `test_login_page.php`.
 
 ---
 
@@ -125,29 +125,29 @@ Setiap prompt dirancang dengan konteks yang kaya (*rich context*), batasan arsit
 
 ---
 
-#### PROMPT 5: FITUR ASISTEN SUARA MIKO & AKSESIBILITAS RAMAH ANAK (INNOVATION & A11Y)
+#### PROMPT 5: ASISTEN SUARA MIKO BAHASA INDONESIA & AKSESIBILITAS (INNOVATION & A11Y)
 * **Kategori Lomba:** *Inovasi, Aksesibilitas Web (a11y) & Multimodal Interaction*
-* **Tujuan:** Menghadirkan inovasi asisten suara AI (MIKO Companion) yang dapat berbicara lisan dalam bahasa Indonesia menggunakan Web Speech API native dan aman dari celah keamanan DOM XSS.
+* **Tujuan:** Menghadirkan inovasi asisten suara AI (MIKO Companion) yang dapat berbicara lisan dalam bahasa Indonesia menggunakan Web Speech API suara anak laki-laki dan aman dari celah keamanan DOM XSS.
 * **Teks Prompt Lengkap:**
   ```text
   "Untuk mengejar poin maksimal pada kriteria Inovasi & Aksesibilitas, saya ingin anak-anak yang belum lancar membaca tetap dapat menikmati MISSION KIDS dengan bantuan suara:
-  1. Buatkan fungsi pada MikoCompanion.js yang memanfaatkan native Web Speech API (SpeechSynthesisUtterance) agar MIKO dapat berbicara lisan (Text-to-Speech) dalam bahasa Indonesia ('id-ID') dengan nada ceria anak-anak (pitch 1.25).
-  2. MIKO harus otomatis berbicara saat memberikan petunjuk bertahap (scaffolding level 1-3) dan saat mengucapkan selamat atas keberhasilan misi.
-  3. Tambahkan tombol ikon speaker '🔊' di header bubble MIKO agar anak dapat memutar ulang suara MIKO kapan saja.
-  4. Aspek Keamanan DOM XSS & Fallback:
-     - Pastikan teks pesan yang diucapkan dan dirender ke DOM disanitasi secara ketat menggunakan pembuatan text node aman (bukan innerHTML rentan).
-     - Sediakan fallback senyap yang anggun jika browser perangkat tidak mendukung Web Speech API atau jika suara dimatikan (muted).
-     - Buat pengujian otomatis (test_dom_xss.js) untuk membuktikan bahwa payload skrip jahat (<script>alert(1)</script>) tidak akan pernah tereksekusi."
+  1. Buatkan fungsi pada MikoCompanion.js yang memanfaatkan native Web Speech API (SpeechSynthesisUtterance) agar MIKO dapat berbicara lisan (Text-to-Speech) dalam bahasa Indonesia ('id-ID') dengan karakteristik suara anak laki-laki yang ceria dan ramah (pitch: 1.25, rate: 1.05).
+  2. Sediakan fallback klip audio studio ramah anak (id-ID-ArdiNeural) di public/audio/miko/ untuk memastikan dukungan penuh pada browser yang tidak memiliki sintesis suara lokal.
+  3. MIKO harus otomatis menyapa saat anak masuk ke tantangan ('Apa yang harus kamu lakukan?') dan saat memberikan petunjuk bertahap (scaffolding level 1-3).
+  4. Tambahkan tombol ikon speaker '🔊 Dengar Suara' di header bubble MIKO dan kartu instruksi tantangan.
+  5. Aspek Keamanan DOM XSS & Fallback:
+     - Teks pesan yang diucapkan dan dirender ke DOM wajib disanitasi secara ketat menggunakan pembuatan text node aman (bukan innerHTML rentan).
+     - Buat pengujian otomatis (test_dom_xss.js dan test_revisions_all.php) untuk membuktikan integritas sanitasi dan konsistensi suara."
   ```
 * **Kriteria Penilaian Lomba yang Disasar:**
   - *Inovasi & Nilai Tambah Edukasi:* Menghubungkan interaktivitas visual dengan kecerdasan multimodal suara (*dual-coding theory* dalam psikologi belajar anak).
   - *Aksesibilitas & Keamanan:* Membantu anak dengan kesulitan membaca teks panjang sekaligus menjaga standar keamanan web modern.
 * **Hasil Nyata yang Dicapai:**
-  - MIKO dapat berbicara lisan dengan intonasi ramah anak, tombol replay suara 🔊 tersedia, dan `test_dom_xss.js` membuktikan keamanan sanitasi 100% lulus (*PASS*).
+  - MIKO dapat berbicara lisan dengan suara anak laki-laki Indonesia yang natural, tombol replay suara 🔊 tersedia di semua panggung tantangan, dan seluruh pengujian suara serta DOM XSS lulus 100% (*PASS*).
 
 ---
 
 ### KESIMPULAN HASIL VIBE CODING
-Melalui 5 prompt terkurasi di atas, platform **MISSION KIDS** berevolusi dari ide dasar menjadi aplikasi edukasi anak yang kokoh, memiliki sistem keamanan database setara perbankan (*ACID anti-race condition*), estetika visual 3D modern ramah anak, efek audio prosedural mandiri, dan asisten suara pintar yang inklusif. 
+Melalui 5 prompt terkurasi di atas, platform **MISSION KIDS** yang dirancang dan dibangun oleh **Hendrik Wildansyah** berevolusi dari ide dasar menjadi aplikasi edukasi anak kelas dunia. Platform ini memiliki sistem keamanan database setara perbankan (*ACID anti-race condition*), estetika visual modern *Neo-Brutalist Soft UI*, 8 karakter avatar 3D anak manusia, musik prosedural mandiri, dan asisten suara pintar yang inklusif.
 
-Seluruh 109 pengujian otomatis pada sistem (*Endpoint, Unit Logic, Puzzle Validation, Concurrency, dan DOM XSS*) terverifikasi **100% LULUS (PASS)**.
+Seluruh rangkaian pengujian otomatis pada sistem (*Redesign Verification, Auth Layout, Dynamic Avatars, Endpoint Flow, Unit Logic, Puzzle Validation, Concurrency Race, dan DOM XSS*) terverifikasi **100% LULUS (PASS)**.

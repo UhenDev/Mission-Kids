@@ -39,23 +39,22 @@ Setiap kode yang dihasilkan oleh AI Agent wajib mematuhi batasan teknologi bersi
 ### 3. Arsitektur & Fitur Utama (Core Features)
 
 1. **Halaman Utama (Landing Page):**
-   - Hero split 2 kolom: Headline berenergi tinggi, tombol CTA berbentuk pil, dan ilustrasi 3D Pixar karakter anak astronot bersama MIKO di pulau melayang.
+   - Hero modern dengan headline ramah anak, tombol CTA bermain, dan ilustrasi petualangan bersama MIKO.
    - Section **Fitur Unggulan**: Eksperimen Sains, Logika & Pola, Pemrograman Dasar, dan Reward & Pencapaian.
-   - Section **3 Dunia Petualangan**: Thumbnail 3D untuk *Number City*, *Discovery Lab*, dan *Thinking Lab*.
-2. **3 Dunia Petualangan & 9 Misi Pembelajaran Kontekstual:**
-   - **Dunia 1: Number City (Numerasi & Belanja)**
-     - *Misi 1 (Toko Kue):* Menghitung total belanja donat dan uang kembalian kasir.
-     - *Misi 2 (Jembatan Angka):* Melengkapi balok aritmetika kelipatan yang hilang.
-     - *Misi 3 (Kota Pola):* Memecahkan teka-teki urutan kristal warna di lampu jalan.
-   - **Dunia 2: Discovery Lab (Sains & Alam)**
-     - *Misi 4 (Tanaman Layu):* Mengatur slider air dan sinar matahari untuk fotosintesis optimal.
-     - *Misi 5 (Misteri Bayangan):* Mengatur jarak lampu senter untuk mengubah skala bayangan panggung.
-     - *Misi 6 (Perjalanan Air):* Mengurutkan tahapan siklus hidrologi (evaporasi, kondensasi, presipitasi).
-   - **Dunia 3: Thinking Lab (Computational Thinking & Algoritma)**
-     - *Misi 7 (Robot Pulang):* Menyusun rute instruksi arah agar Robot Botty menghindari rintangan batu.
-     - *Misi 8 (Jalan Rahasia):* Logika percabangan/kondisional memilih jalur aman.
-     - *Misi 9 (Robot Mengulang):* Konsep *looping* efisien untuk melompat dan maju.
-3. **Siklus Hidup Misi 7 Langkah (7-Step Mission Lifecycle):**
+   - Section **4 Dunia Petualangan**: Thumbnail visual untuk *Number City*, *Discovery Lab*, *Thinking Lab*, dan *Space Odyssey*.
+2. **4 Dunia Petualangan & 80 Misi Pembelajaran Terstruktur:**
+   - **Dunia 1: Number City (Numerasi & Belanja) — 20 Misi**
+     - Skenario belanja toko kue, pecahan uang kembalian, deret aritmetika jembatan angka, lampu kristal pola, dan estimasi hitungan.
+   - **Dunia 2: Discovery Lab (Sains & Alam) — 20 Misi**
+     - Eksperimen fotosintesis bunga matahari, optika bayangan panggung, siklus air hidrologi, massa benda, dan suhu.
+   - **Dunia 3: Thinking Lab (Computational Thinking & Algoritma) — 20 Misi**
+     - Navigasi sekuensial robot Botty, percabangan kondisional IF-ELSE, optimasi loop pengulangan, dan algoritma pengurutan.
+   - **Dunia 4: Space Odyssey (Sains Antariksa & Navigasi) — 20 Misi**
+     - Kalibrasi sudut roket angkasa, koordinat rasi bintang Kartesius, navigasi wahana rover Mars, dan eksplorasi stasiun orbit.
+3. **8 Karakter Avatar 3D Anak Manusia & Podium Preview:**
+   - Pilihan 8 karakter anak manusia berdaya inspiratif (*Kian, Sera, Raka, Nara, Dika, Bayu, Fajar, Luna*).
+   - Tampilan form registrasi dilengkapi kartu potret besar, badge centang aktif, dan panggung podium 3D interaktif yang langsung merespons pilihan avatar.
+4. **Siklus Hidup Misi 7 Langkah (7-Step Mission Lifecycle):**
    - *1. Story:* Skenario masalah kontekstual yang dihadapi.
    - *2. Learn:* Rahasia konsep dan tujuan pembelajaran.
    - *3. Challenge:* Arena interaktif dengan kanvas teka-teki dan panel aksi anak.
@@ -63,18 +62,20 @@ Setiap kode yang dihasilkan oleh AI Agent wajib mematuhi batasan teknologi bersi
    - *5. Reflection:* Pertanyaan refleksi esensial untuk menguji pemahaman mendalam.
    - *6. Reward:* Penghargaan bintang (1–3 ⭐), rincian XP, dan animasi bintang berjenjang.
    - *7. Unlock:* Pembukaan node misi berikutnya di peta dunia secara otomatis.
-4. **Sahabat Cerdas AI MIKO (AI Companion):**
+5. **Sahabat Cerdas AI MIKO Multimodal (AI Companion):**
    - Bantuan berjenjang (*Scaffolding 3-Tier Hints*): Level 1 (Pertanyaan pemantik), Level 2 (Petunjuk fokus), Level 3 (Langkah konkret tanpa membocorkan jawaban).
+   - Suara lisan (*Text-to-Speech*) berbahasa Indonesia dengan nada ramah anak laki-laki (pitch 1.25, rate 1.05) + Fallback Audio Studio ArdiNeural.
    - Posisi *dock* samping atas (*dock-side-top*) saat misi berlangsung agar tidak menutupi arena teka-teki.
-   - Suara lisan (*Text-to-Speech*) berbahasa Indonesia dengan tombol dengar 🔊.
-5. **Dashboard Siswa Terpadu:**
+   - Panduan konkret di setiap panggung tantangan ("Apa yang harus kamu lakukan?").
+6. **Dashboard Siswa Terpadu:**
    - Kartu profil dengan bilah level dan progres XP visual.
    - Rekomendasi Misi Hari Ini dengan tombol akses instan.
-   - Status penyelesaian 3 dunia petualangan dengan thumbnail 3D.
+   - Status penyelesaian 4 dunia petualangan dengan kartu neo-brutalist.
    - Bilah jejak keterampilan (*Numerasi*, *Sains*, dan *Pola & Komputasi*).
-6. **Autentikasi & Gamifikasi Anti-Race Condition:**
-   - Halaman Login & Registrasi berdesain kartu terbelah (*split-card*) dengan 8 pilihan avatar karakter.
-   - Transaksi database bergaransi idempotensi (anti-duplikasi reward, proteksi replay abuse maksimal 3x per hari).
+7. **Autentikasi Bersih & Gamifikasi Anti-Race Condition:**
+   - Halaman Login & Registrasi berdesain Neo-Brutalist dengan footer khusus auth yang rapi tanpa duplikasi navbar, menampilkan kredit *"Website ini dibuat oleh Hendrik Wildansyah."*
+   - Transaksi database bergaransi idempotensi (anti-duplikasi reward, proteksi replay abuse maksimal 3x per hari, persistensi multi-perangkat via Docker volume).
+
 
 ---
 

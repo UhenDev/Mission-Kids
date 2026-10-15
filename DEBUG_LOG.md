@@ -106,5 +106,33 @@
 - **Validation:** Balon percakapan dapat dibuka dan ditutup dengan responsif baik melalui avatar MIKO maupun tombol silang.
 - **Status:** RESOLVED.
 
+---
+
+### Issue #010: Dokploy SQLite Database Table Not Found & Ephemeral Containers
+- **Date:** 2026-10-14
+- **Symptom:** `PDOException: SQLSTATE[HY000]: General error: 1 no such table: worlds` saat deployment berjalan di Dokploy atau ketika container baru dibuat. Pengguna juga melaporkan akun yang dibuat di Android tidak bisa login di desktop karena data tersimpan di container berbeda.
+- **Root Cause:**
+  1. File database SQLite dibuat secara dinamis di direktori root aplikasi tanpa mount volume persisten di Dokploy, sehingga setiap redeploy membuat container baru dengan SQLite kosong.
+  2. Saat file SQLite baru terbentuk, tabel `worlds` belum diinisialisasi otomatis secara idempotent.
+- **Solution:**
+  1. Mengarahkan direktori SQLite ke path persisten `/app/database` dan mendokumentasikan volume mount di `docker-compose.yml`.
+  2. Menambahkan skrip inisialisasi idempotent di `Database.php` yang otomatis mengeksekusi `schema.sql` dan `seeds.sql` jika tabel inti belum ada saat koneksi pertama.
+- **Validation:** `test_mobile_and_db_init.php` berhasil memverifikasi pembuatan tabel otomatis dan persistensi data.
+- **Status:** RESOLVED.
+
+---
+
+### Issue #011: Auth Pages (Login & Register) Navbar Duplication in Footer
+- **Date:** 2026-10-15
+- **Symptom:** Footer pada halaman Login dan Register menampilkan menu navigasi dan tombol CTA yang identik dengan navbar, membingungkan pengguna dan membuat tata letak formulir tertutup.
+- **Root Cause:** Template `templates/layouts/footer.php` merender tautan navigasi global secara default untuk semua halaman tanpa membedakan konteks autentikasi.
+- **Solution:**
+  1. Menambahkan deteksi halaman auth (`$isAuthPage = in_array($currentPage, ['login', 'register']);`) di `footer.php`.
+  2. Merender kontainer khusus `.auth-footer` yang bersih, proporsional, tanpa duplikasi tautan menu, dengan kredit resmi *"Website ini dibuat oleh Hendrik Wildansyah."*
+  3. Memperbarui `components.css` dengan styling neo-brutalist untuk form login dan registrasi, termasuk kartu potret 8 karakter avatar 3D dan panggung podium preview.
+- **Validation:** `test_login_page.php` lulus 24/24 assertions dan `test_redesign_verification.php` lulus 42/42 assertions.
+- **Status:** RESOLVED.
+
+
 
 
