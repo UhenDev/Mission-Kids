@@ -1,10 +1,13 @@
 <?php
 /**
  * MISSION KIDS — Database Connection Factory
- * Provides PDO connection with automatic MySQL -> SQLite fallback.
+ * Provides PDO connection with automatic MySQL -> SQLite fallback
+ * and auto-bootstraps schema & initial seed data if not yet present.
  */
 
 declare(strict_types=1);
+
+require_once __DIR__ . '/../database/DatabaseBootstrapper.php';
 
 class Database
 {
@@ -39,6 +42,7 @@ class Database
 
             self::$instance = new PDO($dsn, $dbConfig['username'], $dbConfig['password'], $options);
             self::$driverUsed = 'mysql';
+            self::ensureSchemaInitialized(self::$instance, self::$driverUsed);
             return self::$instance;
         } catch (PDOException $e) {
             // Check if error is unknown database (1049) -> try to auto-create
@@ -50,6 +54,7 @@ class Database
                     
                     self::$instance = new PDO($dsn, $dbConfig['username'], $dbConfig['password'], $options);
                     self::$driverUsed = 'mysql';
+                    self::ensureSchemaInitialized(self::$instance, self::$driverUsed);
                     return self::$instance;
                 } catch (Exception $inner) {
                     // Fall through to SQLite
@@ -69,8 +74,30 @@ class Database
             ]);
             self::$instance->exec('PRAGMA foreign_keys = ON;');
             self::$driverUsed = 'sqlite';
+            self::ensureSchemaInitialized(self::$instance, self::$driverUsed);
             return self::$instance;
         }
+    }
+
+    public static function ensureSchemaInitialized(PDO $pdo, string $driver): void
+    {
+        static $checked = false;
+        if ($checked) {
+            return;
+        }
+
+        try {
+            $count = $pdo->query("SELECT COUNT(*) FROM worlds")->fetchColumn();
+            if ($count !== false && (int)$count > 0) {
+                $checked = true;
+                return;
+            }
+        } catch (Throwable $e) {
+            // Table doesn't exist yet, proceed to auto-migrate
+        }
+
+        DatabaseBootstrapper::run($pdo, $driver);
+        $checked = true;
     }
 
     public static function getDriverUsed(): string

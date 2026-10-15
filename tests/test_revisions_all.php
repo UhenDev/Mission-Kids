@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/config/database.php';
+require_once dirname(__DIR__) . '/config/database.php';
 
 $pdo = Database::getConnection();
 
@@ -67,8 +67,8 @@ function makeReq(string $url, string $method = 'GET', $data = null): array {
 // ---------------------------------------------------------------------------
 echo "--- 1. Miko Voice Restoration & Interaction Verification ---\n";
 
-$companionJs = file_get_contents(__DIR__ . '/public/js/engine/MikoCompanion.js');
-$landingPhp = file_get_contents(__DIR__ . '/templates/pages/landing.php');
+$companionJs = file_get_contents(dirname(__DIR__) . '/public/js/engine/MikoCompanion.js');
+$landingPhp = file_get_contents(dirname(__DIR__) . '/templates/pages/landing.php');
 
 check("MikoCompanion.js configures cute boy pitch: 1.25", strpos($companionJs, 'pitch: 1.25') !== false);
 check("MikoCompanion.js configures lively rate: 1.05", strpos($companionJs, 'rate: 1.05') !== false);
@@ -85,7 +85,7 @@ $audioFiles = [
     'guide_roket_angkasa.mp3'
 ];
 foreach ($audioFiles as $af) {
-    $fullPath = __DIR__ . '/public/audio/miko/' . $af;
+    $fullPath = dirname(__DIR__) . '/public/audio/miko/' . $af;
     check("Audio clip '{$af}' exists on disk with valid size", file_exists($fullPath) && filesize($fullPath) > 5000);
 }
 

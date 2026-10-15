@@ -334,8 +334,8 @@ require __DIR__ . '/../layouts/header.php';
       </div>
 
       <!-- Single Primary Action Button: Lihat Dunia Lengkap -->
-      <div class="worlds-action-row" style="text-align: center; margin-top: var(--space-6);">
-        <a href="?page=register" class="btn-kid btn-kid-primary btn-kid-lg btn-single-world-cta" id="btn-lihat-dunia-lengkap" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 0.95rem 2.4rem; font-size: var(--fs-md); font-weight: 800; border-radius: var(--radius-pill); box-shadow: 0 10px 25px -4px rgba(37, 99, 235, 0.4); text-decoration: none;">
+      <div class="worlds-action-row" style="text-align: center; margin-top: var(--space-6); margin-bottom: 2.25rem;">
+        <a href="?page=register" class="btn-kid btn-kid-primary btn-kid-lg btn-single-world-cta" id="btn-lihat-dunia-lengkap" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 0.95rem 2.4rem; font-size: var(--fs-md); font-weight: 800; border-radius: var(--radius-pill); box-shadow: 0 10px 25px -4px rgba(37, 99, 235, 0.4); text-decoration: none; max-width: 100%; box-sizing: border-box;">
           <span style="font-size: 1.25rem;">🗺️</span>
           <span>Lihat Dunia Lengkap</span>
           <span aria-hidden="true" style="font-size: 1.1rem; transition: transform 0.2s ease;">➔</span>

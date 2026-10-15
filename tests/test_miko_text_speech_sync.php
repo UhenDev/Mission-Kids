@@ -69,7 +69,7 @@ check("Miko voice engine binds dynamic rate", strpos($html, 'window.MIKO_VOICE_C
 // ---------------------------------------------------------------------------
 echo "\n--- 2. MikoCompanion Strict Verbatim Matching & Anti-Hijacking ---\n";
 
-$companionCode = file_get_contents(__DIR__ . '/public/js/engine/MikoCompanion.js');
+$companionCode = file_get_contents(dirname(__DIR__) . '/public/js/engine/MikoCompanion.js');
 
 check("MikoCompanion has activeResponseId counter", strpos($companionCode, 'this.activeResponseId') !== false);
 check("MikoCompanion has currentResponseText state", strpos($companionCode, 'this.currentResponseText') !== false);
@@ -210,7 +210,7 @@ if (file_exists($cookieFile)) {
 // ---------------------------------------------------------------------------
 echo "\n--- 5. Student Dock Synchronization in app.js ---\n";
 
-$appJs = file_get_contents(__DIR__ . '/public/js/app.js');
+$appJs = file_get_contents(dirname(__DIR__) . '/public/js/app.js');
 check("app.js checks for active hint before cycling cheer phrases", strpos($appJs, 'hasActiveHint') !== false);
 check("app.js speaks exact text from mikoText element", strpos($appJs, 'spokenText = mikoText.textContent.trim()') !== false);
 check("app.js closes speech on bubble close", strpos($appJs, 'companion.stopSpeaking()') !== false);

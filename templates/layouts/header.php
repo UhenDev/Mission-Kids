@@ -22,7 +22,7 @@ $currentPage = $_GET['page'] ?? ($isLoggedIn ? 'home' : 'landing');
   
   <!-- Design System CSS dengan Cache Busting -->
   <link rel="stylesheet" href="css/design-system.css?v=3.3">
-  <link rel="stylesheet" href="css/components.css?v=3.3">
+  <link rel="stylesheet" href="css/components.css?v=3.4">
   <link rel="stylesheet" href="css/animations.css?v=3.3">
   <link rel="stylesheet" href="css/missions.css?v=3.3">
   <link rel="stylesheet" href="css/worlds.css?v=3.3">
