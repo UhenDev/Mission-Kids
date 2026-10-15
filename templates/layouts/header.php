@@ -5,9 +5,11 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/../../src/Helpers/Avatar.php';
+
 $isLoggedIn = Session::isLoggedIn();
 $currentNickname = Session::get('nickname', 'Sahabat Cilik');
-$currentAvatar = Session::get('avatar_id', 'astro_cat');
+$currentAvatar = Session::get('avatar_id', Avatar::DEFAULT_AVATAR);
 $currentPage = $_GET['page'] ?? ($isLoggedIn ? 'home' : 'landing');
 ?>
 <!DOCTYPE html>
@@ -28,7 +30,7 @@ $currentPage = $_GET['page'] ?? ($isLoggedIn ? 'home' : 'landing');
   <!-- Core Interactive Sound & Celebration Scripts -->
   <script src="js/engine/SoundEffects.js?v=3.3"></script>
   <script src="js/engine/CelebrationEffects.js?v=3.3"></script>
-  <script src="js/engine/MikoCompanion.js?v=3.3"></script>
+  <script src="js/engine/MikoCompanion.js?v=5.2"></script>
 </head>
 <body class="<?= $isLoggedIn ? 'has-bottom-nav' : 'landing-guest-page' ?>">
 
@@ -80,19 +82,10 @@ $currentPage = $_GET['page'] ?? ($isLoggedIn ? 'home' : 'landing');
           </div>
         <?php endif; ?>
 
-        <div class="avatar-badge-btn" title="Profil Kamu: <?= e($currentNickname) ?>">
-          <div class="avatar-icon-small">
-            <?= match ($currentAvatar) {
-                'astro_cat' => '🐱',
-                'super_bear' => '🐻',
-                'clever_fox' => '🦊',
-                'star_owl' => '🦉',
-                'rocket_boy' => '👦',
-                'wonder_girl' => '👧',
-                'botty_bot' => '🤖',
-                'happy_dino' => '🦕',
-                default => '🚀'
-            } ?>
+        <?php $charData = Avatar::get($currentAvatar); ?>
+        <div class="avatar-badge-btn" title="Karakter: <?= e($charData['title']) ?> (<?= e($currentNickname) ?>)">
+          <div class="avatar-icon-small" style="overflow: hidden; border: 1.5px solid #93C5FD; padding: 0;">
+            <img src="<?= e($charData['thumb']) ?>" alt="<?= e($charData['name']) ?>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block;" onerror="this.outerHTML='<?= $charData['fallback_icon'] ?>';">
           </div>
           <span class="student-nickname-nav">Halo, <?= e($currentNickname) ?>! ⌄</span>
         </div>
@@ -128,14 +121,11 @@ $currentPage = $_GET['page'] ?? ($isLoggedIn ? 'home' : 'landing');
       </nav>
 
       <div class="header-guest-actions">
-        <button type="button" class="btn-kid btn-nav-sound" onclick="if(window.SoundFX) { window.SoundFX.toggleMute(); } if(window.mikoCompanion) { window.mikoCompanion.speak('Halo Sahabat Cilik! Aku MIKO, siap bertualang bersamamu!'); }" title="Nyalakan Suara MIKO" id="btn-sound-toggle-guest">
-          <span>🔊</span> <span class="nav-sound-text">Suara MIKO</span>
-        </button>
         <a href="?page=login" class="btn-kid btn-nav-auth-login" id="btn-nav-login">
           Masuk
         </a>
-        <a href="?page=register" class="btn-kid btn-nav-auth-register shine-effect" id="btn-nav-register">
-          <span>👤+</span> <span class="nav-reg-text">Daftar</span>
+        <a href="?page=register" class="btn-kid btn-nav-auth-register" id="btn-nav-register">
+          <span style="font-weight: 800; font-size: 15px; margin-right: 2px;">+</span> <span class="nav-reg-text">Daftar</span>
         </a>
       </div>
     <?php endif; ?>

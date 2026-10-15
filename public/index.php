@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../src/Helpers/Session.php';
 require_once __DIR__ . '/../src/Helpers/Security.php';
+require_once __DIR__ . '/../src/Helpers/Avatar.php';
 require_once __DIR__ . '/../src/Controllers/AuthController.php';
 require_once __DIR__ . '/../src/Controllers/HomeController.php';
 require_once __DIR__ . '/../src/Controllers/MissionController.php';

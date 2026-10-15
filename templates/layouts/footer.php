@@ -32,7 +32,7 @@ declare(strict_types=1);
     <div class="footer-meta-side">
       <div class="footer-social-group">
         <a href="javascript:void(0)" title="YouTube Channel" class="footer-social-btn">▶</a>
-        <a href="javascript:void(0)" title="Instagram" class="footer-social-btn">📷</a>
+        <a href="javascript:void(0)" title="Email & Pesan" class="footer-social-btn">✉</a>
         <a href="javascript:void(0)" title="Website Komunitas" class="footer-social-btn">🔗</a>
       </div>
       <span class="footer-copyright-text">&copy; 2026 MISSION KIDS. All rights reserved.</span>
@@ -66,7 +66,7 @@ declare(strict_types=1);
 <?php require __DIR__ . '/../components/miko_bubble.php'; ?>
 
 <!-- App Script -->
-<script src="js/app.js?v=3.3"></script>
+<script src="js/app.js?v=5.1"></script>
 
 </body>
 </html>

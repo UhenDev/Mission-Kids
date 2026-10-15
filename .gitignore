@@ -30,3 +30,5 @@ tmp/
 *.tmp
 *.zip
 create_cpanel_zip.py
+public/audio/miko/cache/*.mp3
+!public/audio/miko/cache/.gitkeep

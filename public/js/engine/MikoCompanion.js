@@ -3,6 +3,57 @@
  * Manages progressive scaffolding hints and MIKO emotional states.
  */
 
+// Shared Central MIKO Voice Configuration - Suara Miko Laki-laki Ramah, Ceria, & Bersemangat
+if (typeof window !== 'undefined') {
+  window.MIKO_VOICE_CONFIG = {
+    gender: 'male',
+    character: 'cute-boy-robot',
+    lang: 'id-ID',
+    pitch: 1.25,   // Karakter suara AI Miko lucu laki-laki / boy mascot ceria
+    rate: 1.05,    // Kecepatan bicara lincah dan bersahabat
+    volume: 1.0,
+
+    getBestVoice: function() {
+      if (typeof window === 'undefined' || !window.speechSynthesis) return null;
+      const voices = window.speechSynthesis.getVoices() || [];
+      if (voices.length === 0) return null;
+
+      // 1. Prioritas Utama: Suara Pria Indonesia (Microsoft Ardi Online Natural, Microsoft Andika, Dimas, Jajang)
+      const idMale = voices.find(v => {
+        const isId = v.lang && (v.lang.startsWith('id') || v.lang.includes('ID') || /indonesia/i.test(v.name));
+        return isId && /ardi|andika|dimas|jajang|male|pria|laki/i.test(v.name);
+      });
+      if (idMale) return idMale;
+
+      // 2. Prioritas Kedua: Suara Bahasa Indonesia Alami (Google Bahasa Indonesia / Gadis dengan pitch maskot anak laki-laki lucu)
+      const idVoice = voices.find(v => v.lang && (v.lang.startsWith('id') || v.lang.includes('ID') || /indonesia/i.test(v.name)));
+      if (idVoice) return idVoice;
+
+      // 3. Suara apa pun yang cocok dengan bahasa Indonesia
+      const idAny = voices.find(v => v.lang && v.lang.toLowerCase().includes('id'));
+      if (idAny) return idAny;
+
+      return voices[0] || null;
+    },
+    // Alias for backward compatibility
+    getBestCuteVoice: function() {
+      return this.getBestVoice();
+    }
+  };
+
+  // Pre-warm SpeechSynthesis voices immediately
+  if (window.speechSynthesis) {
+    try {
+      window.speechSynthesis.getVoices();
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = function() {
+          try { window.speechSynthesis.getVoices(); } catch (e) {}
+        };
+      }
+    } catch (e) {}
+  }
+}
+
 class MikoCompanion {
   constructor(missionSlug) {
     this.missionSlug = missionSlug;
@@ -14,13 +65,15 @@ class MikoCompanion {
     this.hintIndicator = document.getElementById('miko-hint-indicator');
     this.currentAudio = null;
     this.lastSpokenText = '';
+    this.currentResponseText = '';
+    this.activeResponseId = 0;
 
     const speakBtn = document.getElementById('miko-bubble-speak');
     if (speakBtn && typeof speakBtn.addEventListener === 'function') {
       speakBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const currentText = this.bubbleText ? this.bubbleText.textContent.trim() : '';
-        const text = currentText || this.lastSpokenText;
+        const text = currentText || this.currentResponseText || this.lastSpokenText;
         if (text) {
           this.speak(text);
         }
@@ -92,92 +145,76 @@ class MikoCompanion {
     return guides[s] || null;
   }
 
+  normalizeVerbatim(str) {
+    return String(str || '')
+      .replace(/<[^>]*>/g, ' ')
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  /**
+   * Resolves a pre-recorded audio clip ONLY IF the text is a 100% exact verbatim match.
+   * Never hijack dynamic hints or custom AI text with generic audio clips!
+   */
   resolveAudioClip(text) {
     if (!text) return null;
-    const lower = text.toLowerCase();
+    // Studio audio clips in /audio/miko are 100% natural id-ID-ArdiNeural Indonesian cute boy mascot
+    const cleanNorm = this.normalizeVerbatim(text);
 
-    // 1. Mission Challenge Spoken Guides
-    if (lower.includes('kasir toko kue') || lower.includes('masukkan 2 donat') || lower.includes('kembalian seribu')) {
-      return '/audio/miko/guide_toko_kue.mp3';
-    }
-    if (lower.includes('papan angka yang hilang') || lower.includes('lompatan angkanya') || lower.includes('balok angka yang tepat')) {
-      return '/audio/miko/guide_jembatan_angka.mp3';
-    }
-    if (lower.includes('kristal lampu taman') || lower.includes('urutan pola warna') || lower.includes('lampunya menyala')) {
-      return '/audio/miko/guide_kota_pola.mp3';
-    }
-    if (lower.includes('bunga matahari ini sedang layu') || lower.includes('siram air dengan gembor') || lower.includes('tirai matahari')) {
-      return '/audio/miko/guide_tanaman_layu.mp3';
-    }
-    if (lower.includes('bayangan kelinci') || lower.includes('geser senter maju') || lower.includes('garis pentas')) {
-      return '/audio/miko/guide_misteri_bayangan.mp3';
-    }
-    if (lower.includes('siklus air') || lower.includes('kartu penguapan') || lower.includes('awan, dan hujan')) {
-      return '/audio/miko/guide_perjalanan_air.mp3';
-    }
-    if (lower.includes('botty pulang ke stasiun') || lower.includes('pengisi baterai') || lower.includes('tidak menabrak batu')) {
-      return '/audio/miko/guide_robot_pulang.mp3';
-    }
-    if (lower.includes('dua jalan di depanmu') || lower.includes('jalan yang paling aman')) {
-      return '/audio/miko/guide_jalan_rahasia.mp3';
-    }
-    if (lower.includes('balok perulangan loop') || lower.includes('melompat dan maju melewati rintangan')) {
-      return '/audio/miko/guide_robot_mengulang.mp3';
-    }
-    if (lower.includes('roket antariksa') || lower.includes('bahan bakar dan sudut luncur') || lower.includes('stasiun luar angkasa')) {
-      return '/audio/miko/guide_roket_angkasa.mp3';
-    }
-    if (lower.includes('koordinat bintang') || lower.includes('rasi bintang layang-layang') || lower.includes('langit malam')) {
-      return '/audio/miko/guide_rasi_bintang.mp3';
-    }
-    if (lower.includes('rover di planet mars') || lower.includes('kendalikan rover') || lower.includes('kawah meteor')) {
-      return '/audio/miko/guide_rover_mars.mp3';
-    }
+    // Exact verbatim dictionary of studio-recorded clips (Microsoft id-ID-ArdiNeural)
+    const EXACT_MAP = {
+      // 1. Mission Challenge Guides
+      'di soal ini kamu jadi kasir toko kue masukkan 2 donat dan beri koin kembalian seribu rupiah ke nampan kasir ya': '/audio/miko/guide_toko_kue.mp3',
+      'di soal ini kamu jadi kasir toko kue masukkan dua donat dan beri koin kembalian seribu rupiah ke nampan kasir ya': '/audio/miko/guide_toko_kue.mp3',
+      'di jembatan ini ada satu papan angka yang hilang perhatikan lompatan angkanya lalu pasang balok angka yang tepat': '/audio/miko/guide_jembatan_angka.mp3',
+      'lihat warna kristal lampu taman pasang kristal berikutnya sesuai urutan pola warna agar lampunya menyala': '/audio/miko/guide_kota_pola.mp3',
+      'bunga matahari ini sedang layu siram air dengan gembor dan buka tirai matahari sampai bunganya mekar segar': '/audio/miko/guide_tanaman_layu.mp3',
+      'ayo main bayangan kelinci geser senter maju atau mundur sampai ukuran bayangan pas dengan garis pentas': '/audio/miko/guide_misteri_bayangan.mp3',
+      'bantu miko menyusun urutan siklus air pasang kartu penguapan awan dan hujan secara berurutan ya': '/audio/miko/guide_perjalanan_air.mp3',
+      'bantu botty pulang ke stasiun pengisi baterai susun perintah maju dan belok agar botty tidak menabrak batu': '/audio/miko/guide_robot_pulang.mp3',
+      'ada dua jalan di depanmu pilih jalan yang paling aman agar petualanganmu bisa terus berlanjut': '/audio/miko/guide_jalan_rahasia.mp3',
+      'gunakan balok perulangan loop untuk membuat robot melompat dan maju melewati rintangan di lintasan': '/audio/miko/guide_robot_mengulang.mp3',
+      'atur bahan bakar dan sudut luncur roket antariksa agar roket bisa meluncur pas ke stasiun luar angkasa': '/audio/miko/guide_roket_angkasa.mp3',
+      'hubungkan titik koordinat bintang di langit malam untuk membentuk rasi bintang layang layang': '/audio/miko/guide_rasi_bintang.mp3',
+      'kendalikan rover di planet mars buat rute maju dan berbelok untuk mengambil kristal dan hindari kawah meteor': '/audio/miko/guide_rover_mars.mp3',
 
-    // 2. Cheerful Dialogues & Hints
-    if (lower.includes('si robot ceria') || lower.includes('butuh bantuan') || lower.includes('miko dan aku')) {
-      return '/audio/miko/cheer_1.mp3';
-    }
-    if (lower.includes('xp dan bintang') || lower.includes('raih bintang')) {
-      return '/audio/miko/cheer_2.mp3';
-    }
-    if (lower.includes('sedikit demi sedikit') || lower.includes('otakmu') || lower.includes('belajar logika')) {
-      return '/audio/miko/cheer_3.mp3';
-    }
-    if (lower.includes('dunia petualangan') || lower.includes('bertualang hari ini') || lower.includes('siap bertualang')) {
-      return '/audio/miko/cheer_4.mp3';
-    }
-    if (lower.includes('jangan takut salah') || lower.includes('lanjutkan petualanganmu')) {
-      return '/audio/miko/cheer_5.mp3';
-    }
-    if (lower.includes('arena tantangan') || lower.includes('selamat datang')) {
-      return '/audio/miko/mission_welcome.mp3';
-    }
-    if (lower.includes('jangan menyerah')) {
-      return '/audio/miko/mission_retry.mp3';
-    }
-    if (lower.includes('keberhasilanmu') || lower.includes('xp baru') || lower.includes('horeee')) {
-      return '/audio/miko/mission_xp.mp3';
-    }
-    if (lower.includes('memecahkan tantangannya') || lower.includes('luar biasa')) {
-      return '/audio/miko/mission_success.mp3';
-    }
-    if (lower.includes('menyiapkan petunjuk')) {
-      return '/audio/miko/hint_preparing.mp3';
-    }
-    if (lower.includes('level 1') || lower.includes('level satu')) {
-      return '/audio/miko/hint_level_1.mp3';
-    }
-    if (lower.includes('level 2') || lower.includes('level dua')) {
-      return '/audio/miko/hint_level_2.mp3';
-    }
-    if (lower.includes('level 3') || lower.includes('level tiga')) {
-      return '/audio/miko/hint_level_3.mp3';
-    }
-    if (lower.includes('halo') || lower.includes('miko siap')) {
-      return '/audio/miko/greeting_default.mp3';
-    }
-    return null;
+      // 2. Exact Cheer & Default Phrases
+      'halo sahabat cilik aku miko si robot ceria kalau butuh bantuan di dalam misi klik aku ya': '/audio/miko/cheer_1.mp3',
+      'tahukah kamu setiap misi yang berhasil diselesaikan memberimu xp dan bintang baru': '/audio/miko/cheer_2.mp3',
+      'belajar sedikit demi sedikit setiap hari membuat otakmu semakin hebat dan cerdas': '/audio/miko/cheer_3.mp3',
+      'ayo pilih salah satu dunia petualangan dan selesaikan tantangannya hari ini': '/audio/miko/cheer_4.mp3',
+      'kamu hebat jangan takut salah karena dari salah kita bisa belajar hal baru': '/audio/miko/cheer_5.mp3',
+      'halo sahabat cilik aku miko teman belajarmu di setiap petualangan ayo jelajahi empat dunia seru di mission kids dan kumpulkan banyak bintang': '/audio/miko/greeting_default.mp3',
+      'miko sedang menyiapkan petunjuk terbaik untukmu': '/audio/miko/hint_preparing.mp3',
+      'tenang miko punya petunjuk level satu untukmu coba amati polanya sekali lagi': '/audio/miko/hint_level_1.mp3',
+      'petunjuk level dua perhatikan baik baik langkah sebelumnya dan susun strategimu': '/audio/miko/hint_level_2.mp3',
+      'petunjuk level tiga ini langkah kuncinya pasang bagian yang tepat untuk menyelesaikannya': '/audio/miko/hint_level_3.mp3',
+      'selamat datang di arena tantangan petualangan': '/audio/miko/mission_welcome.mp3',
+      'jangan menyerah coba sekali lagi ya': '/audio/miko/mission_retry.mp3',
+      'horeee kamu mendapatkan xp dan bintang baru': '/audio/miko/mission_xp.mp3',
+      'horeee selamat atas keberhasilanmu kamu mendapatkan xp dan bintang baru': '/audio/miko/reward_congrats.mp3',
+      'horeee selamat atas keberhasilanmu kamu mendapatkan xp baru': '/audio/miko/reward_congrats.mp3',
+      'luar biasa kamu berhasil memecahkan tantangannya': '/audio/miko/mission_success.mp3',
+
+      // 3. Landing Page Topics
+      'ada empat dunia menakjubkan di mission kids number city pulau matematika discovery lab ilmu alam thinking lab logika teka teki dan space odyssey roket antariksa': '/audio/miko/topic_worlds.mp3',
+      'belajar sedikit demi sedikit setiap hari membuat otakmu semakin hebat dan cerdas jangan takut salah karena dari salah kita bisa belajar hal baru': '/audio/miko/topic_tips.mp3',
+      'kamu adalah kapten cilik yang hebat dan pemberani kumpulkan bintang selesaikan misi dan raih prestasi terbaikmu bersama miko': '/audio/miko/topic_cheer.mp3',
+
+      // 4. Dashboard Hero Avatar Greetings
+      'hore siap bertualang hari ini': '/audio/miko/avatar_greeting_1.mp3',
+      'ayo selesaikan misi dan raih bintang': '/audio/miko/avatar_greeting_2.mp3',
+      'belajar logika itu seru banget': '/audio/miko/avatar_greeting_3.mp3',
+      'kamu hebat ayo lanjutkan petualanganmu': '/audio/miko/avatar_greeting_4.mp3',
+      'miko dan aku siap membantumu': '/audio/miko/avatar_greeting_5.mp3',
+
+      // 5. Global Floating Companion Default
+      'halo sahabat cilik miko siap menemanimu bereksplorasi kalau butuh bantuan di dalam misi klik tombol petunjuk ya': '/audio/miko/greeting_companion.mp3'
+    };
+
+    return EXACT_MAP[cleanNorm] || null;
   }
 
   playMissionGuide(slug = null) {
@@ -197,31 +234,14 @@ class MikoCompanion {
       guideTextEl.textContent = guide.text;
     }
 
+    this.currentResponseText = guide.text;
     this.speak(guide.text);
   }
 
   getBestCuteVoice() {
-    if (typeof window === 'undefined' || !window.speechSynthesis) return null;
-    const voices = window.speechSynthesis.getVoices() || [];
-    if (voices.length === 0) return null;
-
-    // 1. Natural / Google Indonesian voice (e.g. Google Bahasa Indonesia, Microsoft Gadis Online)
-    const idNatural = voices.find(v => v.lang && (v.lang.startsWith('id') || v.lang.includes('ID')) && /natural|gadis|google|ardi/i.test(v.name));
-    if (idNatural) return idNatural;
-
-    // 2. Any Indonesian voice
-    const anyId = voices.find(v => v.lang && (v.lang.startsWith('id') || v.lang.includes('ID') || /indonesia/i.test(v.name)));
-    if (anyId) return anyId;
-
-    // 3. Cute / friendly female voice (e.g. Zira, Jenny, Gadis, Samantha)
-    const cuteFemale = voices.find(v => /gadis|zira|jenny|female|samantha|victoria|karen/i.test(v.name));
-    if (cuteFemale) return cuteFemale;
-
-    // 4. Any voice that is NOT David or Mark (exclude stiff adult male English)
-    const nonDavid = voices.find(v => !/david|mark|george|richard/i.test(v.name));
-    if (nonDavid) return nonDavid;
-
-    return voices[0] || null;
+    return (window.MIKO_VOICE_CONFIG && typeof window.MIKO_VOICE_CONFIG.getBestVoice === 'function')
+      ? window.MIKO_VOICE_CONFIG.getBestVoice()
+      : null;
   }
 
   setSpeakingState(isSpeaking) {
@@ -232,13 +252,16 @@ class MikoCompanion {
     if (avatar && avatar.classList) {
       if (isSpeaking) {
         avatar.classList.add('miko-speaking');
+        avatar.setAttribute('aria-pressed', 'true');
       } else {
         avatar.classList.remove('miko-speaking');
+        avatar.setAttribute('aria-pressed', 'false');
       }
     }
   }
 
   stopSpeaking() {
+    this.activeResponseId++;
     if (this.currentAudio) {
       try {
         this.currentAudio.pause();
@@ -252,29 +275,50 @@ class MikoCompanion {
     this.setSpeakingState(false);
   }
 
-  speakBrowserTTS(text) {
+  speakBrowserTTS(text, responseId = null) {
     if (typeof window === 'undefined' || !window.speechSynthesis) {
       this.setSpeakingState(false);
       return;
     }
 
+    const myId = responseId || this.activeResponseId;
+
     try {
+      window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'id-ID';
 
       const voice = this.getBestCuteVoice();
       if (voice) {
         utterance.voice = voice;
-        if (voice.lang) utterance.lang = voice.lang;
+        if (voice.lang && (voice.lang.startsWith('id') || voice.lang.includes('ID'))) {
+          utterance.lang = voice.lang;
+        }
       }
 
-      utterance.pitch = 1.32;
-      utterance.rate = 1.06;
+      // Karakter Suara AI Miko Lucu Laki-Laki & Bahasa Indonesia:
+      // - Jika Microsoft Ardi (suara pria asli): pitch 1.16 memberi nada anak laki-laki ceria & bersemangat
+      // - Jika Google Bahasa Indonesia: pitch 1.25 memberi nada maskot anak laki-laki lucu (cute anime boy robot)
+      const isArdiMale = voice && /ardi|andika|male|pria|laki/i.test(voice.name);
+      utterance.pitch = isArdiMale ? 1.16 : 1.25;
+      utterance.rate = (window.MIKO_VOICE_CONFIG && window.MIKO_VOICE_CONFIG.rate !== undefined) ? window.MIKO_VOICE_CONFIG.rate : 1.05;
       utterance.volume = 1.0;
 
-      utterance.onstart = () => this.setSpeakingState(true);
-      utterance.onend = () => this.setSpeakingState(false);
-      utterance.onerror = () => this.setSpeakingState(false);
+      utterance.onstart = () => {
+        if (this.activeResponseId === myId) {
+          this.setSpeakingState(true);
+        }
+      };
+      utterance.onend = () => {
+        if (this.activeResponseId === myId) {
+          this.setSpeakingState(false);
+        }
+      };
+      utterance.onerror = () => {
+        if (this.activeResponseId === myId) {
+          this.setSpeakingState(false);
+        }
+      };
 
       window.speechSynthesis.speak(utterance);
     } catch (e) {
@@ -284,6 +328,8 @@ class MikoCompanion {
 
   speak(text) {
     if (typeof window === 'undefined') return;
+    const myId = ++this.activeResponseId;
+
     // Auto-unmute if user requested Miko to talk
     if (window.SoundFX && window.SoundFX.isMuted()) {
       window.SoundFX.toggleMute();
@@ -291,50 +337,99 @@ class MikoCompanion {
 
     try {
       this.stopSpeaking();
+      // Re-assign myId after stopSpeaking() incremented activeResponseId
+      this.activeResponseId = myId;
 
       const clean = String(text).replace(/<[^>]*>/g, '').trim();
       if (!clean) return;
       this.lastSpokenText = clean;
+      this.currentResponseText = clean;
 
-      // 1. Play cute signature chime intro (pi-po!)
-      if (window.SoundFX && typeof window.SoundFX.playMikoChirp === 'function') {
-        window.SoundFX.playMikoChirp();
-      }
-
-      // 2. Play Natural Studio Audio Clip if matched
+      // 1. Play Natural Studio Audio Clip ONLY if 100% exact verbatim match (0ms latency)
       const audioUrl = this.resolveAudioClip(clean);
       if (audioUrl) {
-        const audio = new Audio(audioUrl);
-        this.currentAudio = audio;
-        this.setSpeakingState(true);
-
-        audio.onended = () => {
-          this.setSpeakingState(false);
-          this.currentAudio = null;
-        };
-        audio.onerror = () => {
-          this.currentAudio = null;
-          this.speakBrowserTTS(clean);
-        };
-
-        const playPromise = audio.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            this.currentAudio = null;
-            this.speakBrowserTTS(clean);
-          });
-        }
+        this.playAudioClip(audioUrl, clean, myId);
         return;
       }
 
-      // 3. Fallback to Web Speech API
-      this.speakBrowserTTS(clean);
+      // 2. Play Dynamic Neural TTS via backend (id-ID-ArdiNeural) with Web Speech fallback
+      this.fetchAndPlayDynamicTts(clean, myId);
     } catch (e) {
       this.setSpeakingState(false);
     }
   }
 
+  playAudioClip(audioUrl, clean, myId) {
+    try {
+      const cacheBustedUrl = audioUrl + (audioUrl.includes('?') ? '&' : '?') + 'v=5.1';
+      const audio = new Audio(cacheBustedUrl);
+      this.currentAudio = audio;
+      this.setSpeakingState(true);
+
+      audio.onended = () => {
+        if (this.activeResponseId === myId) {
+          this.setSpeakingState(false);
+          this.currentAudio = null;
+        }
+      };
+      audio.onerror = () => {
+        if (this.activeResponseId === myId) {
+          this.currentAudio = null;
+          this.speakBrowserTTS(clean, myId);
+        }
+      };
+
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          if (this.activeResponseId === myId) {
+            this.currentAudio = null;
+            this.speakBrowserTTS(clean, myId);
+          }
+        });
+      }
+    } catch (e) {
+      if (this.activeResponseId === myId) {
+        this.speakBrowserTTS(clean, myId);
+      }
+    }
+  }
+
+  fetchAndPlayDynamicTts(clean, myId) {
+    if (typeof window === 'undefined' || typeof fetch !== 'function') {
+      this.speakBrowserTTS(clean, myId);
+      return;
+    }
+
+    const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    const timeoutId = controller ? setTimeout(() => controller.abort(), 7000) : null;
+
+    fetch('?page=api&action=miko_tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: clean }),
+      signal: controller ? controller.signal : undefined
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (timeoutId) clearTimeout(timeoutId);
+        if (this.activeResponseId !== myId) return;
+        if (data && data.success && data.audio_url) {
+          this.playAudioClip(data.audio_url, clean, myId);
+        } else {
+          this.speakBrowserTTS(clean, myId);
+        }
+      })
+      .catch(() => {
+        if (timeoutId) clearTimeout(timeoutId);
+        if (this.activeResponseId === myId) {
+          this.speakBrowserTTS(clean, myId);
+        }
+      });
+  }
+
   say(message, autoOpen = true) {
+    const clean = String(message).replace(/<[^>]*>/g, '').trim();
     if (this.bubbleText) {
       this.bubbleText.textContent = '';
       if (typeof message === 'string') {
@@ -351,7 +446,8 @@ class MikoCompanion {
     if (autoOpen && this.bubble) {
       this.bubble.classList.add('active');
     }
-    this.speak(message);
+    this.currentResponseText = clean;
+    this.speak(clean);
   }
 
   renderHint(level, hintText) {
@@ -372,12 +468,20 @@ class MikoCompanion {
     if (this.bubble) {
       this.bubble.classList.add('active');
     }
-    this.speak(`Petunjuk level ${level}: ${hintText}`);
+
+    const cleanHint = String(hintText).replace(/<[^>]*>/g, '').trim();
+    const spokenText = `Petunjuk MIKO Level ${level}: ${cleanHint}`;
+    this.currentResponseText = spokenText;
+    this.speak(spokenText);
   }
 
   async requestHint(attemptCount, currentState = {}) {
+    const myId = ++this.activeResponseId;
+    this.stopSpeaking();
+    this.activeResponseId = myId;
+
     if (this.bubble) {
-      this.say("<em>MIKO sedang menyiapkan petunjuk terbaik untukmu... 💭</em>", true);
+      this.say("MIKO sedang menyiapkan petunjuk terbaik untukmu... 💭", true);
     }
 
     try {
@@ -393,6 +497,9 @@ class MikoCompanion {
       });
 
       const data = await response.json();
+      // Drop stale response if another action happened
+      if (myId !== this.activeResponseId) return;
+
       if (data.success && data.hint_text) {
         this.renderHint(this.currentHintLevel, data.hint_text);
         
@@ -407,6 +514,7 @@ class MikoCompanion {
         this.say("Semangat! Amati kembali objek di layar dan coba satu per satu ya!");
       }
     } catch (err) {
+      if (myId !== this.activeResponseId) return;
       console.warn("Hint fetch failed, falling back to local guidance:", err);
       this.say("Semangat terus! Kamu pasti bisa menemukan kuncinya!");
     }

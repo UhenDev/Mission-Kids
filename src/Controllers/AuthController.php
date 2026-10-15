@@ -8,6 +8,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../Services/AuthService.php';
 require_once __DIR__ . '/../Helpers/Security.php';
 require_once __DIR__ . '/../Helpers/Session.php';
+require_once __DIR__ . '/../Helpers/Avatar.php';
 
 class AuthController
 {
@@ -71,7 +72,8 @@ class AuthController
         $username = (string)($_POST['username'] ?? '');
         $nickname = (string)($_POST['nickname'] ?? '');
         $password = (string)($_POST['password'] ?? '');
-        $avatarId = (string)($_POST['avatar_id'] ?? 'astro_cat');
+        $rawAvatar = (string)($_POST['avatar_id'] ?? Avatar::DEFAULT_AVATAR);
+        $avatarId = Avatar::isValid($rawAvatar) ? $rawAvatar : Avatar::DEFAULT_AVATAR;
 
         $result = $this->auth->register($username, $password, $nickname, $avatarId);
         if ($result['success']) {

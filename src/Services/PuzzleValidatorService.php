@@ -35,7 +35,7 @@ class PuzzleValidatorService
             $parsedConfig = json_decode($config, true) ?: [];
         }
 
-        return match ($slug) {
+        $bespokeValidation = match ($slug) {
             'toko-kue' => $this->validateBakeryShop($payload, $parsedConfig),
             'jembatan-angka' => $this->validateNumberBridge($payload, $parsedConfig),
             'kota-pola' => $this->validateCrystalPattern($payload, $parsedConfig),
@@ -48,11 +48,34 @@ class PuzzleValidatorService
             'roket-angkasa' => $this->validateRocketLaunch($payload, $parsedConfig),
             'rasi-bintang' => $this->validateStarConstellation($payload, $parsedConfig),
             'rover-mars' => $this->validateMarsRover($payload, $parsedConfig),
-            default => [
-                'valid' => false,
-                'message' => "Tantangan misi '{$slug}' tidak dikenal oleh sistem."
-            ]
+            default => null
         };
+
+        if ($bespokeValidation !== null) {
+            return $bespokeValidation;
+        }
+
+        // Generic Interactive Challenge Validation
+        if (isset($parsedConfig['correct_answer'])) {
+            $submitted = $payload['selected_answer'] ?? $payload['answer'] ?? $payload['selected_value'] ?? null;
+            $expected = $parsedConfig['correct_answer'];
+            if ($submitted !== null && (string)$submitted === (string)$expected) {
+                return [
+                    'valid' => true,
+                    'message' => $parsedConfig['success_message'] ?? 'Hebat! Jawaban dan analisis langkahmu tepat sekali! 🎉'
+                ];
+            }
+            $hintMsg = $parsedConfig['hints'][0]['text'] ?? 'Jawabanmu belum tepat. Yuk periksa petunjuk cerdas MIKO!';
+            return [
+                'valid' => false,
+                'message' => $hintMsg
+            ];
+        }
+
+        return [
+            'valid' => false,
+            'message' => "Tantangan misi '{$slug}' tidak dikenal oleh sistem."
+        ];
     }
 
     /**

@@ -15,25 +15,16 @@ require __DIR__ . '/../../layouts/header.php';
     <!-- Left Card: Profile & Level Summary -->
     <div class="dash-profile-card-mockup">
       <div style="display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-4);">
-        <div class="welcome-avatar-disc" id="hero-avatar-disc" style="width: 64px; height: 64px; font-size: 2.2rem; min-width: 64px;" title="Ketuk aku untuk sapaan ceria!">
-          <?= match ($profile['avatar_id'] ?? 'astro_cat') {
-              'astro_cat' => '🐱',
-              'super_bear' => '🐻',
-              'clever_fox' => '🦊',
-              'star_owl' => '🦉',
-              'rocket_boy' => '👦',
-              'wonder_girl' => '👧',
-              'botty_bot' => '🤖',
-              'happy_dino' => '🦕',
-              default => '🚀'
-          } ?>
+        <?php $heroChar = Avatar::get($profile['avatar_id'] ?? Avatar::DEFAULT_AVATAR); ?>
+        <div class="welcome-avatar-disc" id="hero-avatar-disc" style="width: 64px; height: 64px; min-width: 64px; border-radius: 50%; overflow: hidden; padding: 0; border: 2.5px solid #3B82F6; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.18);" title="Karakter: <?= e($heroChar['title']) ?>">
+          <img src="<?= e($heroChar['thumb']) ?>" alt="<?= e($heroChar['name']) ?>" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.outerHTML='<?= $heroChar['fallback_icon'] ?>';">
         </div>
         <div>
           <h1 style="font-family: var(--font-heading); font-size: var(--fs-xl); color: #0F172A; margin-bottom: 2px;">
             Halo, <?= e($profile['nickname']) ?>! 👋
           </h1>
           <p style="font-size: var(--fs-xs); color: var(--text-muted); margin: 0;">
-            Siap untuk petualangan hari ini?
+            Karakter: <strong style="color: #1D4ED8;"><?= e($heroChar['title']) ?></strong> • Siap berpetualang?
           </p>
         </div>
       </div>
@@ -88,26 +79,30 @@ require __DIR__ . '/../../layouts/header.php';
         </a>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4);">
-        <?php foreach ($worlds as $w): ?>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: var(--space-3);">
+        <?php foreach ($worlds as $idx => $w): ?>
           <?php 
             $thumb = match($w['slug']) {
               'number-city' => 'assets/images/number-city.jpg',
               'discovery-lab' => 'assets/images/discovery-lab.jpg',
               'thinking-lab' => 'assets/images/thinking-lab.jpg',
+              'space-odyssey' => 'assets/images/space-odyssey.jpg',
               default => 'assets/images/discovery-lab.jpg'
             };
           ?>
-          <a href="?page=worlds#world-<?= e($w['slug']) ?>" class="world-card-h-item" style="text-decoration: none; color: inherit;">
-            <div style="height: 110px; overflow: hidden; background: #F1F5F9;">
+          <a href="?page=worlds&world=<?= urlencode($w['slug']) ?>" class="world-card-h-item" style="text-decoration: none; color: inherit; border-radius: var(--radius-xl); overflow: hidden; border: 1.5px solid var(--border-subtle); background: #FFFFFF; transition: transform 0.2s ease, box-shadow 0.2s ease;" title="Buka Peta <?= $idx + 1 ?>: <?= e($w['title']) ?>">
+            <div style="height: 100px; overflow: hidden; background: #F1F5F9; position: relative;">
               <img src="<?= $thumb ?>" alt="<?= e($w['title']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+              <span style="position: absolute; top: 6px; left: 6px; background: rgba(15, 23, 42, 0.75); color: #FFFFFF; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: var(--radius-pill); backdrop-filter: blur(4px);">
+                Peta <?= $idx + 1 ?>
+              </span>
             </div>
-            <div style="padding: var(--space-3) var(--space-4);">
-              <h3 style="font-family: var(--font-heading); font-size: var(--fs-sm); font-weight: 800; color: #0F172A; margin-bottom: 2px;">
+            <div style="padding: var(--space-3);">
+              <h3 style="font-family: var(--font-heading); font-size: var(--fs-xs); font-weight: 800; color: #0F172A; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                 <?= e($w['title']) ?>
               </h3>
-              <div style="font-size: 11px; color: var(--text-muted); font-weight: 700;">
-                <?= (int)$w['completed_missions'] ?>/<?= (int)$w['total_missions'] ?> misi selesai
+              <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">
+                <?= (int)$w['completed_missions'] ?>/<?= (int)$w['total_missions'] ?> selesai
               </div>
             </div>
           </a>

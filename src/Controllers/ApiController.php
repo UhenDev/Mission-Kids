@@ -11,6 +11,7 @@ require_once __DIR__ . '/../Services/MikoAiService.php';
 require_once __DIR__ . '/../Services/GamificationService.php';
 require_once __DIR__ . '/../Helpers/Security.php';
 require_once __DIR__ . '/../Helpers/Session.php';
+require_once __DIR__ . '/../Helpers/Avatar.php';
 
 class ApiController
 {
@@ -33,6 +34,13 @@ class ApiController
         Security::setSecurityHeaders();
 
         $action = $_GET['action'] ?? '';
+        
+        // Allow dynamic neural TTS generation for both guests and students
+        if ($action === 'miko_tts') {
+            $this->handleMikoTts();
+            return;
+        }
+
         $userId = Session::getUserId();
 
         if (!$userId) {
@@ -167,13 +175,59 @@ class ApiController
     private function handleUpdateProfile(int $userId, array $body): void
     {
         $nickname = (string)($body['nickname'] ?? '');
-        $avatarId = (string)($body['avatar_id'] ?? '');
+        $rawAvatar = (string)($body['avatar_id'] ?? '');
+        $avatarId = ($rawAvatar !== '' && Avatar::isValid($rawAvatar)) ? $rawAvatar : '';
 
-        $success = $this->auth->updateProfile($userId, [
-            'nickname' => $nickname,
-            'avatar_id' => $avatarId
-        ]);
+        $profileData = ['nickname' => $nickname];
+        if ($avatarId !== '') {
+            $profileData['avatar_id'] = $avatarId;
+        }
+
+        $success = $this->auth->updateProfile($userId, $profileData);
 
         echo json_encode(['success' => $success]);
+    }
+
+    private function handleMikoTts(): void
+    {
+        $inputRaw = file_get_contents('php://input');
+        $body = json_decode($inputRaw, true) ?: [];
+        $text = trim((string)($body['text'] ?? ($_GET['text'] ?? '')));
+        $clean = strip_tags($text);
+        if (mb_strlen($clean) > 500) {
+            $clean = mb_substr($clean, 0, 500);
+        }
+        if (empty($clean)) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Teks tidak boleh kosong.']);
+            exit;
+        }
+
+        $hash = md5($clean);
+        $cacheDir = __DIR__ . '/../../public/audio/miko/cache';
+        $cacheFile = "{$cacheDir}/{$hash}.mp3";
+
+        if (!is_dir($cacheDir)) {
+            @mkdir($cacheDir, 0777, true);
+        }
+
+        if (file_exists($cacheFile) && filesize($cacheFile) > 1000) {
+            echo json_encode(['success' => true, 'audio_url' => "/audio/miko/cache/{$hash}.mp3"]);
+            exit;
+        }
+
+        // Run python generator script
+        $cliScript = __DIR__ . '/../../generate_tts_cli.py';
+        $escaped = escapeshellarg($clean);
+        $cmd = "python \"{$cliScript}\" {$escaped}";
+        $output = @shell_exec($cmd);
+
+        if (file_exists($cacheFile) && filesize($cacheFile) > 1000) {
+            echo json_encode(['success' => true, 'audio_url' => "/audio/miko/cache/{$hash}.mp3"]);
+            exit;
+        }
+
+        // Fallback response if python not available
+        echo json_encode(['success' => false, 'error' => 'Tidak dapat memproses TTS neural saat ini.']);
     }
 }

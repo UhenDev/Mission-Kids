@@ -1,30 +1,43 @@
 <?php
 /**
  * MISSION KIDS — Register & 3-Step Express Onboarding
+ * Featuring Dynamic 3D Human Avatar Selection
  */
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/../../../src/Helpers/Avatar.php';
 require __DIR__ . '/../../layouts/header.php';
+
+$avatars = Avatar::all();
+$defaultAvatar = $avatars[Avatar::DEFAULT_AVATAR];
 ?>
 
 <div class="container" style="max-width: 950px; padding: var(--space-4) var(--space-4);">
   <div class="auth-split-wrapper">
-    <!-- Left Visual Side -->
-    <div class="auth-visual-side">
+    <!-- Left Visual Side (Dynamic 3D Character Hero Stage) -->
+    <div class="auth-visual-side auth-visual-register" id="auth-visual-panel">
       <div>
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: var(--space-2);">
-          <span style="font-size: 1.6rem;">🚀</span>
+          <span style="font-size: 1.6rem;" aria-hidden="true">🚀</span>
           <strong style="font-family: var(--font-heading); color: #1D4ED8; font-size: 1.15rem;">MISSION KIDS</strong>
         </div>
-        <h2 style="font-family: var(--font-heading); font-size: 1.5rem; color: #1E3A8A; margin-bottom: 4px;">
-          Buat Akun Baru
+        <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #1E3A8A; margin-bottom: 4px; transition: opacity 0.15s ease;" id="auth-visual-char-title">
+          <?= e($defaultAvatar['title']) ?>
         </h2>
-        <p style="font-size: var(--fs-xs); color: #475569; font-weight: 600; margin-bottom: var(--space-4);">
-          Bergabunglah dengan ribuan penemu cilik di seluruh Indonesia!
+        <p style="font-size: var(--fs-xs); color: #475569; font-weight: 600; margin-bottom: var(--space-4); line-height: 1.4; transition: opacity 0.15s ease;" id="auth-visual-char-desc">
+          <?= e($defaultAvatar['desc']) ?>
         </p>
       </div>
-      <img src="assets/images/auth-banner.jpg" alt="Petualang Cilik & Sahabat MIKO" class="auth-visual-img">
+
+      <div class="auth-character-stage">
+        <img id="auth-hero-character-img"
+             src="<?= e($defaultAvatar['image']) ?>"
+             alt="<?= e($defaultAvatar['alt']) ?>"
+             class="auth-character-img"
+             width="896"
+             height="1200">
+      </div>
     </div>
 
     <!-- Right Form Side -->
@@ -35,12 +48,12 @@ require __DIR__ . '/../../layouts/header.php';
       </p>
 
       <?php if (!empty($error)): ?>
-        <div style="background: #FEE2E2; border: 2px solid #FCA5A5; color: #991B1B; border-radius: var(--radius-lg); padding: var(--space-3) var(--space-4); font-size: var(--fs-sm); font-weight: 700; margin-bottom: var(--space-4);">
+        <div style="background: #FEE2E2; border: 2px solid #FCA5A5; color: #991B1B; border-radius: var(--radius-lg); padding: var(--space-3) var(--space-4); font-size: var(--fs-sm); font-weight: 700; margin-bottom: var(--space-4);" role="alert">
           ⚠️ <?= e($error) ?>
         </div>
       <?php endif; ?>
 
-      <form method="POST" action="?page=register" style="display: flex; flex-direction: column; gap: var(--space-4);">
+      <form method="POST" action="?page=register" style="display: flex; flex-direction: column; gap: var(--space-4);" id="form-register">
         <input type="hidden" name="csrf_token" value="<?= e($csrfToken) ?>">
 
         <div>
@@ -48,9 +61,9 @@ require __DIR__ . '/../../layouts/header.php';
             Nama Panggilan
           </label>
           <div class="input-icon-group">
-            <span class="input-icon-prefix">✨</span>
+            <span class="input-icon-prefix" aria-hidden="true">✨</span>
             <input type="text" id="nickname" name="nickname" required placeholder="Masukkan nama panggilanmu"
-                   class="input-with-icon">
+                   class="input-with-icon" autocomplete="name">
           </div>
         </div>
 
@@ -59,9 +72,9 @@ require __DIR__ . '/../../layouts/header.php';
             Nama Pengguna (Username)
           </label>
           <div class="input-icon-group">
-            <span class="input-icon-prefix">👤</span>
+            <span class="input-icon-prefix" aria-hidden="true">👤</span>
             <input type="text" id="username" name="username" required placeholder="Pilih nama pengguna (huruf & angka)"
-                   class="input-with-icon">
+                   class="input-with-icon" autocomplete="username">
           </div>
         </div>
 
@@ -70,9 +83,10 @@ require __DIR__ . '/../../layouts/header.php';
             Kata Sandi
           </label>
           <div class="password-input-wrapper input-icon-group">
-            <span class="input-icon-prefix">🔒</span>
+            <span class="input-icon-prefix" aria-hidden="true">🔒</span>
             <input type="password" id="password" name="password" required placeholder="Minimal 4 karakter"
                    class="input-with-icon"
+                   autocomplete="new-password"
                    style="padding-right: 3.2rem !important;">
             <button type="button" class="btn-toggle-password" id="toggle-password" aria-label="Tampilkan kata sandi" title="Tampilkan kata sandi">
               👁️
@@ -80,29 +94,43 @@ require __DIR__ . '/../../layouts/header.php';
           </div>
         </div>
 
+        <!-- 8 Dynamic 3D Human Avatars Selection -->
         <div>
-          <label style="display: block; font-family: var(--font-heading); font-size: var(--fs-xs); font-weight: 700; margin-bottom: 8px; color: #334155;">
+          <label style="display: block; font-family: var(--font-heading); font-size: var(--fs-xs); font-weight: 700; margin-bottom: 8px; color: #334155;" id="avatar-section-label">
             Pilih Avatar Karakter
           </label>
-          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+          <div class="avatar-grid-8" role="radiogroup" aria-labelledby="avatar-section-label">
             <?php 
-              $avatars = [
-                ['id' => 'astro_cat', 'icon' => '🐱', 'name' => 'Kucing'],
-                ['id' => 'super_bear', 'icon' => '🐻', 'name' => 'Beruang'],
-                ['id' => 'clever_fox', 'icon' => '🦊', 'name' => 'Rubah'],
-                ['id' => 'star_owl', 'icon' => '🦉', 'name' => 'Hantu'],
-                ['id' => 'rocket_boy', 'icon' => '👦', 'name' => 'Astro'],
-                ['id' => 'wonder_girl', 'icon' => '👧', 'name' => 'Maya'],
-                ['id' => 'botty_bot', 'icon' => '🤖', 'name' => 'Botty'],
-                ['id' => 'happy_dino', 'icon' => '🦕', 'name' => 'Dino'],
-              ];
-              foreach ($avatars as $idx => $av):
+              $idx = 0;
+              foreach ($avatars as $avId => $av):
+                $isDefault = ($avId === Avatar::DEFAULT_AVATAR);
+                $idx++;
             ?>
-              <label style="cursor: pointer; text-align: center;">
-                <input type="radio" name="avatar_id" value="<?= $av['id'] ?>" <?= $idx === 0 ? 'checked' : '' ?> style="display: none;" class="avatar-radio">
-                <div class="avatar-pick-box" style="border: 2px solid <?= $idx === 0 ? 'var(--color-primary)' : 'var(--border-subtle)' ?>; background: <?= $idx === 0 ? 'var(--color-primary-light)' : 'var(--bg-surface-elevated)' ?>; border-radius: var(--radius-lg); padding: 8px 4px; transition: all 150ms ease;">
-                  <div style="font-size: 1.6rem;"><?= $av['icon'] ?></div>
-                  <div style="font-size: 10px; font-weight: 700; margin-top: 2px;"><?= $av['name'] ?></div>
+              <label class="avatar-option-label" for="avatar-<?= e($av['id']) ?>">
+                <input type="radio"
+                       id="avatar-<?= e($av['id']) ?>"
+                       name="avatar_id"
+                       value="<?= e($av['id']) ?>"
+                       <?= $isDefault ? 'checked' : '' ?>
+                       class="avatar-radio"
+                       data-title="<?= e($av['title']) ?>"
+                       data-desc="<?= e($av['desc']) ?>"
+                       data-image="<?= e($av['image']) ?>"
+                       data-alt="<?= e($av['alt']) ?>"
+                       aria-label="<?= e($av['title']) ?>"
+                       aria-checked="<?= $isDefault ? 'true' : 'false' ?>">
+                <div class="avatar-pick-box <?= $isDefault ? 'is-selected' : '' ?>">
+                  <span class="avatar-pick-badge" aria-hidden="true">✓</span>
+                  <div class="avatar-pick-thumb-wrapper">
+                    <img src="<?= e($av['thumb']) ?>" 
+                         alt="<?= e($av['name']) ?>" 
+                         class="avatar-pick-thumb" 
+                         width="44" 
+                         height="44" 
+                         loading="eager">
+                  </div>
+                  <div class="avatar-pick-name"><?= e($av['name']) ?></div>
+                  <div class="avatar-pick-role"><?= e($av['role']) ?></div>
                 </div>
               </label>
             <?php endforeach; ?>
@@ -125,29 +153,83 @@ require __DIR__ . '/../../layouts/header.php';
 </div>
 
 <script>
-// Simple avatar selection highlight
-document.querySelectorAll('.avatar-radio').forEach(radio => {
-  radio.addEventListener('change', () => {
-    document.querySelectorAll('.avatar-pick-box').forEach(box => {
-      box.style.borderColor = 'var(--border-subtle)';
-      box.style.background = 'var(--bg-surface-elevated)';
-    });
-    const selectedBox = radio.closest('label').querySelector('.avatar-pick-box');
-    selectedBox.style.borderColor = 'var(--color-primary)';
-    selectedBox.style.background = 'var(--color-primary-light)';
-  });
-});
+(function() {
+  // Elements
+  const heroImg = document.getElementById('auth-hero-character-img');
+  const titleElem = document.getElementById('auth-visual-char-title');
+  const descElem = document.getElementById('auth-visual-char-desc');
+  const radios = document.querySelectorAll('.avatar-radio');
 
-// Password visibility toggle
-document.getElementById('toggle-password')?.addEventListener('click', function() {
-  const pwd = document.getElementById('password');
-  if (!pwd) return;
-  const isHidden = pwd.type === 'password';
-  pwd.type = isHidden ? 'text' : 'password';
-  this.textContent = isHidden ? '🙈' : '👁️';
-  this.setAttribute('aria-label', isHidden ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
-  this.title = isHidden ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi';
-});
+  // Preload all 8 full-body character images into browser memory cache for zero latency
+  const preloadedImages = {};
+  radios.forEach(radio => {
+    const imgSrc = radio.dataset.image;
+    if (imgSrc) {
+      const img = new Image();
+      img.src = imgSrc;
+      preloadedImages[radio.value] = img;
+    }
+  });
+
+  // Dynamic Avatar Selection Handler
+  function selectAvatar(radio) {
+    if (!radio) return;
+
+    // 1. Update selection highlight on all boxes
+    document.querySelectorAll('.avatar-pick-box').forEach(box => {
+      box.classList.remove('is-selected');
+    });
+    radios.forEach(r => {
+      r.setAttribute('aria-checked', r === radio ? 'true' : 'false');
+    });
+
+    const activeBox = radio.closest('label').querySelector('.avatar-pick-box');
+    if (activeBox) {
+      activeBox.classList.add('is-selected');
+    }
+
+    // 2. Extract character data attributes
+    const nextSrc = radio.dataset.image;
+    const nextAlt = radio.dataset.alt || radio.dataset.title;
+    const nextTitle = radio.dataset.title;
+    const nextDesc = radio.dataset.desc;
+
+    // 3. Smooth transition on the left visual panel
+    if (heroImg && nextSrc) {
+      heroImg.classList.add('switching');
+      setTimeout(() => {
+        heroImg.src = nextSrc;
+        heroImg.alt = nextAlt;
+        heroImg.classList.remove('switching');
+      }, 70);
+    }
+
+    if (titleElem && nextTitle) {
+      titleElem.textContent = nextTitle;
+    }
+
+    if (descElem && nextDesc) {
+      descElem.textContent = nextDesc;
+    }
+  }
+
+  // Bind change & keyboard events
+  radios.forEach(radio => {
+    radio.addEventListener('change', () => selectAvatar(radio));
+    radio.addEventListener('click', () => selectAvatar(radio));
+  });
+
+  // Password visibility toggle
+  document.getElementById('toggle-password')?.addEventListener('click', function() {
+    const pwd = document.getElementById('password');
+    if (!pwd) return;
+    const isHidden = pwd.type === 'password';
+    pwd.type = isHidden ? 'text' : 'password';
+    this.textContent = isHidden ? '🙈' : '👁️';
+    this.setAttribute('aria-label', isHidden ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
+    this.title = isHidden ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi';
+  });
+})();
 </script>
 
 <?php require __DIR__ . '/../../layouts/footer.php'; ?>

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../Helpers/Session.php';
+require_once __DIR__ . '/../Helpers/Avatar.php';
 
 class AuthService
 {
@@ -17,8 +18,11 @@ class AuthService
         $this->db = Database::getConnection();
     }
 
-    public function register(string $username, string $password, string $nickname, string $avatarId = 'astro_cat'): array
+    public function register(string $username, string $password, string $nickname, string $avatarId = 'kian'): array
     {
+        if (!Avatar::isValid($avatarId)) {
+            $avatarId = Avatar::DEFAULT_AVATAR;
+        }
         $username = strtolower(trim($username));
         $nickname = trim($nickname);
 
@@ -99,7 +103,7 @@ class AuthService
         Session::set('user_id', (int)$user['id']);
         Session::set('username', $user['username']);
         Session::set('nickname', $user['nickname'] ?? ucfirst($user['username']));
-        Session::set('avatar_id', $user['avatar_id'] ?? 'astro_cat');
+        Session::set('avatar_id', $user['avatar_id'] ?? Avatar::DEFAULT_AVATAR);
 
         return ['success' => true, 'user' => $user];
     }

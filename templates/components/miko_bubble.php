@@ -19,12 +19,12 @@ $currentNick = Session::get('nickname', 'Sahabat Cilik');
       </div>
     </div>
     <div class="miko-bubble-text" id="miko-bubble-text">
-      Halo <?= e($currentNick) ?>! MIKO siap menemanimu bereksplorasi. Kalau butuh bantuan di dalam misi, klik tombol petunjuk ya!
+      Halo Sahabat Cilik! MIKO siap menemanimu bereksplorasi. Kalau butuh bantuan di dalam misi, klik tombol petunjuk ya!
     </div>
   </div>
 
   <!-- MIKO Trigger Button with Inline SVG Avatar -->
-  <button class="miko-avatar-btn miko-living-avatar" id="miko-avatar-trigger" title="Bicara dengan MIKO" aria-label="Buka bantuan MIKO">
+  <button class="miko-avatar-btn miko-living-avatar" id="miko-dock-avatar-trigger" title="Bicara dengan MIKO" aria-label="Buka bantuan MIKO">
     <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <!-- Antenna -->
       <line x1="50" y1="12" x2="50" y2="28" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>

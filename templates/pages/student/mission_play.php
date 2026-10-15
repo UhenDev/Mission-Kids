@@ -16,7 +16,7 @@ require __DIR__ . '/../../layouts/header.php';
     <!-- Top Bar -->
     <div class="mission-topbar">
       <div class="mission-breadcrumbs">
-        <a href="?page=worlds" style="color: var(--color-primary);">&larr; Peta</a>
+        <a href="?page=worlds&world=<?= urlencode($mission['world_slug']) ?>" style="color: var(--color-primary);">&larr; Peta <?= e($mission['world_title']) ?></a>
         <span>/</span>
         <span><?= e($mission['world_title']) ?></span>
         <span>/</span>
@@ -216,9 +216,12 @@ require __DIR__ . '/../../layouts/header.php';
         </div>
 
         <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
-          <a href="?page=worlds" class="btn-kid btn-kid-primary" style="padding: 0.9rem 2.2rem; font-size: var(--fs-md);" id="btn-next-mission-link">
+          <a href="?page=worlds&world=<?= urlencode($mission['world_slug']) ?>" class="btn-kid btn-kid-primary" style="padding: 0.9rem 2.2rem; font-size: var(--fs-md);" id="btn-next-mission-link">
             Lanjut Petualangan Peta 🗺️
           </a>
+          <button type="button" class="btn-kid btn-kid-ghost" id="btn-replay-reward-miko" style="padding: 0.9rem 1.6rem; font-size: var(--fs-md); border-color: #38BDF8; color: #0284C7; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+            🔊 Dengar Suara Miko 🤖
+          </button>
           <button type="button" class="btn-kid btn-kid-ghost" onclick="location.reload();" style="padding: 0.9rem 1.6rem; font-size: var(--fs-md);">
             Mainkan Ulang 🔄
           </button>
@@ -264,6 +267,9 @@ window.CURRENT_MISSION = {
       Jawabanmu benar dan semua langkah sudah tepat!
     </p>
     <div style="display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap;">
+      <button type="button" class="btn-kid btn-kid-ghost" id="btn-modal-speak-miko" style="padding: 0.8rem 1.4rem; font-size: 13px; border-color: #38BDF8; color: #0284C7; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+        🔊 Dengar Suara Miko 🤖
+      </button>
       <button type="button" class="btn-kid btn-kid-ghost" id="btn-modal-stay" style="padding: 0.8rem 1.4rem;">
         Lihat Arena 👀
       </button>
@@ -289,6 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- Load Mission Engine Scripts -->
 <script src="js/engine/InteractionHandler.js?v=3.3"></script>
-<script src="js/engine/MissionEngine.js?v=3.3"></script>
+<script src="js/engine/MissionEngine.js?v=5.2"></script>
 
 <?php require __DIR__ . '/../../layouts/footer.php'; ?>

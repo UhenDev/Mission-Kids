@@ -5,8 +5,9 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. MIKO Floating Companion Trigger & Speech Cycling
-  const mikoTrigger = document.getElementById('miko-avatar-trigger');
+  // 1. MIKO Floating Companion Trigger & Speech Cycling (Student Dock Only)
+  const mikoDock = document.getElementById('miko-dock');
+  const mikoTrigger = mikoDock ? (document.getElementById('miko-dock-avatar-trigger') || mikoDock.querySelector('.miko-avatar-btn')) : null;
   const mikoBubble = document.getElementById('miko-bubble');
   const mikoClose = document.getElementById('miko-bubble-close');
   const mikoText = document.getElementById('miko-bubble-text');
@@ -39,7 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let spokenText = '';
         if (mikoText) {
-          if (!mikoBubble.dataset.openedOnce) {
+          const hasActiveHint = mikoText.querySelector('.miko-hint-text') || mikoText.textContent.includes('Petunjuk MIKO') || mikoText.textContent.includes('Panduan Misi');
+          if (!mikoBubble.dataset.openedOnce || hasActiveHint) {
             mikoBubble.dataset.openedOnce = 'true';
             spokenText = mikoText.textContent.trim();
           } else {

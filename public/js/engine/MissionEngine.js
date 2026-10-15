@@ -157,6 +157,12 @@ class MissionEngine {
                 modal.classList.remove('active');
               };
             }
+            const btnModalSpeak = document.getElementById('btn-modal-speak-miko');
+            if (btnModalSpeak) {
+              btnModalSpeak.onclick = () => {
+                this.companion.say("Luar biasa! Kamu berhasil memecahkan tantangannya! 🌟");
+              };
+            }
           }
 
           if (window.Celebration) {
@@ -168,7 +174,10 @@ class MissionEngine {
             window.SoundFX.playStarShower();
           }
 
-          this.companion.say("Luar biasa! Kamu berhasil memecahkan tantangannya! Ayo lanjutkan ke refleksi pembelajaran! 🌟");
+          // Delay Miko speech by 250ms so celebratory fanfare chimes first without sound clash
+          setTimeout(() => {
+            this.companion.say("Luar biasa! Kamu berhasil memecahkan tantangannya! 🌟");
+          }, 250);
         } else {
           feedbackBox.style.background = '#FEE2E2';
           feedbackBox.style.color = '#991B1B';
@@ -192,8 +201,11 @@ class MissionEngine {
 
           if (this.attemptCount >= 2) {
             this.companion.showHintBadge();
-            this.companion.say("Jangan menyerah ya! Coba klik tombol Petunjuk MIKO untuk mendapat bantuan berharga! 💡");
           }
+          // Encourage on incorrect check with AI Miko cute boy voice
+          setTimeout(() => {
+            this.companion.say("Jangan menyerah, coba sekali lagi ya! 💡");
+          }, 200);
         }
       });
     }
@@ -373,7 +385,17 @@ class MissionEngine {
       }
     }
 
-    this.companion.say(`Horeee! Selamat atas keberhasilanmu! Kamu mendapatkan +${result.total_awarded_xp} XP baru! 🎊🎉`);
+    const btnReplayReward = document.getElementById('btn-replay-reward-miko');
+    if (btnReplayReward) {
+      btnReplayReward.onclick = () => {
+        this.companion.say("Horeee! Selamat atas keberhasilanmu! Kamu mendapatkan XP dan bintang baru! 🌟");
+      };
+    }
+
+    // Delay Miko speech by 350ms so celebration fanfare plays first without audio clash
+    setTimeout(() => {
+      this.companion.say("Horeee! Selamat atas keberhasilanmu! Kamu mendapatkan XP dan bintang baru! 🌟");
+    }, 350);
   }
 }
 

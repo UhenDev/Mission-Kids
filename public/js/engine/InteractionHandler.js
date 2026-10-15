@@ -44,7 +44,7 @@ class InteractionHandler {
     } else if (this.slug === 'rover-mars') {
       this.mountMarsRover(canvasEl, controlsEl);
     } else {
-      canvasEl.innerHTML = `<div style="padding: 2rem;">Tantangan interaktif untuk misi ${this.data.title} siap dimainkan!</div>`;
+      this.mountInteractiveChallenge(canvasEl, controlsEl);
     }
   }
 
@@ -2223,7 +2223,80 @@ class InteractionHandler {
         commands: Array.isArray(this.state.commands) ? this.state.commands : []
       };
     }
+    if (this.state.selected_answer !== null && this.state.selected_answer !== undefined) {
+      return {
+        selected_answer: this.state.selected_answer
+      };
+    }
     return {};
+  }
+
+  // =========================================================================
+  // Interactive Modular Challenge Engine (Supports all 80 rich world missions)
+  // =========================================================================
+  mountInteractiveChallenge(canvasEl, controlsEl) {
+    const config = this.config || {};
+    const question = config.question || 'Pilihlah jawaban atau langkah yang paling tepat:';
+    const visual = config.visual_hint || config.scenario || '';
+    const options = Array.isArray(config.options) ? config.options : [];
+
+    this.state.selected_answer = null;
+
+    canvasEl.innerHTML = `
+      <div class="interactive-challenge-card" style="width: 100%; max-width: 640px; margin: 0 auto; padding: 24px 20px; text-align: center;">
+        <div style="display: inline-flex; align-items: center; gap: 6px; background: #EFF6FF; border: 1.5px solid #BFDBFE; border-radius: 999px; padding: 5px 16px; font-size: 13px; font-weight: 800; color: #1D4ED8; margin-bottom: 16px;">
+          <span>🎯</span> Tantangan Misi Cerdas
+        </div>
+        <h3 style="font-size: 1.25rem; color: #1E293B; margin-bottom: 16px; font-family: var(--font-heading); line-height: 1.45;">
+          ${question}
+        </h3>
+        ${visual ? `
+          <div style="background: #F8FAFC; border: 2px dashed #CBD5E1; border-radius: 18px; padding: 16px 20px; margin-bottom: 22px; font-size: 1rem; color: #475569; font-weight: 600; line-height: 1.5;">
+            ${visual}
+          </div>
+        ` : ''}
+        <div id="interactive-options-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 10px;">
+          ${options.map((opt, idx) => {
+            const text = typeof opt === 'string' ? opt : (opt.text || opt.label || '');
+            const icon = typeof opt === 'object' && opt.icon ? opt.icon : '✨';
+            const val = typeof opt === 'object' && opt.id !== undefined ? opt.id : idx;
+            return `
+              <button type="button" class="interactive-opt-btn" data-val="${val}" style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: #FFFFFF; border: 2.5px solid #E2E8F0; border-radius: 16px; cursor: pointer; text-align: left; font-size: 0.98rem; font-weight: 700; color: #1E293B; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                <span style="font-size: 1.6rem; line-height: 1; flex-shrink: 0;">${icon}</span>
+                <span style="flex: 1; line-height: 1.35;">${text}</span>
+              </button>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+
+    controlsEl.innerHTML = `
+      <div style="padding: 12px; background: #F8FAFC; border-radius: 14px; font-size: 13px; color: #64748B; font-weight: 600; text-align: center; border: 1px solid #E2E8F0;">
+        💡 Klik opsi jawaban yang menurutmu benar, lalu tekan tombol <strong>Periksa Hasil Jawaban</strong>!
+      </div>
+    `;
+
+    // Attach click events to options
+    const optionBtns = canvasEl.querySelectorAll('.interactive-opt-btn');
+    optionBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (window.SoundFX && typeof window.SoundFX.playTap === 'function') {
+          window.SoundFX.playTap();
+        }
+        optionBtns.forEach(b => {
+          b.style.borderColor = '#E2E8F0';
+          b.style.background = '#FFFFFF';
+          b.style.transform = 'none';
+          b.style.boxShadow = 'none';
+        });
+        btn.style.borderColor = '#3B82F6';
+        btn.style.background = '#EFF6FF';
+        btn.style.transform = 'scale(1.02)';
+        btn.style.boxShadow = '0 6px 18px -4px rgba(59, 130, 246, 0.3)';
+        this.state.selected_answer = btn.getAttribute('data-val');
+      });
+    });
   }
 }
 

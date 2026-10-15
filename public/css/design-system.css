@@ -21,6 +21,18 @@
   --color-purple: #8B5CF6;
   --color-purple-light: #EDE9FE;
 
+  /* Reference Precision Palette */
+  --color-primary-blue: #1264F5;
+  --color-deep-blue: #1646A0;
+  --color-heading-navy: #173F86;
+  --color-body-text: #58779F;
+  --color-login-bg: #F3F8FF;
+  --color-surface-white: #FFFFFF;
+  --color-border-blue: #D6E6FF;
+  --color-soft-blue: #EAF3FF;
+  --color-success-green: #20B879;
+  --color-error-red: #E5484D;
+
   /* Neutrals & Surfaces */
   --bg-app: #F8FAFC;
   --bg-surface: #FFFFFF;

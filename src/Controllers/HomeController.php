@@ -31,6 +31,8 @@ class HomeController
             exit;
         }
 
+        $userId = Session::getUserId() ?? 0;
+        $worlds = $this->missionProgress->getWorldsWithProgress($userId);
         $pageTitle = "MISSION KIDS — Petualangan Misimu Dimulai di Sini.";
         require __DIR__ . '/../../templates/pages/landing.php';
     }
