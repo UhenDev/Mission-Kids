@@ -6,8 +6,8 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/config/database.php';
-require_once __DIR__ . '/src/Services/AuthService.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../src/Services/AuthService.php';
 
 echo "\n======================================================\n";
 echo "  MISSION KIDS — LOGIN PAGE AUTOMATED VERIFICATION\n";
@@ -28,7 +28,7 @@ function assertCheck(string $name, bool $condition, string $details = ''): void 
 }
 
 // 1. Check landscape image exists and is readable
-$landscapePath = __DIR__ . '/public/assets/images/login-adventure-landscape.jpg';
+$landscapePath = __DIR__ . '/../public/assets/images/login-adventure-landscape.jpg';
 assertCheck("Landscape asset file exists on disk", file_exists($landscapePath), $landscapePath);
 if (file_exists($landscapePath)) {
     assertCheck("Landscape asset file size > 50KB", filesize($landscapePath) > 50000);

@@ -13,30 +13,44 @@ $avatars = Avatar::all();
 $defaultAvatar = $avatars[Avatar::DEFAULT_AVATAR];
 ?>
 
-<div class="container" style="max-width: 950px; padding: var(--space-4) var(--space-4);">
+<div class="container" style="max-width: 980px; padding: var(--space-4) var(--space-4);">
   <div class="auth-split-wrapper">
     <!-- Left Visual Side (Dynamic 3D Character Hero Stage) -->
     <div class="auth-visual-side auth-visual-register" id="auth-visual-panel">
-      <div>
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: var(--space-2);">
-          <span style="font-size: 1.6rem;" aria-hidden="true">🚀</span>
-          <strong style="font-family: var(--font-heading); color: #1D4ED8; font-size: 1.15rem;">MISSION KIDS</strong>
+      <div class="auth-visual-header">
+        <div class="auth-visual-brand-row">
+          <span class="auth-visual-rocket-badge" aria-hidden="true">🚀</span>
+          <strong class="auth-visual-brand-name">MISSION KIDS</strong>
         </div>
-        <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #1E3A8A; margin-bottom: 4px; transition: opacity 0.15s ease;" id="auth-visual-char-title">
+
+        <div class="preview-podium-tag">
+          <span class="preview-tag-pulse" aria-hidden="true"></span>
+          <span>Karakter Pilihanmu</span>
+        </div>
+
+        <h2 class="auth-visual-char-headline" id="auth-visual-char-title">
           <?= e($defaultAvatar['title']) ?>
         </h2>
-        <p style="font-size: var(--fs-xs); color: #475569; font-weight: 600; margin-bottom: var(--space-4); line-height: 1.4; transition: opacity 0.15s ease;" id="auth-visual-char-desc">
+
+        <div class="auth-visual-char-role-badge" id="auth-visual-char-role">
+          <?= e($defaultAvatar['role']) ?>
+        </div>
+
+        <p class="auth-visual-char-desc" id="auth-visual-char-desc">
           <?= e($defaultAvatar['desc']) ?>
         </p>
       </div>
 
+      <!-- Large Character Hero Showcase with Illustrated Spotlight Podium -->
       <div class="auth-character-stage">
+        <div class="auth-stage-aura" aria-hidden="true"></div>
         <img id="auth-hero-character-img"
              src="<?= e($defaultAvatar['image']) ?>"
              alt="<?= e($defaultAvatar['alt']) ?>"
              class="auth-character-img"
              width="896"
              height="1200">
+        <div class="auth-stage-podium" aria-hidden="true"></div>
       </div>
     </div>
 
@@ -94,11 +108,17 @@ $defaultAvatar = $avatars[Avatar::DEFAULT_AVATAR];
           </div>
         </div>
 
-        <!-- 8 Dynamic 3D Human Avatars Selection -->
+        <!-- 8 Dynamic 3D Human Avatars Selection as Large Portrait Cards -->
         <div>
-          <label style="display: block; font-family: var(--font-heading); font-size: var(--fs-xs); font-weight: 700; margin-bottom: 8px; color: #334155;" id="avatar-section-label">
-            Pilih Avatar Karakter
-          </label>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <label style="font-family: var(--font-heading); font-size: var(--fs-xs); font-weight: 700; color: #334155; margin: 0;" id="avatar-section-label">
+              Pilih Avatar Karakter
+            </label>
+            <span style="font-size: 11px; font-weight: 700; color: #2563EB; background: #EFF6FF; padding: 2px 8px; border-radius: 9999px;">
+              Ketuk untuk memilih
+            </span>
+          </div>
+
           <div class="avatar-grid-8" role="radiogroup" aria-labelledby="avatar-section-label">
             <?php 
               $idx = 0;
@@ -115,6 +135,7 @@ $defaultAvatar = $avatars[Avatar::DEFAULT_AVATAR];
                        class="avatar-radio"
                        data-title="<?= e($av['title']) ?>"
                        data-desc="<?= e($av['desc']) ?>"
+                       data-role="<?= e($av['role']) ?>"
                        data-image="<?= e($av['image']) ?>"
                        data-alt="<?= e($av['alt']) ?>"
                        aria-label="<?= e($av['title']) ?>"
@@ -125,12 +146,14 @@ $defaultAvatar = $avatars[Avatar::DEFAULT_AVATAR];
                     <img src="<?= e($av['thumb']) ?>" 
                          alt="<?= e($av['name']) ?>" 
                          class="avatar-pick-thumb" 
-                         width="44" 
-                         height="44" 
+                         width="82" 
+                         height="82" 
                          loading="eager">
                   </div>
-                  <div class="avatar-pick-name"><?= e($av['name']) ?></div>
-                  <div class="avatar-pick-role"><?= e($av['role']) ?></div>
+                  <div class="avatar-pick-info">
+                    <div class="avatar-pick-name"><?= e($av['name']) ?></div>
+                    <div class="avatar-pick-role"><?= e($av['role']) ?></div>
+                  </div>
                 </div>
               </label>
             <?php endforeach; ?>
@@ -157,6 +180,7 @@ $defaultAvatar = $avatars[Avatar::DEFAULT_AVATAR];
   // Elements
   const heroImg = document.getElementById('auth-hero-character-img');
   const titleElem = document.getElementById('auth-visual-char-title');
+  const roleElem = document.getElementById('auth-visual-char-role');
   const descElem = document.getElementById('auth-visual-char-desc');
   const radios = document.querySelectorAll('.avatar-radio');
 
@@ -183,7 +207,7 @@ $defaultAvatar = $avatars[Avatar::DEFAULT_AVATAR];
       r.setAttribute('aria-checked', r === radio ? 'true' : 'false');
     });
 
-    const activeBox = radio.closest('label').querySelector('.avatar-pick-box');
+    const activeBox = radio.closest('label')?.querySelector('.avatar-pick-box');
     if (activeBox) {
       activeBox.classList.add('is-selected');
     }
@@ -192,6 +216,7 @@ $defaultAvatar = $avatars[Avatar::DEFAULT_AVATAR];
     const nextSrc = radio.dataset.image;
     const nextAlt = radio.dataset.alt || radio.dataset.title;
     const nextTitle = radio.dataset.title;
+    const nextRole = radio.dataset.role;
     const nextDesc = radio.dataset.desc;
 
     // 3. Smooth transition on the left visual panel
@@ -208,12 +233,16 @@ $defaultAvatar = $avatars[Avatar::DEFAULT_AVATAR];
       titleElem.textContent = nextTitle;
     }
 
+    if (roleElem && nextRole) {
+      roleElem.textContent = nextRole;
+    }
+
     if (descElem && nextDesc) {
       descElem.textContent = nextDesc;
     }
   }
 
-  // Bind change & keyboard events
+  // Bind change & click events
   radios.forEach(radio => {
     radio.addEventListener('change', () => selectAvatar(radio));
     radio.addEventListener('click', () => selectAvatar(radio));

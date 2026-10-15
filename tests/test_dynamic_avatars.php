@@ -5,9 +5,9 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/config/database.php';
-require_once __DIR__ . '/src/Helpers/Avatar.php';
-require_once __DIR__ . '/src/Services/AuthService.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../src/Helpers/Avatar.php';
+require_once __DIR__ . '/../src/Services/AuthService.php';
 
 echo "\n======================================================\n";
 echo "  MISSION KIDS — DYNAMIC 3D HUMAN AVATARS TEST SUITE\n";
@@ -42,8 +42,8 @@ foreach ($expectedChars as $charId) {
     assertCondition("Avatar '{$charId}' has complete metadata", $hasFields);
 
     // Verify Asset Files on Disk
-    $fullImagePath = __DIR__ . '/public/' . ($char['image'] ?? '');
-    $thumbImagePath = __DIR__ . '/public/' . ($char['thumb'] ?? '');
+    $fullImagePath = __DIR__ . '/../public/' . ($char['image'] ?? '');
+    $thumbImagePath = __DIR__ . '/../public/' . ($char['thumb'] ?? '');
 
     assertCondition("Asset image exists for '{$charId}'", file_exists($fullImagePath), $fullImagePath);
     assertCondition("Asset thumb exists for '{$charId}'", file_exists($thumbImagePath), $thumbImagePath);
