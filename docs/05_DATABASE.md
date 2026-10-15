@@ -1,15 +1,16 @@
-# 05. DATABASE PLAN & SCHEMA SPECIFICATION — MISSION KIDS
+# 05. SPESIFIKASI SKEMA DATABASE — MISSION KIDS
 
-## 1. Schema Design Principles
-The MISSION KIDS database is designed with relational rigor:
-- **Foreign Key Constraints:** Cascade or restrict integrity checks across student profiles, attempts, and XP.
-- **Atomic Progress Updates:** Mission completion and XP award updates execute within a database transaction.
-- **JSON Column for Mission Configuration:** Each mission stores its interactive payload (e.g. initial inventory, goal targets, grid obstacles) in `config_json`, allowing new missions to be configured without schema migrations.
-- **Cross-Engine Compatibility:** The SQL schema utilizes standard ANSI SQL conventions, allowing seamless execution on both MariaDB/MySQL and SQLite.
+## 1. Prinsip Desain Skema
+
+Basis data MISSION KIDS dirancang dengan ketelitian relasional tinggi:
+- **Integritas Relasional & Foreign Key:** Mendukung relasi antar akun pengguna, profil karakter, progres misi, dan riwayat XP.
+- **Pembaruan Atomik (Database Transactions):** Penyelesaian misi dan pemberian XP dieksekusi dalam transaksi basis data terisolasi untuk mencegah ketidaksinkronan data jika terjadi kegagalan jaringan di tengah proses.
+- **Kolom JSON untuk Konfigurasi Misi:** Setiap misi menyimpan muatan interaktif (*payload* cerita, target keberhasilan, variabel alat) di dalam kolom `config_json`, memungkinkan penambahan misi baru tanpa perlu migrasi skema tabel.
+- **Kompatibilitas Lintas Mesin (SQLite & MySQL):** Skema SQL mematuhi standar ANSI SQL portabel, sehingga dapat berjalan lancar pada SQLite lokal maupun MySQL / MariaDB produksi via PDO.
 
 ---
 
-## 2. Entity Relationship Diagram (ERD)
+## 2. Diagram Relasi Entitas (Entity Relationship Diagram / ERD)
 
 ```text
 ┌─────────────────┐       1:1       ┌─────────────────┐
@@ -39,197 +40,112 @@ The MISSION KIDS database is designed with relational rigor:
 
 ---
 
-## 3. Data Dictionary
+## 3. Kamus Data (Data Dictionary)
 
-### Table: `users`
-| Field | Type | Attributes | Description |
+### Tabel: `users` (Akun Pengguna)
+| Kolom | Tipe Data | Atribut | Keterangan |
 | :--- | :--- | :--- | :--- |
-| `id` | INT UNSIGNED | PK, AUTO_INCREMENT | Unique user identifier |
-| `username` | VARCHAR(50) | UNIQUE, NOT NULL | Child-friendly login name (e.g. `rian_juara`) |
-| `password_hash` | VARCHAR(255) | NOT NULL | Securely hashed password (`PASSWORD_DEFAULT` / Bcrypt) |
-| `role` | ENUM('student', 'parent', 'admin') | DEFAULT 'student' | User authorization role |
-| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Registration timestamp |
-| `updated_at` | DATETIME | ON UPDATE CURRENT_TIMESTAMP | Last modification |
+| `id` | INTEGER / INT | PK, AUTO_INCREMENT | Pengidentifikasi unik pengguna |
+| `username` | VARCHAR(50) | UNIQUE, NOT NULL | Nama pengguna untuk login (huruf & angka) |
+| `password_hash` | VARCHAR(255) | NOT NULL | Hash kata sandi terenkripsi (`PASSWORD_DEFAULT` Bcrypt) |
+| `role` | VARCHAR(20) | DEFAULT 'student' | Peran otorisasi pengguna (`student`, `parent`, `admin`) |
+| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Waktu pendaftaran akun |
+| `updated_at` | DATETIME | ON UPDATE CURRENT_TIMESTAMP | Waktu pembaruan data terakhir |
 
-### Table: `profiles`
-| Field | Type | Attributes | Description |
+### Tabel: `profiles` (Profil Karakter & Status Siswa)
+| Kolom | Tipe Data | Atribut | Keterangan |
 | :--- | :--- | :--- | :--- |
-| `id` | INT UNSIGNED | PK, AUTO_INCREMENT | Profile ID |
-| `user_id` | INT UNSIGNED | UNIQUE, FK -> users(id) | Linked user account |
-| `nickname` | VARCHAR(60) | NOT NULL | Friendly display name |
-| `avatar_id` | VARCHAR(30) | DEFAULT 'astro_cat' | Selected avatar identifier |
-| `current_level` | INT UNSIGNED | DEFAULT 1 | Student rank (1 to 5) |
-| `total_xp` | INT UNSIGNED | DEFAULT 0 | Cumulative experience points |
-| `preferred_world_id` | INT UNSIGNED | NULL, FK -> worlds(id) | Onboarding preference |
-| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
-| `updated_at` | DATETIME | ON UPDATE CURRENT_TIMESTAMP | Update timestamp |
+| `id` | INTEGER / INT | PK, AUTO_INCREMENT | ID profil unik |
+| `user_id` | INTEGER / INT | UNIQUE, FK -> users(id) | Terhubung ke akun pengguna |
+| `nickname` | VARCHAR(60) | NOT NULL | Nama panggilan ramah anak |
+| `avatar_id` | VARCHAR(30) | DEFAULT 'kian' | ID karakter 3D terpilih (`kian`, `sera`, `raka`, `nara`, `dika`, `bayu`, `fajar`, `luna`) |
+| `current_level` | INTEGER | DEFAULT 1 | Level penjelajah saat ini (Level 1 sampai 5) |
+| `total_xp` | INTEGER | DEFAULT 0 | Akumulasi perolehan poin pengalaman (*XP*) |
+| `preferred_world_id` | INTEGER | NULL, FK -> worlds(id) | Pilihan dunia awal saat registrasi |
+| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Waktu pembuatan profil |
+| `updated_at` | DATETIME | ON UPDATE CURRENT_TIMESTAMP | Waktu pembaruan profil |
 
-### Table: `worlds`
-| Field | Type | Attributes | Description |
+### Tabel: `worlds` (Dunia Pembelajaran)
+| Kolom | Tipe Data | Atribut | Keterangan |
 | :--- | :--- | :--- | :--- |
-| `id` | INT UNSIGNED | PK, AUTO_INCREMENT | World identifier |
-| `slug` | VARCHAR(50) | UNIQUE, NOT NULL | e.g. `number-city`, `discovery-lab` |
-| `title` | VARCHAR(100) | NOT NULL | World title (e.g. "Number City") |
-| `subtitle` | VARCHAR(150) | NOT NULL | Short thematic summary |
-| `theme_color` | VARCHAR(20) | NOT NULL | Hex or CSS token |
-| `sort_order` | INT UNSIGNED | DEFAULT 1 | Display ordering |
-| `is_active` | TINYINT(1) | DEFAULT 1 | Availability toggle |
+| `id` | INTEGER / INT | PK, AUTO_INCREMENT | ID dunia |
+| `slug` | VARCHAR(50) | UNIQUE, NOT NULL | Slug pengenal URL (`number-city`, `discovery-lab`, dll) |
+| `title` | VARCHAR(100) | NOT NULL | Judul nama dunia petualangan |
+| `subtitle` | VARCHAR(150) | NOT NULL | Deskripsi tematik singkat |
+| `theme_color` | VARCHAR(20) | NOT NULL | Kode warna heksadesimal atau token tema |
+| `sort_order` | INTEGER | DEFAULT 1 | Urutan tampil dunia pada peta penjelajahan |
+| `is_active` | INTEGER | DEFAULT 1 | Status aktif dunia (1 = aktif, 0 = nonaktif) |
 
-### Table: `missions`
-| Field | Type | Attributes | Description |
+### Tabel: `missions` (Daftar Misi Pembelajaran)
+| Kolom | Tipe Data | Atribut | Keterangan |
 | :--- | :--- | :--- | :--- |
-| `id` | INT UNSIGNED | PK, AUTO_INCREMENT | Mission ID |
-| `world_id` | INT UNSIGNED | NOT NULL, FK -> worlds(id) | Associated world |
-| `slug` | VARCHAR(60) | UNIQUE, NOT NULL | e.g. `toko-kue`, `tanaman-layu` |
-| `title` | VARCHAR(120) | NOT NULL | Mission display title |
-| `subtitle` | VARCHAR(200) | NOT NULL | Short challenge hook |
-| `learning_objective` | TEXT | NOT NULL | Pedagogical focus statement |
-| `interaction_type` | VARCHAR(40) | NOT NULL | `match_sort`, `simulation`, `sequence_logic` |
-| `xp_reward` | INT UNSIGNED | DEFAULT 100 | Base XP awarded on clear |
-| `sort_order` | INT UNSIGNED | DEFAULT 1 | Node position in world map |
-| `config_json` | LONGTEXT | NOT NULL | JSON payload with story, tools, goals, hints |
-| `is_active` | TINYINT(1) | DEFAULT 1 | Active status |
+| `id` | INTEGER / INT | PK, AUTO_INCREMENT | ID misi |
+| `world_id` | INTEGER / INT | NOT NULL, FK -> worlds(id) | Dunia tempat misi bernaung |
+| `slug` | VARCHAR(60) | UNIQUE, NOT NULL | Slug pengenal URL misi (`toko-kue`, `tanaman-layu`, dll) |
+| `title` | VARCHAR(120) | NOT NULL | Judul nama misi petualangan |
+| `subtitle` | VARCHAR(200) | NOT NULL | Deskripsi tantangan misi |
+| `learning_objective` | TEXT | NOT NULL | Tujuan capaian pembelajaran misi |
+| `interaction_type` | VARCHAR(40) | NOT NULL | Tipe interaksi (`match_sort`, `simulation`, `sequence_logic`) |
+| `xp_reward` | INTEGER | DEFAULT 100 | Hadiah dasar XP saat misi berhasil diselesaikan |
+| `sort_order` | INTEGER | DEFAULT 1 | Urutan node misi di dalam dunia |
+| `config_json` | TEXT | NOT NULL | Konfigurasi JSON (cerita, alat simulasi, target nilai, petunjuk MIKO) |
+| `is_active` | INTEGER | DEFAULT 1 | Status ketersediaan misi |
 
-### Table: `mission_progress`
-| Field | Type | Attributes | Description |
+### Tabel: `mission_progress` (Progres Node Misi Siswa)
+| Kolom | Tipe Data | Atribut | Keterangan |
 | :--- | :--- | :--- | :--- |
-| `id` | INT UNSIGNED | PK, AUTO_INCREMENT | Progress ID |
-| `user_id` | INT UNSIGNED | NOT NULL, FK -> users(id) | Student ID |
-| `mission_id` | INT UNSIGNED | NOT NULL, FK -> missions(id) | Mission ID |
-| `status` | ENUM('locked', 'available', 'completed') | DEFAULT 'locked' | World map unlock status |
-| `stars` | TINYINT UNSIGNED | DEFAULT 0 | 1 to 3 stars rating |
-| `completed_at` | DATETIME | NULL | Timestamp of first completion |
-| `updated_at` | DATETIME | ON UPDATE CURRENT_TIMESTAMP | Last activity timestamp |
+| `id` | INTEGER / INT | PK, AUTO_INCREMENT | ID progres |
+| `user_id` | INTEGER / INT | NOT NULL, FK -> users(id) | Siswa pemilik progres |
+| `mission_id` | INTEGER / INT | NOT NULL, FK -> missions(id) | Misi terkait |
+| `status` | VARCHAR(20) | DEFAULT 'locked' | Status node (`locked`, `available`, `completed`) |
+| `stars` | INTEGER | DEFAULT 0 | Perolehan rating bintang (0 sampai 3 bintang) |
+| `completed_at` | DATETIME | NULL | Waktu pertama kali misi berhasil diselesaikan |
 
-### Table: `mission_attempts`
-| Field | Type | Attributes | Description |
+### Tabel: `mission_attempts` (Log Percobaan Interaksi Misi)
+| Kolom | Tipe Data | Atribut | Keterangan |
 | :--- | :--- | :--- | :--- |
-| `id` | INT UNSIGNED | PK, AUTO_INCREMENT | Attempt ID |
-| `user_id` | INT UNSIGNED | NOT NULL, FK -> users(id) | Student ID |
-| `mission_id` | INT UNSIGNED | NOT NULL, FK -> missions(id) | Mission ID |
-| `hints_used` | TINYINT UNSIGNED | DEFAULT 0 | Number of MIKO hints opened |
-| `is_success` | TINYINT(1) | NOT NULL | 1 if completed, 0 if abandoned/failed |
-| `reflection_answer` | TEXT | NULL | Selected or entered reflection insight |
-| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Attempt timestamp |
+| `id` | INTEGER / INT | PK, AUTO_INCREMENT | ID percobaan |
+| `user_id` | INTEGER / INT | NOT NULL, FK -> users(id) | Siswa yang mencoba |
+| `mission_id` | INTEGER / INT | NOT NULL, FK -> missions(id) | Misi yang dimainkan |
+| `attempt_number`| INTEGER | DEFAULT 1 | Percobaan ke-N pada sesi ini |
+| `is_success` | INTEGER | DEFAULT 0 | Hasil percobaan (1 = berhasil, 0 = belum berhasil) |
+| `hints_used` | INTEGER | DEFAULT 0 | Jumlah petunjuk MIKO yang diakses |
+| `user_solution` | TEXT | NULL | JSON data solusi yang dimasukkan anak |
+| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Waktu percobaan dilakukan |
 
-### Table: `xp_transactions`
-| Field | Type | Attributes | Description |
+### Tabel: `achievements` (Lencana Prestasi Kehormatan)
+| Kolom | Tipe Data | Atribut | Keterangan |
 | :--- | :--- | :--- | :--- |
-| `id` | INT UNSIGNED | PK, AUTO_INCREMENT | Transaction ID |
-| `user_id` | INT UNSIGNED | NOT NULL, FK -> users(id) | Student ID |
-| `amount` | INT | NOT NULL | XP granted (e.g. +100, +50, +20) |
-| `source_type` | VARCHAR(50) | NOT NULL | `mission_clear`, `first_try_bonus`, etc. |
-| `reference_id` | INT UNSIGNED | NULL | ID of linked mission or badge |
-| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Award timestamp |
+| `id` | INTEGER / INT | PK, AUTO_INCREMENT | ID lencana |
+| `slug` | VARCHAR(50) | UNIQUE, NOT NULL | Pengenal lencana (`first-mission`, `little-scientist`, dll) |
+| `title` | VARCHAR(100) | NOT NULL | Nama lencana kehormatan |
+| `description` | VARCHAR(255) | NOT NULL | Syarat pencapaian untuk membuka lencana |
+| `icon` | VARCHAR(30) | NOT NULL | Ikon lencana medali |
+| `xp_bonus` | INTEGER | DEFAULT 50 | Bonus XP tambahan saat lencana diraih |
 
-### Table: `achievements` & `user_achievements`
-Standard badge system tracking criteria (`first_mission`, `world_complete_discovery`, etc.) and student unlock history.
+### Tabel: `user_achievements` (Riwayat Lencana Siswa)
+| Kolom | Tipe Data | Atribut | Keterangan |
+| :--- | :--- | :--- | :--- |
+| `id` | INTEGER / INT | PK, AUTO_INCREMENT | ID catatan |
+| `user_id` | INTEGER / INT | NOT NULL, FK -> users(id) | Siswa penerima lencana |
+| `achievement_id` | INTEGER / INT | NOT NULL, FK -> achievements(id) | Lencana yang berhasil diraih |
+| `unlocked_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Waktu lencana resmi dibuka |
+
+### Tabel: `xp_transactions` (Buku Kas XP Siswa)
+| Kolom | Tipe Data | Atribut | Keterangan |
+| :--- | :--- | :--- | :--- |
+| `id` | INTEGER / INT | PK, AUTO_INCREMENT | ID transaksi |
+| `user_id` | INTEGER / INT | NOT NULL, FK -> users(id) | Siswa penerima XP |
+| `amount` | INTEGER | NOT NULL | Besaran poin XP yang ditambahkan |
+| `source` | VARCHAR(50) | NOT NULL | Sumber perolehan (`mission_clear`, `first_try_bonus`, `achievement`) |
+| `reference_id` | INTEGER | NULL | ID referensi entitas terkait (misal mission_id) |
+| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Waktu pencatatan transaksi XP |
 
 ---
 
-## 4. DDL Script (MySQL / MariaDB & SQLite Compatible)
+## 4. Mekanisme Inisialisasi Otomatis (Auto-Bootstrap)
 
-```sql
-CREATE TABLE IF NOT EXISTS users (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
-    role VARCHAR(20) NOT NULL DEFAULT 'student',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS profiles (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED NOT NULL UNIQUE,
-    nickname VARCHAR(60) NOT NULL,
-    avatar_id VARCHAR(30) NOT NULL DEFAULT 'astro_cat',
-    current_level INT UNSIGNED NOT NULL DEFAULT 1,
-    total_xp INT UNSIGNED NOT NULL DEFAULT 0,
-    preferred_world_id INT UNSIGNED NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS worlds (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    slug VARCHAR(50) NOT NULL UNIQUE,
-    title VARCHAR(100) NOT NULL,
-    subtitle VARCHAR(150) NOT NULL,
-    theme_color VARCHAR(20) NOT NULL,
-    sort_order INT UNSIGNED NOT NULL DEFAULT 1,
-    is_active TINYINT(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS missions (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    world_id INT UNSIGNED NOT NULL,
-    slug VARCHAR(60) NOT NULL UNIQUE,
-    title VARCHAR(120) NOT NULL,
-    subtitle VARCHAR(200) NOT NULL,
-    learning_objective TEXT NOT NULL,
-    interaction_type VARCHAR(40) NOT NULL,
-    xp_reward INT UNSIGNED NOT NULL DEFAULT 100,
-    sort_order INT UNSIGNED NOT NULL DEFAULT 1,
-    config_json LONGTEXT NOT NULL,
-    is_active TINYINT(1) NOT NULL DEFAULT 1,
-    FOREIGN KEY (world_id) REFERENCES worlds(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS mission_progress (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED NOT NULL,
-    mission_id INT UNSIGNED NOT NULL,
-    status VARCHAR(20) NOT NULL DEFAULT 'locked',
-    stars TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    completed_at DATETIME NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    UNIQUE KEY uq_user_mission (user_id, mission_id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (mission_id) REFERENCES missions(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS mission_attempts (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED NOT NULL,
-    mission_id INT UNSIGNED NOT NULL,
-    hints_used TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    is_success TINYINT(1) NOT NULL,
-    reflection_answer TEXT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (mission_id) REFERENCES missions(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS xp_transactions (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED NOT NULL,
-    amount INT NOT NULL,
-    source_type VARCHAR(50) NOT NULL,
-    reference_id INT UNSIGNED NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS achievements (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    slug VARCHAR(60) NOT NULL UNIQUE,
-    title VARCHAR(100) NOT NULL,
-    description VARCHAR(255) NOT NULL,
-    icon_name VARCHAR(50) NOT NULL,
-    xp_reward INT UNSIGNED NOT NULL DEFAULT 50,
-    criteria_type VARCHAR(50) NOT NULL,
-    criteria_threshold INT UNSIGNED NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS user_achievements (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED NOT NULL,
-    achievement_id INT UNSIGNED NOT NULL,
-    unlocked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY uq_user_achievement (user_id, achievement_id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (achievement_id) REFERENCES achievements(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-```
+Pada lingkungan container Docker maupun server hosting:
+1. Kelas [`Database.php`](file:///c:/Users/HENDRIK%20WILDANSYAH/.gemini/antigravity-ide/scratch/mission-kids/config/database.php) mendeteksi keberadaan file database SQLite di path yang ditentukan (`/app/database/mission_kids.sqlite` atau direktori lokal).
+2. Jika file belum ada atau kosong (0 tabel), sistem menjalankan metode `autoBootstrap()` yang membaca dan mengeksekusi file [`database/schema.sql`](file:///c:/Users/HENDRIK%20WILDANSYAH/.gemini/antigravity-ide/scratch/mission-kids/database/schema.sql) dan [`database/seeds.sql`](file:///c:/Users/HENDRIK%20WILDANSYAH/.gemini/antigravity-ide/scratch/mission-kids/database/seeds.sql).
+3. Struktur 4 dunia, 80 misi lengkap, dan data lencana otomatis terisi secara instan dan idempoten (tidak akan menduplikasi data jika sudah ada).

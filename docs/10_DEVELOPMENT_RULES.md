@@ -1,48 +1,49 @@
-# 10. DEVELOPMENT RULES & QUALITY STANDARDS — MISSION KIDS
+# 10. ATURAN PENGEMBANGAN & STANDAR KUALITAS — MISSION KIDS
 
-## 1. Coding Standards & Conventions
+## 1. Standar & Konvensi Penulisan Kode
 
-### 1.1 PHP (Backend)
-- Standard: Modern PHP 8.2+ with strict typing where appropriate (`declare(strict_types=1);`).
-- Naming:
-  - Classes: PascalCase (e.g., `MissionProgressService`, `AuthController`).
-  - Methods & Variables: camelCase (e.g., `getMissionById()`, `$currentLevel`).
-  - Database Columns & Tables: snake_case (e.g., `user_id`, `created_at`).
-  - Constants: UPPER_SNAKE_CASE (e.g., `MAX_HINT_LEVEL`).
-- Architecture: Strict Separation of Concerns (Controller handles HTTP/Routing, Service handles business logic, Repository/Model handles DB queries, Views handle semantic HTML).
-- Output Escaping: Never echo raw `$_POST` or database values directly. Always wrap with the `e()` escape helper.
+### 1.1 Backend PHP
+- **Versi Standar:** Modern PHP 8.2+ dengan pengetikan ketat di setiap file (`declare(strict_types=1);`).
+- **Konvensi Penamaan:**
+  - Nama Kelas: `PascalCase` (contoh: `MissionProgressService`, `AuthController`, `Database`).
+  - Nama Metode & Variabel: `camelCase` (contoh: `getMissionById()`, `$currentLevel`, `$isAuthPage`).
+  - Nama Tabel & Kolom Database: `snake_case` (contoh: `user_id`, `created_at`, `avatar_id`).
+  - Konstanta: `UPPER_SNAKE_CASE` (contoh: `DEFAULT_AVATAR`, `MAX_HINT_LEVEL`).
+- **Arsitektur:** Pemisahan Tanggung Jawab (*Separation of Concerns*). Controller menangani permintaan HTTP dan alur perutean, Service menangani logika bisnis dan komputasi, Helper menangani utilitas keamanan, dan View merender antarmuka HTML semantik.
+- **Sanitasi Keluaran:** Dilarang keras mencetak variabel `$_POST` atau hasil basis data mentah secara langsung. Selalu bungkus dengan fungsi pembantu `e()`.
 
-### 1.2 CSS & Design System
-- Structure: Modular CSS files (`design-system.css`, `components.css`, `missions.css`, `worlds.css`).
-- Custom Properties: Always consume `--color-*`, `--space-*`, and `--radius-*` tokens. Never introduce arbitrary inline hex colors.
-- Responsive Units: Use `rem` for typography and spacing, `px` for borders and subtle hair-lines, `%` / `fr` / `clamp()` for fluid layout grids.
-- Mobile Touch: Minimum target size of `48px` x `48px` for primary interactive elements.
+### 1.2 CSS & Sistem Desain
+- **Struktur:** File CSS modular terpisah (`design-system.css`, `components.css`, `missions.css`, `worlds.css`).
+- **Variabel Desain:** Selalu gunakan token `--color-*`, `--space-*`, dan `--radius-*`. Hindari penulisan kode warna heksadesimal sembarangan di luar token sistem desain.
+- **Satuan Responsif:** Gunakan `rem` untuk ukuran huruf dan spasi, `px` untuk ketebalan garis batas (*border*), serta `%` / `fr` / `clamp()` untuk tata letak grid cairan yang fleksibel.
+- **Target Sentuh:** Ukuran minimum target sentuh interaktif adalah `48px` x `48px` untuk kenyamanan jari anak-anak.
 
-### 1.3 JavaScript (Frontend)
-- Vanilla Modern ES6+: Classes, modules, template literals, async/await, and native DOM APIs.
-- No heavy frameworks (no React, Vue, or bulky bundlers) unless explicitly requested; raw native browser performance ensures instant load times on school devices.
-- State Immutability: Mutate game state through explicit engine actions to maintain predictable replay and undo behavior.
-
----
-
-## 2. Visual Quality Control (VQC) Checklist
-
-Before any view or screen is marked as complete, verify:
-- [ ] **Adventure Feel:** Does this screen feel like a warm, joyful mission hub, or does it feel like a corporate admin dashboard? (If it looks like a SaaS dashboard, redesign immediately).
-- [ ] **Whitespace & Balance:** Is there comfortable breathing room around elements without cramping or giant empty voids?
-- [ ] **Visual Feedback:** Do interactive buttons compress with a satisfying `:active` depth?
-- [ ] **Contrast:** Is text crisp and legible on light and colored surfaces?
-- [ ] **No Placeholder Images:** Are all characters, icons, and illustrations rendered via crisp inline SVGs or verified vector assets?
-- [ ] **No Emoji Overload:** Emojis are used only as playful accent markers, never as structural navigation buttons.
+### 1.3 Frontend JavaScript
+- **Standar:** Vanilla ES6+ murni (Classes, Modules, Template Literals, Async/Await, dan DOM API asli).
+- **Tanpa Framework Berat:** Tidak menggunakan library frontend yang membengkakkan ukuran bundle (seperti React atau Vue berlebihan). Performa browser bawaan menjamin waktu muat instan pada perangkat berdaya rendah di lingkungan sekolah.
+- **Kekekalan Status (State Management):** Perubahan status permainan harus melalui aksi engine yang eksplisit untuk menjaga perilaku riwayat dan pengulangan langkah yang dapat diprediksi.
 
 ---
 
-## 3. Definition of Done (DoD)
+## 2. Daftar Periksa Kontrol Kualitas Visual (Visual Quality Control / VQC)
 
-A user story or feature is considered **Done** only when:
-1. **Functional Correctness:** All happy paths and edge cases work according to the PRD.
-2. **Visual Fidelity:** Complies 100% with the Mission Kids Design System.
-3. **Resilience:** Graceful handling of network timeouts, invalid inputs, and AI service unavailability.
-4. **Security Verified:** Parameters passed via PDO prepared statements, user input escaped with `e()`, CSRF tokens validated.
-5. **Responsive Integrity:** Tested and validated on Mobile (375px/412px), Tablet (768px), and Desktop (1024px+).
-6. **Self-Documenting Code:** Clean naming, no dead code or commented-out blocks, clear documentation.
+Sebelum suatu tampilan atau layar dinyatakan selesai:
+- [ ] **Nuansa Petualangan Edukasi:** Apakah layar ini terasa hangat, ramah anak, dan memikat seperti game petualangan edukasi, atau terlihat kaku seperti dasbor admin korporat? (Jika terlihat seperti dasbor korporat, segera lakukan desain ulang).
+- [ ] **Ruang Bernapas & Keseimbangan (Whitespace):** Apakah terdapat jarak sela yang nyaman antar elemen tanpa terasa berdesakan atau meninggalkan ruang kosong yang canggung?
+- [ ] **Umpan Balik Taktil 3D:** Apakah tombol-tombol interaktif memiliki efek tekan `:active` yang responsif dan nyata?
+- [ ] **Kontras & Keterbacaan:** Apakah teks kontras dan mudah dibaca pada latar belakang terang maupun berwarna?
+- [ ] **Tanpa Gambar Placeholder:** Apakah seluruh karakter, ikon, dan ilustrasi menggunakan aset visual asli yang tajam dan terverifikasi?
+- [ ] **Footer Terpisah dari Navbar:** Apakah footer autentikasi bersih dari menu tiruan navbar dan menampilkan kredit pembuat: *"Website ini dibuat oleh Hendrik Wildansyah."*?
+- [ ] **Pilihan Karakter Menjolok:** Apakah pemilihan avatar menampilkan kartu potret yang besar dan jelas dengan indikator terpilih yang tegas?
+
+---
+
+## 3. Definisi Selesai (Definition of Done / DoD)
+
+Suatu fitur atau tugas dianggap **Selesai (Done)** hanya jika:
+1. **Kebenaran Fungsional:** Seluruh alur utama dan skenario batas berjalan sesuai dokumen spesifikasi (PRD).
+2. **Kesesuaian Desain:** Mematuhi 100% token dan panduan Sistem Desain MISSION KIDS.
+3. **Ketahanan Sistem:** Mampu menangani kegagalan jaringan, masukan tidak valid, dan situasi saat layanan AI eksternal offline dengan fallback lokal mulus.
+4. **Keamanan Teruji:** Menggunakan parameterized PDO queries, seluruh output dibersihkan dengan `e()`, dan token CSRF divalidasi.
+5. **Integritas Responsif:** Teruji dan tampil proporsional pada Ponsel (360px–480px), Tablet (768px), dan Desktop (1200px+).
+6. **Pengujian Otomatis Lolos:** Seluruh skrip verifikasi otomatis di folder `tests/` berjalan sukses dengan status **100% PASS**.

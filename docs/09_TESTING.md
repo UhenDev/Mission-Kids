@@ -1,50 +1,62 @@
-# 09. QUALITY ASSURANCE & TESTING PLAN — MISSION KIDS
+# 09. PENGUJIAN & JAMINAN KUALITAS (QA) — MISSION KIDS
 
-## 1. Testing Philosophy
-Every component of MISSION KIDS undergoes rigorous verification to guarantee that elementary school children encounter a seamless, joyful, and bug-free educational experience. Testing encompasses functional correctness, responsive layout integrity, touch interaction ergonomics, and error resilience.
+## 1. Filosofi Pengujian
+
+Setiap komponen dari platform **MISSION KIDS** melewati verifikasi ketat untuk menjamin siswa Sekolah Dasar mendapatkan pengalaman belajar yang lancar, menyenangkan, dan bebas dari kendala teknis. Pengujian mencakup kebenaran fungsional, integritas tata letak responsif, ergonomi layar sentuh, dan ketahanan sistem saat terjadi galat jaringan.
 
 ---
 
-## 2. Test Execution Matrix
+## 2. Matriks Eksekusi Uji Fungsional
 
-### 2.1 Functional Test Suite
-
-| Test ID | Module | Scenario | Expected Result | Pass Criteria |
+| ID Pengujian | Modul | Skenario | Hasil yang Diharapkan | Kriteria Lolos |
 | :--- | :--- | :--- | :--- | :--- |
-| **TC-AUTH-01** | Auth | Register new student with valid username & password | Account created in DB, auto-logged in, redirected to Onboarding / Student Home | Session established, profile initialized |
-| **TC-AUTH-02** | Auth | Register with existing duplicate username | Shows friendly error *"Nama panggilan ini sudah ada, pilih nama lain ya!"* | No DB error, form preserved |
-| **TC-AUTH-03** | Auth | Login with incorrect password | Shows friendly error *"Kata sandi belum tepat, coba ingat-ingat lagi!"* | 401 response handled smoothly |
-| **TC-HOME-01** | Student Home | View Student Home after registration | Greeting displays student nickname, avatar, Level 1, 0 XP, and active World 1 | Data matches DB profile |
-| **TC-ENG-01** | Engine | Launch Mission 2.1 ("Tanaman Layu") | Story modal opens, shows briefing and MIKO in dialogue state | Mission loads initial moisture/sunlight |
-| **TC-ENG-02** | Engine | Simulate plant watering & sunlight adjustment | Visual SVG plant reacts live: stem lifts, leaves turn green as values enter target range | Simulation values update at 60fps |
-| **TC-ENG-03** | Engine | Request MIKO Hint 1 | MIKO opens bubble with conceptual question, hints_used increments | No answer revealed, encouraging tone |
-| **TC-ENG-04** | Engine | Complete mission challenge & answer reflection | Celebration confetti triggers, XP dialog appears (+100 XP + bonuses), next node unlocks | DB records attempt, XP updated |
-| **TC-ROBOT-01**| Engine | Run sequence commands in "Robot Pulang" | Robot moves along grid tile-by-tile with animated steps matching card queue | Robot reaches dock, victory sound/cue |
-| **TC-FALLBACK**| AI Companion | Disconnect external internet / disable AI key | MIKO instantly delivers predefined pedagogical hint from mission config | Zero 500 error, zero delay |
+| **TC-AUTH-01** | Autentikasi | Registrasi siswa baru dengan username & password valid | Akun terdaftar di database, auto-login, dialihkan ke Beranda Siswa | Sesi terbentuk, profil terinisialisasi |
+| **TC-AUTH-02** | Autentikasi | Registrasi dengan username yang sudah digunakan | Menampilkan pesan ramah: *"Nama pengguna sudah digunakan, coba nama lain ya!"* | Form terjaga, tidak ada error SQL |
+| **TC-AUTH-03** | Autentikasi | Login dengan kata sandi salah | Menampilkan pesan ramah: *"Nama pengguna atau kata sandi belum tepat..."* | Kode HTTP ditangani dengan benar |
+| **TC-FOOTER-01**| Footer | Buka halaman Login & Register | Footer autentikasi bersih tampil tanpa menu navbar, teks kredit Hendrik Wildansyah tampak jelas | Struktur terpisah dari navbar |
+| **TC-AVATAR-01**| Registrasi | Memilih kartu portrait karakter (misal: Sera, Raka) | Gambar besar hero stage, judul, peran, dan deskripsi langsung berganti seketika | Stage pratinjau & radio sinkron |
+| **TC-SIM-01** | Engine | Uji Misi 2.1 ("Selamatkan Bunga Matahari") | Manipulasi air & matahari mengubah kondisi tanaman secara visual dan real-time | Reaksi tanaman berjalan di 60fps |
+| **TC-HINT-01** | AI MIKO | Meminta Petunjuk MIKO Level 1 | Balon MIKO terbuka berisi pertanyaan pemantik sokratik tanpa membocorkan jawaban | Nada bicara ramah & mendidik |
+| **TC-COMPLETE** | Engine | Menyelesaikan tantangan misi & refleksi | Konfeti muncul, modal hadiah XP terbuka (+100 XP), node misi berikutnya terbuka | Data attempt tercatat di DB |
+| **TC-ROBOT-01** | Engine | Menjalankan kartu perintah di "Botty Pulang" | Robot melangkah kotak demi kotak di grid sesuai urutan balok perintah | Animasi sinkron dengan kartu aktif |
+| **TC-FALLBACK** | Sahabat AI | Mematikan koneksi internet / nonaktifkan API key | MIKO langsung memberikan petunjuk pedagogis deterministik dari data lokal | Nol error 500, nol penundaan |
 
 ---
 
-## 3. Responsive & Device Ergonomics
+## 3. Ergonomi Perangkat & Profil Layar
 
-### Test Viewport Profiles
-1. **Mobile Small (375px - 412px):** iPhone SE / Android compact.
-   - *Verification:* Nav bar compresses to friendly mobile header; button sizes remain >= 48px; mission canvas fits without horizontal scroll overflow.
-2. **Tablet (768px - 820px):** iPad / Android tablet (very common in elementary schools).
-   - *Verification:* Split-panel mission view (Controls on left/bottom, Simulation SVG centered).
-3. **Desktop (1024px - 1440px):** Classroom PC / Chromebook.
-   - *Verification:* High-resolution vector assets, comfortable keyboard navigation, generous whitespace.
-
----
-
-## 4. Input Method Validation (Touch & Mouse)
-- **Drag-and-Drop:** Verified with HTML5 Drag API and Touch Drag Events.
-- **Tap-to-Assign Alternative:** On touch screens where drag-and-drop can sometimes be finicky for small hands, tapping an item selects it, and tapping the target slot immediately drops it in place.
+1. **Ponsel Pintar / Mobile Compact (360px – 480px):**
+   - *Verifikasi:* Navbar memadat dengan rapi; tombol sentuh berukuran >= 48px; kanvas misi muat proporsional tanpa pergeseran horizontal (*no horizontal overflow*); kartu portrait avatar tersusun seimbang.
+2. **Tablet Sekolah (768px – 1024px):**
+   - *Verifikasi:* Panel ganda (pratinjau karakter di sebelah kiri, formulir & grid kartu avatar di sebelah kanan).
+3. **Komputer Desktop / Laptop / Chromebook (1200px+):**
+   - *Verifikasi:* Aset visual beresolusi tinggi, navigasi keyboard yang nyaman, jarak antar elemen lapang dan ergonomis.
 
 ---
 
-## 5. Automated Health Check & Diagnostic Script
-A diagnostic command runner (`test_suite.php`) is provided in the repository to automatically verify:
-1. Database connectivity and schema integrity.
-2. Seed data presence (3 worlds, 9 missions, 5 badges).
-3. Session and CSRF security functions.
-4. MikoAiService fallback behavior.
+## 4. Validasi Metode Masukan (Layar Sentuh & Mouse)
+- **Geser-dan-Lepas (Drag-and-Drop):** Diverifikasi menggunakan HTML5 Drag API dan Touch Drag Events untuk interaksi memindahkan objek.
+- **Alternatif Ketuk-Pilih (Tap-to-Assign):** Pada layar sentuh tertentu di mana gerakan geser mungkin sulit bagi tangan anak-anak, mengetuk objek akan menyorotnya, dan mengetuk wadah tujuan akan langsung menempatkan objek pada posisinya.
+
+---
+
+## 5. Rangkaian Skrip Pengujian Otomatis Repository
+
+Repositori MISSION KIDS menyediakan skrip pengujian otomatis komprehensif di dalam folder [`tests/`](file:///c:/Users/HENDRIK%20WILDANSYAH/.gemini/antigravity-ide/scratch/mission-kids/tests):
+
+1. **`test_redesign_verification.php`:** Memvalidasi pemisahan footer autentikasi dari navbar, kehadiran teks kredit pembuat, keberadaan 8 kartu portrait avatar, dan panel hero preview stage.
+2. **`test_login_page.php`:** Memvalidasi rendering form login, token CSRF, validasi kredensial, dan penanganan kesalahan.
+3. **`test_dynamic_avatars.php`:** Menguji integritas 8 avatar karakter anak 3D, ketersediaan file aset, dan persistensi registrasi ke database.
+4. **`test_all_endpoints.php`:** Menguji seluruh 36 rute dan alur endpoint HTTP (Landing, Auth, Worlds, Missions, Hint API, Complete Mission API).
+5. **`test_revisions_all.php`:** Menguji integrasi suara MIKO, pembersihan tombol peta dunia, dan isolasi soal per peta.
+6. **`test_mobile_and_db_init.php`:** Menguji responsivitas mobile dan auto-bootstrap skema basis data SQLite.
+7. **`test_miko_text_speech_sync.php`:** Menguji sinkronisasi teks balon dialog dan suara ucapan MIKO (*anti-hijacking verbatim matching*).
+
+Untuk menjalankan pengujian:
+```bash
+php tests/test_redesign_verification.php
+php tests/test_login_page.php
+php tests/test_dynamic_avatars.php
+php tests/test_all_endpoints.php
+```
+Semua rangkaian pengujian telah terverifikasi **100% PASS**.

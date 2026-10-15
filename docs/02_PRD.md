@@ -1,179 +1,179 @@
-# 02. PRODUCT REQUIREMENTS DOCUMENT (PRD) — MISSION KIDS
+# 02. DOKUMEN KEBUTUHAN PRODUK (PRD) — MISSION KIDS
 
-## 1. Document Control & Scope
-This PRD outlines functional and non-functional specifications for **MISSION KIDS**, defining student experience, learning mechanics, mission specifications, and platform features for release v1.0 MVP.
-
----
-
-## 2. User Personas
-
-### Persona A: Rian (Usia 8 Tahun, Kelas 2 SD)
-- **Karakter:** Energik, mudah terdistraksi oleh teks panjang, sangat responsif terhadap respon visual dan stimulasi langsung.
-- **Kebutuhan:** Instruksi singkat berbasis visual/suara ikonik, tombol besar yang mudah disentuh di tablet, apresiasi positif saat berhasil, dan petunjuk lembut saat salah tanpa rasa malu.
-- **Skenario Sukses:** Menyelesaikan misi "Toko Kue" dengan menghitung koin kue dan "Tanaman Layu" dengan menyiram bunga hingga segar.
-
-### Persona B: Maya (Usia 10 Tahun, Kelas 4 SD)
-- **Karakter:** Penasaran, suka bereksperimen, menyukai teka-teki logika dan sains.
-- **Kebutuhan:** Tantangan yang memancing daya nalar (computational thinking), kemampuan mengulang eksperimen dengan variabel berbeda, dan melihat progres kemampuannya berkembang.
-- **Skenario Sukses:** Menyelesaikan misi "Robot Pulang" dengan merangkai urutan langkah efisien dan misi "Misteri Bayangan".
-
-### Persona C: Ibu Ratna (Orang Tua & Guru SD)
-- **Karakter:** Sadar teknologi, khawatir anak hanya terpapar konten hiburan pasif (video pendek / game destruktif).
-- **Kebutuhan:** Platform aman tanpa iklan, tanpa chat bebas dengan orang asing, materi selaras dengan kurikulum dasar (literasi, numerasi, sains dasar, computational thinking), serta laporan progress belajar anak yang jelas dan edukatif.
+## 1. Kontrol Dokumen & Ruang Lingkup
+Dokumen Kebutuhan Produk (*Product Requirements Document / PRD*) ini menguraikan spesifikasi fungsional dan non-fungsional dari platform **MISSION KIDS**, mendefinisikan pengalaman belajar siswa, mekanisme interaksi misi, spesifikasi gamifikasi, dan fitur platform secara menyeluruh.
 
 ---
 
-## 3. High-Level Feature Architecture
+## 2. Persona Pengguna
+
+### Persona A: Rian (Usia 8 Tahun, Siswa Kelas 2 SD)
+- **Karakter:** Penuh energi, cepat bosan dengan teks instruksi panjang, sangat menyukai stimulasi visual ceria dan interaksi sentuhan langsung.
+- **Kebutuhan:** Instruksi ringkas dengan panduan suara ramah, tombol besar yang mudah ditekan pada tablet/ponsel, animasi apresiasi perayaan saat berhasil, dan petunjuk lembut saat keliru tanpa membuat malu.
+- **Skenario Sukses:** Menyelesaikan misi *"Toko Kue Donat"* dengan menghitung koin belanja serta misi *"Selamatkan Bunga Matahari"* dengan menyiram air hingga mekar.
+
+### Persona B: Maya (Usia 10 Tahun, Siswa Kelas 4 SD)
+- **Karakter:** Kritis, suka bereksperimen, menggemari teka-teki logika, sains, dan eksplorasi ruang angkasa.
+- **Kebutuhan:** Tantangan yang memancing daya nalar (*computational thinking*), kebebasan mencoba berbagai variasi solusi, dan melihat grafik perkembangan level penjelajahnya.
+- **Skenario Sukses:** Menyelesaikan misi *"Botty Pulang ke Rumah"* dengan merangkai instruksi balok langkah terpendek dan misi *"Roket Angkasa"*.
+
+### Persona C: Ibu Ratna (Orang Tua & Guru Sekolah Dasar)
+- **Karakter:** Peduli pendidikan digital, khawatir anak terpapar konten negatif atau kecanduan game tanpa nilai edukasi.
+- **Kebutuhan:** Lingkungan digital yang aman (bebas iklan, tanpa chat publik dengan orang asing, patuh privasi anak), materi yang selaras dengan kurikulum dasar (literasi, numerasi, sains dasar, berpikir komputasi), serta tampilan perkembangan anak yang jelas.
+
+---
+
+## 3. Arsitektur Fitur Platform
 
 ```text
 MISSION KIDS
-├── 1. Public & Onboarding
-│   ├── Landing Page (Clean, punchy, high-conversion)
-│   ├── Kid-Friendly Registration / Login
-│   └── 3-Step Express Onboarding (Name, Avatar, First World Choice)
-├── 2. Student Experience (Home & Navigation)
-│   ├── Student Home ("Apa misi saya hari ini?")
-│   ├── Mission of the Day & Recommended Quests
-│   ├── World Exploration Hub & Adventure Map
-│   └── Skill Progress Journey (Numeracy, Science, Logic, Problem Solving)
-├── 3. Mission Engine (Interactive Learning Workflows)
-│   ├── World 01: Number City (3 Missions)
-│   ├── World 02: Discovery Lab (3 Missions)
-│   └── World 03: Thinking Lab (3 Missions)
-├── 4. AI Companion MIKO
-│   ├── Contextual Floating Buddy (Non-intrusive)
-│   ├── 3-Tier Progressive Scaffolding Hints
-│   └── Smart Fallback System (Guaranteed Uptime)
-└── 5. Gamification & Progression
-    ├── XP Ledger & Level Ups
-    ├── Achievement Badges
-    └── Metacognitive Reflection Checkpoints
+├── 1. Halaman Publik & Registrasi
+│   ├── Landing Page Edukatif (Hero interaktif, pengenalan MIKO, preview dunia)
+│   ├── Autentikasi Siswa (Login & Register dengan footer minimalis berdedikasi)
+│   └── Pemilihan Karakter 3D (8 Kartu Portrait karakter dengan stage preview dinamis)
+├── 2. Pengalaman Belajar Siswa (Student Dashboard)
+│   ├── Beranda Siswa ("Apa misimu hari ini?")
+│   ├── Misi Rekomendasi & Quests Harian
+│   ├── Peta Penjelajahan Dunia (Number City, Discovery Lab, Thinking Lab, Space Odyssey)
+│   └── Riwayat Progres Keterampilan (Numerasi, Sains, Logika, Problem Solving)
+├── 3. Engine Misi Interaktif (Interactive Learning Canvas)
+│   ├── Dunia 01: Number City (20 Misi Numerasi)
+│   ├── Dunia 02: Discovery Lab (20 Misi Sains & Sebab-Akibat)
+│   ├── Dunia 03: Thinking Lab (20 Misi Logika Komputasi)
+│   └── Dunia 04: Space Odyssey (20 Misi Antariksa & Masalah Kompleks)
+├── 4. Sahabat AI Pendamping MIKO
+│   ├── Maskot Mengambang Responsif (Floating Companion)
+│   ├── Bantuan Bertahap 3 Level (Konseptual → Spesifik → Aksi Terbimbing)
+│   ├── Sintesis Suara Ceria Indonesia (Web Speech TTS + Klip Audio Sinkron)
+│   └── Sistem Fallback Lokal Otomatis (100% Uptime tanpa Single-Point-of-Failure)
+└── 5. Gamifikasi Positif & Refleksi
+    ├── Perolehan XP & Kenaikan 5 Level Petualang
+    ├── Peringkat Bintang Performa (1–3 Bintang)
+    ├── Lencana Kehormatan (Achievements)
+    └── Jeda Refleksi Metakognitif Pasca Misi
 ```
 
 ---
 
-## 4. Learning Worlds & 9 MVP Missions Detail
+## 4. Empat Dunia Pembelajaran & Spesifikasi Misi
 
-### WORLD 01: NUMBER CITY (Numerasi & Pola Angka)
-*Tema Visual: Kota ramah masa depan dengan toko roti, jembatan gantung beroda gigi, dan jalur trem berpola.*
+### DUNIA 01: NUMBER CITY (Petualangan Numerasi & Pola Angka)
+*Tema Visual: Kota metropolitan modern ramah anak dengan toko roti cerah, jembatan gantung beroda gigi, dan lampu taman kristal.*
 
-#### Mission 1.1: Toko Kue Donat (Interactive Shopping & Decision Making)
-- **Learning Objective:** Mengasah kemampuan penjumlahan dan pengurangan pecahan uang sederhana serta pengambilan keputusan belanja.
-- **Story Context:** Toko kue Bibi Bella kedatangan banyak pelanggan, namun mesin kasir rusak! Siswa membantu Bibi Bella menyiapkan pesanan kue dan menghitung uang kembalian.
-- **Interaction Type:** Interactive Shopping Tray (drag & tap koin dan kue ke nampan pesanan).
-- **Challenge:** Menyiapkan 2 donat seharga Rp 3.000 dengan uang pembeli Rp 5.000. Berapa uang kembalian yang harus ditaruh di nampan?
-- **Reflection:** *"Mengapa kita harus memeriksa harga barang sebelum membayar di kasir?"*
+#### Misi 1.1: Toko Kue Donat Bibi Bella (Interactive Shopping & Pecahan Uang)
+- **Tujuan Pembelajaran:** Melatih operasi hitung penjumlahan dan pengurangan pecahan nilai uang rupiah dalam kehidupan sehari-hari.
+- **Konteks Cerita:** Toko kue Bibi Bella ramai pembeli, namun mesin kasir sedang dalam perbaikan! Siswa membantu Bibi Bella menyiapkan donat dan menghitung uang kembalian yang tepat.
+- **Tipe Interaksi:** *Interactive Shopping Tray* (mengetuk koin pecahan Rp 1.000, Rp 2.000, Rp 5.000 ke nampan kasir).
+- **Tantangan:** Menyiapkan pesanan kue seharga Rp 3.000 dari pembeli yang membayar dengan uang Rp 5.000. Berapa uang kembalian yang ditaruh di nampan?
+- **Pertanyaan Refleksi:** *"Mengapa kita perlu menghitung uang kembalian dengan cermat saat berbelanja?"*
 
-#### Mission 1.2: Jembatan Angka (Number Logic & Arithmetic)
-- **Learning Objective:** Mengenal relasi penjumlahan lompat dan kelipatan angka untuk menghubungkan platform jembatan.
-- **Story Context:** Jembatan penyeberangan menuju menara jam runtuh beberapa papannya. MIKO mengajak siswa memasang balok batu dengan nilai hitung yang tepat agar jembatan tersambung kembali.
-- **Interaction Type:** Number Puzzle Block Placement.
-- **Challenge:** Balok bernomor 2, 5, 8, [ ? ], 14. Berapakah balok yang hilang?
-- **Reflection:** *"Pola apa yang kamu temukan pada jarak antar angka pada balok?"*
+#### Misi 1.2: Jembatan Angka yang Hilang (Deret Aritmatika & Pola Hitung)
+- **Tujuan Pembelajaran:** Memahami pola bilangan loncat dan kelipatan angka untuk menyambung struktur jembatan.
+- **Konteks Cerita:** Jembatan penyeberangan menuju menara kota kehilangan beberapa papan baloknya. Siswa memilih balok nomor yang tepat untuk mengisi kekosongan.
+- **Tantangan:** Deret balok nomor: 2, 5, 8, [ ? ], 14. Berapakah nilai balok yang hilang? (Pola loncat +3).
+- **Pertanyaan Refleksi:** *"Bagaimana caramu menemukan selisih angka antar balok pada jembatan?"*
 
-#### Mission 1.3: Kota Pola (Visual Pattern Recognition)
-- **Learning Objective:** Mengidentifikasi pola berulang geometris dan aljabar awal secara visual.
-- **Story Context:** Lampu hias di taman kota mati karena urutan kristal warnanya tertukar oleh angin kencang.
-- **Interaction Type:** Drag-and-drop pattern slotting.
-- **Challenge:** Mengisi kristal [Merah, Biru, Biru, Merah, Biru, ?].
-- **Reflection:** *"Bagaimana caramu mengetahui kristal berikutnya yang harus dipasang?"*
+#### Misi 1.3: Kota Pola (Pengenalan Pola Geometris Berulang)
+- **Tujuan Pembelajaran:** Melatih logika aljabar awal melalui identifikasi pola ritme visual yang berulang.
+- **Tantangan:** Menyusun kristal lampu warna: [Merah, Biru, Biru, Merah, Biru, ?] untuk menghidupkan kembali lampu taman kota.
 
 ---
 
-### WORLD 02: DISCOVERY LAB (Sains & Eksperimen Sebab-Akibat)
-*Tema Visual: Laboratorium terbuka hijau dengan rumah kaca botani, meja optik kaca prisma, dan menara siklus cuaca.*
+### DUNIA 02: DISCOVERY LAB (Sains Alam & Simulasi Sebab-Akibat)
+*Tema Visual: Laboratorium alam terbuka dengan rumah kaca botani, meja optik prisma, dan danau siklus hidrologi.*
 
-#### Mission 2.1: Tanaman Layu (Plant Biology & Simulation) — *Flagship Vertical Slice*
-- **Learning Objective:** Memahami bahwa tumbuhan membutuhkan keseimbangan air, cahaya matahari, dan nutrisi tanah untuk hidup dan bertumbuh (fotosintesis sederhana).
-- **Story Context:** Tanaman bunga matahari mini milik Lab Discovery terlihat layu, batangnya menunduk dan daunnya menguning. Siswa bertindak sebagai Dokter Tanaman.
-- **Interaction Type:** Live Simulation Slider & Action Tools (Siram Air, Geser Tirai Matahari, Beri Pupuk Organik).
-- **Simulation Feedback:** 
-  - Terlalu sedikit air & gelap = Tanaman tetap layu.
-  - Air pas + cahaya cukup = Bunga perlahan tegak, daun hijau segar, bunga mekar bercahaya!
-  - Air banjir berlebih = Muncul peringatan gelembung air bahwa akar bisa membusuk.
-- **Challenge:** Kembalikan kesegaran bunga matahari ke skor kesehatan 100% dalam 3 langkah terencana.
-- **Reflection:** *"Apa saja 2 hal paling penting yang dibutuhkan tanaman setiap hari?"*
+#### Misi 2.1: Selamatkan Bunga Matahari Layu (Biologi Tumbuhan & Simulasi Live)
+- **Tujuan Pembelajaran:** Memahami bahwa tumbuhan memerlukan keseimbangan air, sinar matahari, dan nutrisi untuk bertumbuh (fotosintesis sederhana).
+- **Konteks Cerita:** Bunga matahari mini di laboratorium layu, batangnya menunduk dan daunnya menguning. Siswa berperan sebagai Dokter Tanaman.
+- **Tipe Interaksi:** *Live Simulation Controls* (Gembor Air, Penggeser Tirai Sinar Matahari, Pupuk Organik).
+- **Umpan Balik Simulasi:**
+  - Air terlalu sedikit & gelap: Tanaman tetap layu menunduk.
+  - Air seimbang + sinar matahari cukup: Batang bunga perlahan tegak, daun berubah hijau segar, dan kelopak bunga mekar bercahaya!
+  - Air berlebih/banjir: Muncul peringatan bahwa akar tanaman bisa membusuk jika tergenang air terlalu banyak.
+- **Tantangan:** Kembalikan kesehatan bunga ke skor 100% dengan takaran air dan cahaya yang seimbang.
+- **Pertanyaan Refleksi:** *"Sebutkan dua hal penting yang dibutuhkan tanaman setiap hari untuk tetap hidup sehat!"*
 
-#### Mission 2.2: Misteri Bayangan (Light & Optics Sandbox)
-- **Learning Objective:** Memahami hukum dasar perambatan cahaya lurus dan bagaimana jarak sumber cahaya menentukan ukuran bayangan.
-- **Story Context:** Ruang teater boneka bayangan kehilangan proyektor senter. Maya dan MIKO ingin membuat bayangan kelinci sebesar layar pentas.
-- **Interaction Type:** Interactive Torch Placement & Obstacle Distance Drag.
-- **Challenge:** Mengatur posisi senter dekat atau jauh dari objek untuk mencocokkan bayangan dengan siluet target di layar.
-- **Reflection:** *"Apa yang terjadi pada bayangan jika senter digerakkan semakin dekat ke benda?"*
+#### Misi 2.2: Misteri Bayangan Panggung (Fisika Optika & Cahaya)
+- **Tujuan Pembelajaran:** Memahami perambatan cahaya lurus dan pengaruh jarak sumber cahaya terhadap ukuran bayangan benda.
+- **Tantangan:** Menyesuaikan jarak senter proyektor agar bayangan boneka kelinci pas dengan garis target panggung teater.
 
-#### Mission 2.3: Perjalanan Air (The Water Cycle Sequence)
-- **Learning Objective:** Memahami siklus air: Penguapan (Evaporasi) → Pembentukan Awan (Kondensasi) → Hujan (Presipitasi).
-- **Story Context:** Kolam danau lab mengering saat musim panas. Siswa menggerakkan mesin waktu alam untuk melihat kemana air pergi dan bagaimana hujan tercipta kembali.
-- **Interaction Type:** Flow Sequencing & State Activation.
-- **Challenge:** Mengurutkan 3 fase utama siklus air agar awan mendung turun menjadi hujan penyubur danau.
-- **Reflection:** *"Dari mana asal air hujan yang turun membasahi bumi?"*
+#### Misi 2.3: Perjalanan Siklus Air (Fase Siklus Hidrologi)
+- **Tujuan Pembelajaran:** Mengurutkan tahapan siklus air: Evaporasi (Penguapan) → Kondensasi (Pembentukan Awan) → Presipitasi (Turun Hujan).
 
 ---
 
-### WORLD 03: THINKING LAB (Computational Thinking & Algoritma Awal)
-*Tema Visual: Grid kota digital retro-futuristik yang ramah dengan robot lucu bernama Botty, jalur lantai magnetik, dan baterai energi.*
+### DUNIA 03: THINKING LAB (Logika Komputasi / Computational Thinking)
+*Tema Visual: Grid kota digital retro-futuristik dengan robot ramah Botty, jalur magnetik, dan stasiun pengisian daya.*
 
-#### Mission 3.1: Robot Pulang (Step-by-Step Sequencing)
-- **Learning Objective:** Mengasah kemampuan merancang instruksi algoritmik berurutan (sequence execution) tanpa syntax rumit.
-- **Story Context:** Botty tersesat di persimpangan taman bermain setelah baterainya melemah. Bantulah Botty menyusun kartu langkah menuju stasiun pengisian daya (*charging dock*).
-- **Interaction Type:** Command Block Builder (Maju, Putar Kiri, Putar Kanan, Lompat).
-- **Challenge:** Grid 4x4 dengan 1 rintangan batu. Susun kartu [Maju → Putar Kanan → Maju 2 Langkah] lalu tekan tombol hijau **"JALANKAN ROBOT!"**.
-- **Execution:** Botty bergerak kotak demi kotak dengan animasi langkah yang memuaskan.
-- **Reflection:** *"Mengapa urutan instruksi harus tepat sebelum robot dijalankan?"*
+#### Misi 3.1: Botty Pulang ke Rumah (Algoritma Langkah Sekuensial)
+- **Tujuan Pembelajaran:** Menyusun instruksi langkah berurutan (*sequential algorithm*) tanpa memerlukan sintaks pemrograman yang rumit.
+- **Tipe Interaksi:** *Visual Command Block Builder* (Maju, Belok Kiri, Belok Kanan, Lompat).
+- **Tantangan:** Grid 4x4 dengan rintangan batu. Susun kartu perintah [Maju → Belok Kanan → Maju 2 Langkah] lalu tekan tombol **"JALANKAN ROBOT!"**.
+- **Eksekusi:** Botty berjalan kotak demi kotak dengan animasi langkah terarah menuju stasiun daya.
 
-#### Mission 3.2: Jalan Rahasia (Conditional Decision & Obstacle Avoidance)
-- **Learning Objective:** Memahami logika sederhana "JIKA ada rintangan, MAKA pilih jalur aman".
-- **Story Context:** Jalan utama terhalang genangan oli pelumas. Botty harus memeriksa tanda rambu warna untuk memilih jembatan yang terbuka.
-- **Interaction Type:** Path selector dengan pengkondisian visual.
-- **Challenge:** Menyusun rute yang lolos deteksi sensor pintu warna.
-- **Reflection:** *"Bagaimana caramu memilih jalan saat melihat rintangan di depan?"*
+#### Misi 3.2: Jalan Rahasia Sensor Warna (Logika Percabangan / If-Else)
+- **Tujuan Pembelajaran:** Memahami pengambilan keputusan bersyarat: *"JIKA terdeteksi warna merah, MAKA belok; JIKA hijau, MAKA lurus"*.
 
-#### Mission 3.3: Robot Mengulang (Loop & Repetition Intuition)
-- **Learning Objective:** Menanamkan intuisi perulangan (looping) untuk mempersingkat pekerjaan berulang.
-- **Story Context:** Botty harus menaiki 4 anak tangga yang sama satu per satu. Daripada menekan "Lompat-Maju" 4 kali panjang, MIKO mengenalkan Kartu Pengulang (Loop 4x).
-- **Interaction Type:** Visual Loop Wrapper Block.
-- **Challenge:** Meringkas instruksi 8 blok menjadi 1 blok pengulang [Ulangi 4x: (Naik, Maju)].
-- **Reflection:** *"Apa keuntungan menggunakan kartu pengulang daripada menyusun kartu yang sama berulang-ulang?"*
+#### Misi 3.3: Robot Mengulang (Konsep Perulangan / Looping)
+- **Tujuan Pembelajaran:** Memahami fungsi blok perulangan (*loop*) untuk mengefisiensikan instruksi yang berulang-ulang.
 
 ---
 
-## 5. MIKO — Contextual AI Learning Companion
-1. **Behavioral Protocol:**
-   - MIKO tidak berada di halaman terpisah; MIKO bertengger sebagai ikon karakter di pojok kanan bawah canvas misi.
-   - Mengeluarkan gelembung sapaan kontekstual sesuai progres misi saat ini.
-   - Menyediakan tombol bantuan bertingkat: **"Minta Petunjuk MIKO"**.
-2. **Pedagogical Guardrails:**
-   - Larangan mutlak memberikan jawaban langsung pada petunjuk pertama dan kedua.
-   - Bahasa wajib santun, ceria, edukatif, dan menggunakan bahasa Indonesia yang ramah anak.
-   - Nol pengumpulan data pribadi (larangan menanyakan nomor telepon, alamat, sekolah, dsb).
+### DUNIA 04: SPACE ODYSSEY (Eksplorasi Antariksa & Masalah Kompleks)
+*Tema Visual: Stasiun orbit antariksa, nebula bercahaya, roket peluncuran, dan permukaan planet berbatu.*
+
+#### Misi 4.1: Roket Angkasa (Daya Dorong & Propulsi)
+- **Tujuan Pembelajaran:** Menyeimbangkan rasio bahan bakar dan massa muatan agar roket mencapai orbit tanpa kehabisan daya.
+
+#### Misi 4.2: Peta Rasi Bintang (Pola Koordinat Astronomi)
+- **Tujuan Pembelajaran:** Menghubungkan titik koordinat bintang untuk membentuk rasi navigasi di langit malam.
+
+#### Misi 4.3: Rover Mars (Navigasi Ekspedisi Planet)
+- **Tujuan Pembelajaran:** Merancang jalur lintasan penjelajah permukaan planet yang menghindari kawah dan badai pasir.
 
 ---
 
-## 6. Gamification System & Visual Progress
+## 5. Sahabat AI Belajar MIKO
 
-### XP Engine
+1. **Prinsip Interaksi MIKO:**
+   - MIKO selalu hadir di sudut layar sebagai ikon sahabat yang bersahabat (*floating companion*).
+   - Menampilkan balon dialog kontekstual sesuai misi yang sedang dibuka.
+   - Dilengkapi tombol petunjuk berjenjang: **"Minta Petunjuk MIKO"**.
+   - Suara audio disintesis menggunakan Web Speech API ramah anak laki-laki Indonesia (pitch: 1.25, rate: 1.05) yang selaras dengan teks balon ucapan (*anti-hijacking verbatim sync*).
+
+2. **Aturan Pedagogis Ketat:**
+   - Dilarang keras membocorkan jawaban secara langsung pada petunjuk level 1 dan level 2.
+   - Tutur bahasa wajib ramah, ceria, edukatif, dan bebas dari istilah teknis yang membingungkan anak.
+   - Tidak ada pengumpulan data pribadi (larangan meminta nomor telepon, alamat rumah, nama sekolah, dll).
+
+---
+
+## 6. Sistem Gamifikasi Positif
+
+### Perolehan Experience Points (XP)
 - Menyelesaikan misi: **+100 XP**
-- Menyelesaikan tantangan percobaan pertama tanpa petunjuk: **+50 XP (Bonus Eksplorasi)**
-- Meminta petunjuk MIKO (tetap diapresiasi karena mau belajar): **+20 XP**
-- Refleksi pasca misi: **+30 XP**
+- Menyelesaikan misi pada percobaan pertama tanpa petunjuk: **+50 XP (Bonus Mandiri)**
+- Bertanya pada petunjuk MIKO (tetap diapresiasi karena berani belajar): **+20 XP**
+- Mengisi pertanyaan refleksi metakognitif: **+30 XP**
 
-### Levels
-- Level 1: **Penjelajah Pemula (0 - 199 XP)**
-- Level 2: **Petualang Cilik (200 - 499 XP)**
-- Level 3: **Penemu Pintar (500 - 899 XP)**
-- Level 4: **Kapten Misi (900 - 1499 XP)**
-- Level 5: **Master Explorer (1500+ XP)**
+### 5 Tingkatan Level Petualang
+1. Level 1: **Penjelajah Pemula (0 – 199 XP)**
+2. Level 2: **Petualang Cilik (200 – 499 XP)**
+3. Level 3: **Penemu Pintar (500 – 899 XP)**
+4. Level 4: **Kapten Misi (900 – 1.499 XP)**
+5. Level 5: **Master Explorer (1.500+ XP)**
 
-### 5 MVP Achievement Badges
-1. 🏅 **First Mission Cleared:** Menyelesaikan misi pertama apapun di platform.
-2. 🔬 **Little Scientist:** Menyelesaikan seluruh misi di Discovery Lab.
-3. 🧮 **Number Explorer:** Menyelesaikan seluruh misi di Number City.
-4. 🤖 **Logic Commander:** Menyelesaikan seluruh misi di Thinking Lab.
-5. 🌟 **Mission Master:** Menyelesaikan seluruh 9 MVP missions.
+### Lencana Prestasi (Achievements)
+- 🏅 **First Mission Cleared:** Menyelesaikan misi pertama di platform.
+- 🧮 **Number Explorer:** Menuntaskan seluruh misi di Number City.
+- 🔬 **Little Scientist:** Menuntaskan seluruh misi di Discovery Lab.
+- 🤖 **Logic Commander:** Menuntaskan seluruh misi di Thinking Lab.
+- 🚀 **Space Pioneer:** Menuntaskan seluruh misi di Space Odyssey.
+- 🌟 **Mission Master:** Menyelesaikan seluruh misi dan mencapai level tertinggi.
 
 ---
 
-## 7. Responsive & Touch Standards
-- Desain Mobile-First dengan breakpoint: Mobile (360px - 480px), Tablet (768px - 1024px), Desktop (1200px+).
-- Target sentuh minimum 44px x 44px dengan ruang sela aman minimal 8px antar elemen interaktif.
-- Mendukung mode multi-input: Touch drag-and-drop serta Tap-to-select alternatif bagi perangkat tablet/ponsel yang sensitif.
+## 7. Standar Responsivitas & Layar Sentuh
+- Desain *Mobile-First* dengan titik henti responsif: Ponsel (360px – 480px), Tablet (768px – 1024px), Desktop (1200px+).
+- Ukuran target sentuh tombol minimal 48px x 48px dengan jarak sela aman minimal 8px antar elemen.
+- Mendukung dua mode interaksi: Geser-dan-lepas (*drag & drop*) serta ketuk-pilih (*tap-to-select*) untuk kemudahan penggunaan pada layar tablet sekolah.

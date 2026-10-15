@@ -1,77 +1,80 @@
-# 06. MISSION ENGINE SPECIFICATION — MISSION KIDS
+# 06. SPESIFIKASI ENGINE MISI — MISSION KIDS
 
-## 1. Engine Architecture & Core Principles
-The **MISSION KIDS Mission Engine** is a reusable, modular client-side framework that standardizes how educational missions are authored, rendered, played, validated, and rewarded.
+## 1. Arsitektur Engine & Prinsip Inti
 
-### Key Tenets
-1. **Zero Logic Duplication:** Every mission shares the exact same lifecycle container, progress syncer, reflection modal, and MIKO interface. Only the interaction canvas and config parameters differ.
-2. **Declarative Mission Config:** Missions are defined in clean JSON structures specifying narrative text, assets, interaction type, target states, hints, and reflections.
-3. **Touch-First Tactility:** High-contrast drag targets, oversized tap buttons, and lively SVG micro-animations ensure seamless operation on touchscreens, iPads, Chromebooks, and desktop mice.
+**MISSION KIDS Mission Engine** adalah kerangka kerja modular di sisi klien (*frontend client framework*) yang menstandarisasi bagaimana seluruh misi edukasi dimuat, dirender, dimainkan, divalidasi, dan diapresiasi.
+
+### Prinsip Utama Engine
+1. **Nol Duplikasi Logika (Zero Logic Duplication):** Setiap misi berbagi arsitektur kontainer siklus hidup yang identik, sinkronisasi progres yang sama, modal refleksi yang sama, dan antarmuka AI MIKO yang sama. Hanya kanvas manipulasi dan parameter konfigurasi JSON yang berbeda.
+2. **Konfigurasi Misi Deklaratif (Declarative JSON Config):** Seluruh konten narasi cerita, aset visual, tipe interaksi, target solusi, petunjuk bertahap, dan pertanyaan refleksi didefinisikan dalam struktur JSON yang bersih.
+3. **Sentuhan Layar Utama (Touch-First Tactility):** Target sentuh kontras tinggi, tombol besar ber-outline tegas, dan animasi SVG responsif 60fps menjamin kenyamanan bermain pada layar sentuh tablet, ponsel pintar, Chromebook, maupun laptop sekolah.
 
 ---
 
-## 2. The 7-Step Mission Lifecycle
+## 2. Siklus Hidup 7 Langkah Misi (7-Step Mission Lifecycle)
 
 ```text
  ┌─────────────┐
- │ 1. STORY    │ ◀── Narrative hook: MIKO & characters explain the urgent dilemma.
+ │  1. CERITA  │ ◀── Narasi pembuka: MIKO & karakter menjelaskan masalah mendesak yang dihadapi.
  └──────┬──────┘
         ▼
  ┌─────────────┐
- │ 2. LEARN    │ ◀── Bite-sized scientific/mathematical insight before action.
+ │ 2. BELAJAR  │ ◀── Wawasan ilmiah/matematika ringkas sebelum anak mulai bertindak.
  └──────┬──────┘
         ▼
  ┌─────────────┐
- │ 3. ACTIVITY │ ◀── Interactive playground: explore tools, sliders, or blocks freely.
+ │3. AKTIVITAS │ ◀── Area eksplorasi bebas: mencoba alat, slider, atau tombol interaktif.
  └──────┬──────┘
         ▼
  ┌─────────────┐
- │4. CHALLENGE │ ◀── Concrete problem-solving goal: student aligns variables to target.
+ │4. TANTANGAN │ ◀── Sasaran konkrit pemecahan masalah: anak menyelaraskan variabel ke target misi.
  └──────┬──────┘
         ▼
  ┌─────────────┐
- │ 5. FEEDBACK │ ◀── Instant validation: celebratory visual cues or warm retry hints.
+ │5. UMPAN BALIK│ ◀── Validasi instan: perayaan visual langsung atau petunjuk ramah untuk mencoba lagi.
  └──────┬──────┘
         ▼
  ┌─────────────┐
- │6. REFLECTION│ ◀── Metacognitive checkpoint: student consolidates key takeaway.
+ │ 6. REFLEKSI │ ◀── Jeda metakognitif: anak mengaitkan apa yang dipelajari dengan dunia nyata.
  └──────┬──────┘
         ▼
  ┌─────────────┐
- │ 7. REWARD   │ ◀── Confetti burst, XP breakdown (+100 XP), badge check, map unlock.
+ │7. APRESIASI │ ◀── Hamburan konfeti, rincian hadiah XP (+100 XP), cek lencana, dan buka node peta.
  └─────────────┘
 ```
 
 ---
 
-## 3. The Three Core Interaction Handlers
+## 3. Tiga Handler Interaksi Inti
 
-### Type 01: `match_sort` (Shopping & Pattern Trays)
-- **Used In:** *Toko Kue Donat*, *Jembatan Angka*, *Kota Pola*.
-- **Mechanics:** A collection of draggable source items (coins, pastry, numbered bridge stones, colored crystals) and designated target drop zones/slots.
-- **Accessibility Fallback:** If drag-and-drop is difficult on certain touch screens, tapping an item highlights it, and tapping the target slot immediately moves it into place.
-- **Validation:** Compares slot contents with the mission's mathematical/pattern rule (e.g. `sum(tray_items) == 5000`).
+### Tipe 01: `match_sort` (Nampan Belanja & Pencocokan Pola)
+- **Digunakan Pada:** *Toko Kue Donat*, *Jembatan Angka*, *Kota Pola*.
+- **Mekanisme:** Kumpulan elemen sumber yang dapat diketuk/digeser (koin pecahan rupiah, kue donat, balok batu bernomor, kristal lampu warna) dan zona wadah target (*tray slots*).
+- **Aksesibilitas Ganda:** Selain mendukung geser-lepas (*drag & drop*), sistem menyediakan mode ketuk-ke-nampan (*tap-to-assign*) yang sangat memudahkan anak pada layar sentuh berukuran kecil.
+- **Validasi Solusi:** Memeriksa kesesuaian nilai nampan dengan aturan matematika misi (misalnya `sum(koin_nampan) == 2000`).
 
-### Type 02: `experiment_simulation` (Physical & Biological Labs)
-- **Used In:** *Tanaman Layu* (Vertical Slice Hero), *Misteri Bayangan*, *Perjalanan Air*.
-- **Mechanics:** Continuous or stepped interactive controls (Watering Can tool, Sunlight Curtain slider, Fertilizer toggle).
-- **Reactive Model:** Manipulating a tool instantly recalculates simulation state vectors (e.g., `moisture`, `sunlight`, `health`) and triggers SVG morphs:
-  - *Plant:* Stems unbend from 45° to 90°, leaves swell from dull yellow `#CBD5E1` to vibrant emerald `#10B981`, flower petals bloom.
-  - *Shadow:* Adjusting torch distance changes shadow scale and blur radius in real time.
-- **Validation:** Evaluates whether student stabilized simulation parameters within the "Healthy Living Zone" for at least 3 seconds.
+### Tipe 02: `experiment_simulation` (Laboratorium Fisika & Biologi Live)
+- **Digunakan Pada:** *Selamatkan Bunga Matahari Layu* (*Vertical Slice Unggulan*), *Misteri Bayangan*, *Perjalanan Air*.
+- **Mekanisme:** Kontrol manipulasi kontinu atau bertahap (Alat Gembor Siram Air, Penggeser Tirai Cahaya Matahari, Sakelar Pupuk Organik).
+- **Model Reaktif Visual:** Memanipulasi alat seketika menghitung ulang vektor kondisi tanaman (`moisture`, `sunlight`, `plant_health`) dan memicu perubahan bentuk SVG secara langsung:
+  - *Tanaman:* Batang perlahan tegak dari 45° ke 90°, daun mengembang dari kuning kusam menjadi hijau zamrud segar `#10B981`, dan kelopak bunga mekar bercahaya.
+  - *Bayangan:* Menggeser senter mendekat atau menjauh secara real-time mengubah skala rasio bayangan dan radius blur siluet panggung.
+- **Validasi Solusi:** Mengevaluasi apakah anak berhasil menjaga variabel dalam "Zona Sehat Seimbang" (Health Score 100%).
 
-### Type 03: `sequence_logic` (Algorithmic Robot Runner)
-- **Used In:** *Robot Pulang*, *Jalan Rahasia*, *Robot Mengulang*.
-- **Mechanics:** 
-  1. Palette of command blocks: `[MAJU]`, `[PUTAR KIRI]`, `[PUTAR KANAN]`, `[LOMPAT]`, `[ULANGI 4X]`.
-  2. Execution tray where cards are sequenced.
-  3. Visual grid (4x4 or 5x5) featuring Botty the Robot, walls, items, and the charging dock.
-  4. Animated Playback Engine: When the student hits *"JALANKAN ROBOT!"*, the engine executes cards step-by-step with a 500ms step interval, highlighting the active card as Botty moves.
-- **Validation:** Checks if Botty reached the destination coordinate without collision with obstacles.
+### Tipe 03: `sequence_logic` (Robot Pemrograman Algoritma Sekuensial)
+- **Digunakan Pada:** *Botty Pulang ke Rumah*, *Jalan Rahasia Sensor Warna*, *Robot Mengulang*.
+- **Mekanisme:**
+  1. Palet kartu balok perintah: `[MAJU]`, `[PUTAR KIRI]`, `[PUTAR KANAN]`, `[LOMPAT]`, `[ULANGI 4X]`.
+  2. Nampan antrean eksekusi tempat kartu disusun berurutan.
+  3. Grid peta visual (4x4 atau 5x5) menampilkan Botty the Robot, dinding rintangan, dan stasiun pengisian daya.
+  4. Mesin Pemutaran Animasi: Saat anak menekan tombol hijau **"JALANKAN ROBOT!"**, engine mengeksekusi kartu langkah demi langkah dengan jeda 500ms, menyoroti kartu yang sedang aktif saat Botty melangkah.
+- **Validasi Solusi:** Memeriksa apakah Botty tiba di koordinat stasiun daya dengan selamat tanpa menabrak rintangan.
 
 ---
 
-## 4. Mission Configuration Schema (JSON Spec)
+## 4. Skema Konfigurasi JSON Misi (Spesifikasi `config_json`)
+
+Setiap data misi pada database dikonfigurasi melalui payload JSON berstruktur baku:
 
 ```json
 {
@@ -80,14 +83,14 @@ The **MISSION KIDS Mission Engine** is a reusable, modular client-side framework
   "title": "Dokter Tanaman: Bunga Matahari",
   "story": {
     "headline": "Bunga Matahari Mini Butuh Bantuanmu!",
-    "dialogue": "Halo Penjelajah Cilik! Bunga matahari di lab kita tampak layu dan menunduk. Bisakah kamu mencari tahu apa yang kurang?",
+    "dialogue": "Halo Sahabat Penjelajah Cilik! Bunga matahari di lab kita tampak layu dan batangnya menunduk. Bisakah kamu mencari tahu apa yang kurang agar ia mekar kembali?",
     "character_state": "worried"
   },
   "learning_concept": {
     "title": "Kebutuhan Dasar Tumbuhan",
     "bullet_points": [
-      "Tanaman membutuhkan air untuk mengalirkan nutrisi dari tanah.",
-      "Tanaman membutuhkan sinar matahari untuk memasak makanan (fotosintesis)."
+      "Tanaman membutuhkan air untuk mengalirkan nutrisi dari akar ke daun.",
+      "Tanaman membutuhkan sinar matahari yang cukup untuk memasak makanannya sendiri (fotosintesis)."
     ]
   },
   "interaction": {
@@ -98,36 +101,28 @@ The **MISSION KIDS Mission Engine** is a reusable, modular client-side framework
       "plant_health": 25
     },
     "target_state": {
-      "moisture_min": 60,
-      "moisture_max": 90,
-      "sunlight_min": 65,
-      "sunlight_max": 95,
-      "plant_health_target": 100
-    }
+      "moisture_range": [50, 80],
+      "sunlight_range": [60, 85],
+      "required_health": 100
+    },
+    "tools": [
+      { "id": "water_can", "label": "Siram Air", "icon": "💧", "effect": { "moisture": "+25" } },
+      { "id": "sun_curtain", "label": "Buka Tirai Matahari", "icon": "☀️", "type": "slider", "min": 0, "max": 100 }
+    ]
   },
-  "hints": [
-    {
-      "level": 1,
-      "text": "Lihatlah tanahnya yang kering dan ruangan yang agak gelap. Tanaman butuh apa ya untuk segar kembali?"
-    },
-    {
-      "level": 2,
-      "text": "Cobalah menyiram tanaman dengan gembor air dan buka tirai jendela agar sinar matahari masuk!"
-    },
-    {
-      "level": 3,
-      "text": "Siram air hingga indikator kelembapan berwarna hijau (70%), lalu geser tirai sampai sinar matahari cukup terang!"
-    }
-  ],
+  "hints": {
+    "level_1": "Coba perhatikan tanah bunga matahari itu. Apakah tanahnya kering atau lembap?",
+    "level_2": "Tanaman sangat membutuhkan air dan cahaya. Cobalah siram air dengan gembor di sebelah kiri!",
+    "level_3": "Siram air sampai tanahnya segar, lalu geser tirai jendela agar sinar matahari mencapai sekitar 75%!"
+  },
   "reflection": {
-    "question": "Apa dua hal terpenting yang membuat bunga matahari segar kembali?",
+    "question": "Sebutkan dua hal paling penting yang dibutuhkan tanaman setiap hari untuk tetap hidup sehat!",
     "options": [
-      "Es krim dan kipas angin",
       "Air yang cukup dan sinar matahari",
-      "Kegelapan dan batu bata"
+      "Es krim dan minuman manis",
+      "Kipas angin dan ruangan gelap"
     ],
-    "correct_index": 1,
-    "explanation": "Hebat! Air dan sinar matahari adalah sumber energi utama agar tanaman bisa tumbuh subur."
+    "correct_index": 0
   }
 }
 ```
